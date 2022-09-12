@@ -7,12 +7,12 @@ using Model;
 
 namespace Controller
 {
-    internal static class Data
+    public static class Data
     {
         public static Competition competition;
         public static Race CurrentRace;
 
-        public static void initialise()
+        public static void Initialise()
         {
             competition = new Competition();
             AddParticipants();
@@ -30,6 +30,8 @@ namespace Controller
 
         private static void AddParticipants()
         {
+            competition.Participants = new List<IParticipant>();
+
             Driver DriverOne = new Driver();
             DriverOne.Naam = "Max Verstappen";
 
@@ -46,17 +48,19 @@ namespace Controller
 
         private static void AddTracks()
         {
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[2];
+            competition.Tracks = new Queue<Track>();
+
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
             sectionTypesZandvoort[0] = (SectionTypes)1;
             sectionTypesZandvoort[1] = (SectionTypes)3;
             sectionTypesZandvoort[2] = (SectionTypes)2;
 
-            SectionTypes[] sectionTypesSpa = new SectionTypes[2];
+            SectionTypes[] sectionTypesSpa = new SectionTypes[3];
             sectionTypesSpa[0] = (SectionTypes)1;
             sectionTypesSpa[1] = (SectionTypes)2;
             sectionTypesSpa[2] = (SectionTypes)3;
 
-            SectionTypes[] sectionTypesMonza = new SectionTypes[2];
+            SectionTypes[] sectionTypesMonza = new SectionTypes[3];
             sectionTypesMonza[0] = (SectionTypes)3;
             sectionTypesMonza[1] = (SectionTypes)2;
             sectionTypesMonza[2] = (SectionTypes)1;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Controller
 {
-    internal class Race
+    public class Race
     {
         public Track Track { get; set; }
         public List<IParticipant> Participants;
