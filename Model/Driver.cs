@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Driver : IParticipant
+    public class Driver : IParticipant
     {
         public string Naam { get; set; }
         public int Points { get; set; }
