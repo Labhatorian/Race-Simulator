@@ -8,10 +8,10 @@ namespace Model
 {
     internal interface IParticipant
     {
-        public string Naam { get; set; }
-        public int Points { get; set; }
-        public IEquipment Equipment { get; set; }
-        public TeamColors TeamColor { get; set; }
+        string Naam { get; set; }
+        int Points { get; set; }
+        IEquipment Equipment { get; set; }
+        TeamColors TeamColor { get; set; }
     }
 
     enum TeamColors
