@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Race Simulator", "Race Simulator\Race Simulator.csproj", "{67FF8A64-4D16-4861-A319-9688B387394D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{D84C1314-0284-4973-95E6-031A70AF23B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{0514BE16-1DED-47C7-92AC-92CE1EEED344}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67FF8A64-4D16-4861-A319-9688B387394D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FF8A64-4D16-4861-A319-9688B387394D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FF8A64-4D16-4861-A319-9688B387394D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FF8A64-4D16-4861-A319-9688B387394D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D84C1314-0284-4973-95E6-031A70AF23B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D84C1314-0284-4973-95E6-031A70AF23B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D84C1314-0284-4973-95E6-031A70AF23B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D84C1314-0284-4973-95E6-031A70AF23B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B0A14D3B-C55A-4005-BE3D-B10ED009D844}
+	EndGlobalSection
+EndGlobal
