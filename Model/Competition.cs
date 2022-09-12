@@ -13,7 +13,8 @@ namespace Model
 
     public Track NextTrack()
     {
-        return null;
+        Track Track = Tracks.Peek();
+        return Track;
     }
 }
 }
