@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{0514BE16-1DED-47C7-92AC-92CE1EEED344}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerTest", "ControllerTest\ControllerTest.csproj", "{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0514BE16-1DED-47C7-92AC-92CE1EEED344}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
