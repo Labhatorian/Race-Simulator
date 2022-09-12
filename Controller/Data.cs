@@ -9,13 +9,23 @@ namespace Controller
 {
     internal static class Data
     {
-        public static Competition competition { get; set; }
+        public static Competition competition;
+        public static Race CurrentRace;
 
         public static void initialise()
         {
             competition = new Competition();
             AddParticipants();
             AddTracks();
+        }
+
+        public static void NextRace()
+        {
+            Track track = competition.NextTrack();
+            if (track != null)
+            {
+                CurrentRace = new Race(track, competition.Participants);
+            }
         }
 
         private static void AddParticipants()
