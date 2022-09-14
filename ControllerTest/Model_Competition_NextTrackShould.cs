@@ -16,6 +16,7 @@ namespace ControllerTest
         public void Setup()
         {
             _competition = new Competition();
+            _competition.Tracks = new Queue<Track>();
 
         }
 
@@ -24,6 +25,23 @@ namespace ControllerTest
         {
             Track result = _competition.NextTrack();
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void NextTrack_OneInQueue_ReturnTrack()
+        {
+            SectionTypes[] sectionTypesSilverstone = new SectionTypes[3];
+            sectionTypesSilverstone[0] = (SectionTypes)1;
+            sectionTypesSilverstone[1] = (SectionTypes)3;
+            sectionTypesSilverstone[2] = (SectionTypes)4;
+
+            Track TrackTest = new Track("Silverstone", sectionTypesSilverstone);
+
+            _competition.Tracks.Enqueue(TrackTest);
+
+            //Nu testen
+            Track result = _competition.NextTrack();
+            Assert.AreEqual(TrackTest, result);
         }
     }
 }

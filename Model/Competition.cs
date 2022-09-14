@@ -11,16 +11,17 @@ namespace Model
         public List<IParticipant> Participants { get; set; }
         public Queue<Track> Tracks { get; set; }
 
-    public Track NextTrack()
-    {
+        public Track? NextTrack()
+        {
             if (Tracks != null)
             {
-                Track Track = Tracks.Peek();
-                return Track;
-            } else
-            {
-                return null;
+                if (Tracks.Count > 0)
+                {
+                    Track Track = Tracks.Peek();
+                    return Track;
+                }
             }
-    }
+            return null;
+        }
 }
 }
