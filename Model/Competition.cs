@@ -13,8 +13,14 @@ namespace Model
 
     public Track NextTrack()
     {
-        Track Track = Tracks.Peek();
-        return Track;
+            if (Tracks != null)
+            {
+                Track Track = Tracks.Peek();
+                return Track;
+            } else
+            {
+                return null;
+            }
     }
 }
 }
