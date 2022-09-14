@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Controller;
+﻿using Controller;
 
 namespace Race_Simulator
 {
@@ -12,10 +6,10 @@ namespace Race_Simulator
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            Controller.Data.Initialise();
-            Controller.Data.NextRace();
-            Console.WriteLine($"Op naar: {Controller.Data.CurrentRace.Track.Name}!");
+            Console.WriteLine("Hello, (Formula 1) World (Championship)!");
+            Data.Initialise();
+            Data.NextRace();
+            Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
 
             for (; ; )
             {
