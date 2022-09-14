@@ -1,5 +1,6 @@
 ﻿using Controller;
 
+
 namespace Race_Simulator
 {
     internal class Program
@@ -7,8 +8,10 @@ namespace Race_Simulator
         private static void Main(string[] args)
         {
             Data.Initialise();
+            Visualisation.Initialise();
             Data.NextRace();
             Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
+            Visualisation.DrawTrack(Data.CurrentRace.Track);
 
             for (; ; )
             {
