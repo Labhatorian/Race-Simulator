@@ -8,7 +8,7 @@ using Model;
 namespace ControllerTest
 {
     [TestFixture]
-    internal class Model_Competition_NextTrackShould
+    internal class Model_Competition_Track
     {
         private Competition _competition;
 
