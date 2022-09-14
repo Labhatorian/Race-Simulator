@@ -14,15 +14,19 @@ namespace Model
         public Track(string name, SectionTypes[] sections)
         {
             Name = name;
-            Sections = new LinkedList<Section>();
+            Sections = ConvertSections(sections);
+        }
 
-            foreach(SectionTypes sectionType in sections)
+        private LinkedList<Section> ConvertSections(SectionTypes[] sections)
+        {
+            LinkedList<Section> SectionList = new LinkedList<Section>();
+            foreach (SectionTypes sectionType in sections)
             {
                 Section section = new Section();
                 section.SectionType = sectionType;
-                Sections.AddLast(section);
+                SectionList.AddLast(section);
             }
-
+            return SectionList;
         }
     }
 }
