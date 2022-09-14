@@ -18,6 +18,7 @@ namespace Model
                 if (Tracks.Count > 0)
                 {
                     Track Track = Tracks.Peek();
+                    Tracks.Dequeue();
                     return Track;
                 }
             }
