@@ -37,6 +37,8 @@ namespace Controller
             StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
+            
+            PlaceParticipants(track, participants);
         }
 
         private void RandomizeEquipment()
@@ -47,5 +49,40 @@ namespace Controller
                 participant.Equipment.Performance = _random.Next(99);
             }
         }
+
+        private void PlaceParticipants(Track track, List<IParticipant> Participants)
+        {
+            int currentAt = 0;
+
+            while (currentAt < Participants.Count)
+            {
+                foreach (Section section in track.Sections)
+                {
+                    if (section.SectionType == SectionTypes.StartGrid)
+                    {
+                        //Ga er van uit dat het logisch is ingedeeld dus achter elkaar starting grids voor de circuit
+                        SectionData sectionData = GetSectionData(section);
+                        
+                        if(sectionData.Left == null)
+                        {
+                            sectionData.Left = Participants[currentAt];
+                            currentAt++;
+
+                            //Volgende participant gaat section lijst af
+                            break;
+                        } else if(sectionData.Right == null)
+                        {
+                            sectionData.Right = Participants[currentAt];
+                            currentAt++;
+
+                            //Volgende participant gaat section lijst af
+                            break;
+                        }
+                        //Als section vol is, gaat hij naar de volgende
+                    }
+                }
+                //Ga er van uit dat er genoeg plek is
+            }
+         }
     }
 }
