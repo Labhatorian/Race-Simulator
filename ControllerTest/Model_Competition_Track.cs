@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +77,32 @@ namespace ControllerTest
             Assert.AreEqual(TracksQueued[1], TrackTestTwo);
             TracksQueued[2] = _competition.NextTrack();
             Assert.IsNull(TracksQueued[2]);
+        }
+
+        [Test]
+        public void ModelSetTester()
+        {
+            SectionData sectionDataTest = new SectionData();
+            sectionDataTest.DistanceLeft = 30;
+            sectionDataTest.DistanceRight = 20;
+
+            Assert.AreEqual(sectionDataTest.DistanceLeft, 30);
+            Assert.AreEqual(sectionDataTest.DistanceRight, 20);
+
+            Driver driverTest = new Driver();
+            driverTest.Naam = "Max?";
+            Assert.AreEqual(driverTest.Naam, "Max?");
+
+            Car carTest = new Car();
+            carTest.Speed = 10;
+            carTest.Performance = 30;
+            carTest.Quality = 20;
+            carTest.IsBroken = true;
+            Assert.AreEqual(carTest.Speed, 10);
+            Assert.AreEqual(carTest.Performance, 30);
+            Assert.AreEqual(carTest.Quality, 20);
+            Assert.AreEqual(carTest.IsBroken, true);
+
         }
         #endregion
     }

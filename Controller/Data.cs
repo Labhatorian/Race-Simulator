@@ -51,19 +51,19 @@ namespace Controller
             competition.Tracks = new Queue<Track>();
 
             SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
-            sectionTypesZandvoort[0] = (SectionTypes)1;
+            sectionTypesZandvoort[0] = (SectionTypes)3;
             sectionTypesZandvoort[1] = (SectionTypes)3;
             sectionTypesZandvoort[2] = (SectionTypes)2;
 
             SectionTypes[] sectionTypesSpa = new SectionTypes[3];
-            sectionTypesSpa[0] = (SectionTypes)1;
-            sectionTypesSpa[1] = (SectionTypes)2;
-            sectionTypesSpa[2] = (SectionTypes)3;
+            sectionTypesSpa[0] = (SectionTypes)3;
+            sectionTypesSpa[1] = (SectionTypes)3;
+            sectionTypesSpa[2] = (SectionTypes)1;
 
             SectionTypes[] sectionTypesMonza = new SectionTypes[3];
             sectionTypesMonza[0] = (SectionTypes)3;
-            sectionTypesMonza[1] = (SectionTypes)2;
-            sectionTypesMonza[2] = (SectionTypes)1;
+            sectionTypesMonza[1] = (SectionTypes)3;
+            sectionTypesMonza[2] = (SectionTypes)2;
 
             Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
             Track TrackTwo = new Track("Spa", sectionTypesSpa);
