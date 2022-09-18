@@ -70,6 +70,7 @@ namespace ControllerTest
             _competition.Tracks.Enqueue(TrackTest);
             _competition.Tracks.Enqueue(TrackTestTwo);
 
+            //Check of de gequeed tracks in goede volgorde zijn
             Track[] TracksQueued = new Track[3];
             TracksQueued[0] = _competition.NextTrack();
             Assert.AreEqual(TracksQueued[0], TrackTest);
@@ -98,6 +99,8 @@ namespace ControllerTest
             carTest.Performance = 30;
             carTest.Quality = 20;
             carTest.IsBroken = true;
+
+            //Check of alle gegevens kloppen die zijn geset
             Assert.AreEqual(carTest.Speed, 10);
             Assert.AreEqual(carTest.Performance, 30);
             Assert.AreEqual(carTest.Quality, 20);

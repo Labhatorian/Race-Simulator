@@ -17,6 +17,7 @@ namespace Model
             Sections = ConvertSections(sections);
         }
 
+        //Converteert elk section van array naar een section in de linkedlist
         private LinkedList<Section> ConvertSections(SectionTypes[] sections)
         {
             LinkedList<Section> SectionList = new LinkedList<Section>();

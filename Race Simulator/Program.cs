@@ -10,9 +10,13 @@ namespace Race_Simulator
             Data.Initialise();
             Visualisation.Initialise();
             Data.NextRace();
-            Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
-            Visualisation.DrawTrack(Data.CurrentRace.Track);
 
+            Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
+            Console.WriteLine("De kwalificatie is al afgerond!");
+            Console.WriteLine("Hier is het circuit en de startopselling:");
+            Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace);
+
+            //Hou de console open
             for (; ; )
             {
                 Thread.Sleep(100);

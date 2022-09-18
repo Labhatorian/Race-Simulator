@@ -13,9 +13,11 @@ namespace Controller
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
-        private Dictionary<Section, SectionData> _positions;
+        public Dictionary<Section, SectionData> _positions;
 
-        private SectionData GetSectionData(Section section)
+        //Haal sectiondata op als het bestaan anders maak nieuw
+        //Sectiondata bevat gegevens over de deelnemers die nu in de section zitten
+        public SectionData GetSectionData(Section section)
         {
             _positions.TryGetValue(section, out var value);
 
@@ -26,9 +28,11 @@ namespace Controller
             {
                 SectionData sectionData = new SectionData();
                 _positions.Add(section, sectionData);
-                return sectionData;
+                return sectionData; 
             }
         }
+
+        //Maak race aan
 
         public Race(Track track, List<IParticipant> participants)
         {
@@ -41,6 +45,7 @@ namespace Controller
             PlaceParticipants(track, participants);
         }
 
+        //Geef de deelnemers een willekeurig aantal kwaliteit en performance
         private void RandomizeEquipment()
         {
             foreach(IParticipant participant in Participants)
@@ -50,8 +55,10 @@ namespace Controller
             }
         }
 
+        //Plaats deelnemers in de startopstelling
         private void PlaceParticipants(Track track, List<IParticipant> Participants)
         {
+            //Telt bij welk deelnemer wij zijn
             int currentAt = 0;
 
             while (currentAt < Participants.Count)
@@ -60,7 +67,7 @@ namespace Controller
                 {
                     if (section.SectionType == SectionTypes.StartGrid)
                     {
-                        //Ga er van uit dat het logisch is ingedeeld dus achter elkaar starting grids voor de circuit
+                        //Ga er van uit dat het logisch is ingedeeld dus genoeg starting grids voor de circuit
                         SectionData sectionData = GetSectionData(section);
                         
                         if(sectionData.Left == null)
