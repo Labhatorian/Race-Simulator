@@ -14,11 +14,13 @@ namespace Controller
 
         public static void Initialise()
         {
+            //Maak nieuw competitie en voeg circuit en deelnemers toe
             competition = new Competition();
             AddParticipants();
             AddTracks();
         }
 
+        //Volgende race dus circuit
         public static void NextRace()
         {
             Track track = competition.NextTrack();
@@ -28,6 +30,7 @@ namespace Controller
             }
         }
 
+        //Voeg deelnemers toe
         private static void AddParticipants()
         {
             competition.Participants = new List<IParticipant>();
@@ -46,14 +49,17 @@ namespace Controller
             competition.Participants.Add(DriverThree);
         }
 
+        //Voeg circuits toe met hun bochten en straights
         private static void AddTracks()
         {
             competition.Tracks = new Queue<Track>();
 
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[5];
             sectionTypesZandvoort[0] = (SectionTypes)3;
             sectionTypesZandvoort[1] = (SectionTypes)3;
             sectionTypesZandvoort[2] = (SectionTypes)2;
+            sectionTypesZandvoort[3] = (SectionTypes)1;
+            sectionTypesZandvoort[4] = (SectionTypes)4;
 
             SectionTypes[] sectionTypesSpa = new SectionTypes[3];
             sectionTypesSpa[0] = (SectionTypes)3;

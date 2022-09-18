@@ -11,6 +11,7 @@ namespace Model
         public List<IParticipant> Participants { get; set; }
         public Queue<Track> Tracks { get; set; }
 
+        //Haal volgende circuit op
         public Track? NextTrack()
         {
             if (Tracks != null)
