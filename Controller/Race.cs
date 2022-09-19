@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Controller
 {
@@ -14,7 +16,8 @@ namespace Controller
         public DateTime StartTime;
         private Random _random;
         public Dictionary<Section, SectionData> _positions;
-
+        private Timer timer;
+        
         //Haal sectiondata op als het bestaan anders maak nieuw
         //Sectiondata bevat gegevens over de deelnemers die nu in de section zitten
         public SectionData GetSectionData(Section section)
@@ -41,8 +44,11 @@ namespace Controller
             StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
+            timer = new Timer(500);
+            timer.Elapsed += OnTimedEvent;
             
             PlaceParticipants(track, participants);
+            Start();
         }
 
         //Geef de deelnemers een willekeurig aantal kwaliteit en performance
@@ -91,5 +97,15 @@ namespace Controller
                 //Ga er van uit dat er genoeg plek is
             }
          }
+
+        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+        }
+
+        private void Start()
+        {
+            timer.Enabled = true;
+        }
     }
 }
