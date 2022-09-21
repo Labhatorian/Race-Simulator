@@ -48,7 +48,7 @@ namespace Controller
             StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
-            timer = new Timer(500);
+            timer = new Timer(1000);
             timer.Elapsed += OnTimedEvent;
             
             PlaceParticipants(track, participants);
@@ -61,8 +61,8 @@ namespace Controller
             foreach(IParticipant participant in Participants)
             {
                 participant.Equipment.Quality = _random.Next(1, 10);
-                participant.Equipment.Performance = _random.Next(1, 10);
-                participant.Equipment.Speed = _random.Next(1, 3);
+                participant.Equipment.Performance = _random.Next(1, 5);
+                participant.Equipment.Speed = _random.Next(1, 5);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Controller
 
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            //Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
 
             foreach (KeyValuePair<Section, SectionData> entry in _positions)
             {
@@ -123,10 +123,11 @@ namespace Controller
                         NextSection = section;
                         break;
                     }
-                    if(section == Section)
+                    if (section == Section)
                     {
                         Found = true;
-                    } else
+                    }
+                    else
                     {
                         //Blijf dan zitten?
                     }
@@ -139,47 +140,54 @@ namespace Controller
                     int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 2); ;
                     SD.DistanceLeft += Speed;
 
-                    if(SD.DistanceLeft >= 200)
+                    if (SD.DistanceLeft >= 100)
                     {
                         SD.DistanceLeft = 0;
 
-                        if(SDnext.Left == null)
+                        if (SDnext.Left == null)
                         {
                             SDnext.Left = SD.Left;
-                        } else if (SDnext.Right == null)
+                            SD.Left = null;
+                        }
+                        else if (SDnext.Right == null)
                         {
                             SDnext.Right = SD.Left;
+                            SD.Left = null;
                         }
 
-                        DriversChanged(this, new DriversChangedEventArgs(Track));
+                        //TODO Alleen driver zelf printen
+                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                     }
                 }
 
                 if (SD.Right != null)
                 {
-                    int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
+                    int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance * _random.Next(1, 2); ;
                     SD.DistanceRight += Speed;
 
-                    if (SD.DistanceRight >= 200)
+                    if (SD.DistanceRight >= 100)
                     {
                         SD.DistanceRight = 0;
 
                         if (SDnext.Left == null)
                         {
                             SDnext.Left = SD.Right;
+                            SD.Right = null;
                         }
                         else if (SDnext.Right == null)
                         {
                             SDnext.Right = SD.Right;
+                            SD.Right = null;
                         }
 
-                        DriversChanged(this, new DriversChangedEventArgs(Track));
+                        //TODO Alleen driver zelf printen
+                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                     }
                 }
             }
         }
 
-            private void Start()
+        private void Start()
         {
             RandomizeEquipment();
             timer.Enabled = true;
