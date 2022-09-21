@@ -1,5 +1,6 @@
 ﻿using Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Controller
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
-        public Dictionary<Section, SectionData> _positions;
+        public static Dictionary<Section, SectionData> _positions;
         private Timer timer;
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
         
@@ -57,8 +58,9 @@ namespace Controller
         {
             foreach(IParticipant participant in Participants)
             {
-                participant.Equipment.Quality = _random.Next(99);
-                participant.Equipment.Performance = _random.Next(99);
+                participant.Equipment.Quality = _random.Next(1, 10);
+                participant.Equipment.Performance = _random.Next(1, 10);
+                participant.Equipment.Speed = _random.Next(1, 10);
             }
         }
 
@@ -99,13 +101,79 @@ namespace Controller
             }
          }
 
-        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             //Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+
+            foreach (KeyValuePair<Section, SectionData> entry in _positions)
+            {
+                SectionData SD = entry.Value;
+                Section Section = entry.Key;
+                Section NextSection = Section;
+
+                //Vind volgende section
+                Boolean Found = false;
+                foreach (Section section in Track.Sections)
+                {
+                    if (Found)
+                    {
+                        NextSection = section;
+                        break;
+                    }
+                    if(section == Section)
+                    {
+                        Found = true;
+                    } else
+                    {
+                        //Blijf dan zitten?
+                    }
+                }
+
+
+                if (SD.Left != null)
+                {
+                    int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance;
+                    SD.DistanceLeft += Speed;
+
+                    if(SD.DistanceLeft >= 100)
+                    {
+                        SD.DistanceLeft = 0;
+                        ToNextSection(NextSection, SD.Left);
+                    }
+                }
+
+                if (SD.Right != null)
+                {
+                    int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
+                    SD.DistanceRight += Speed;
+
+                    if (SD.DistanceRight >= 100)
+                    {
+                        SD.DistanceRight = 0;
+                        ToNextSection(NextSection, SD.Right);
+                    }
+                }
+            }
+        }
+        
+        //Dit moet een event invoken
+        private void ToNextSection(Section section, IParticipant driver)
+        {
+            SectionData SD = GetSectionData(section);
+            if(SD.Right == null)
+            {
+                SD.Right = driver;
+            } else if(SD.Left == null)
+            {
+                SD.Left = SD.Right;
+                SD.Right = driver;
+            }
+            DriversChanged(this, new DriversChangedEventArgs(Track));
         }
 
-        private void Start()
+            private void Start()
         {
+            RandomizeEquipment();
             timer.Enabled = true;
         }
     }
