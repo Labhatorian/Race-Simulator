@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Model;
 
 namespace Controller
 {
     public static class Data
     {
-        public static Competition competition;
-        public static Race CurrentRace;
+        private static Competition competition { get; set; }
+        public static Race CurrentRace { get; set; }
 
         public static void Initialise()
         {
@@ -37,16 +38,19 @@ namespace Controller
 
             Driver DriverOne = new Driver();
             DriverOne.Naam = "Max Verstappen";
+            DriverOne.Equipment = new Car();
 
             Driver DriverTwo = new Driver();
             DriverTwo.Naam = "Lewis Hamilton";
+            DriverTwo.Equipment = new Car();
 
-            Driver DriverThree = new Driver();
-            DriverThree.Naam = "Charles Leclerc";
+            //Driver DriverThree = new Driver();
+            //DriverThree.Naam = "Charles Leclerc";
+            //DriverThree.Equipment = new Car();
 
             competition.Participants.Add(DriverOne);
             competition.Participants.Add(DriverTwo);
-            competition.Participants.Add(DriverThree);
+            //competition.Participants.Add(DriverThree);
         }
 
         //Voeg circuits toe met hun bochten en straights
@@ -54,12 +58,12 @@ namespace Controller
         {
             competition.Tracks = new Queue<Track>();
 
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[5];
             sectionTypesZandvoort[0] = (SectionTypes)3;
-            sectionTypesZandvoort[1] = (SectionTypes)3;
+            sectionTypesZandvoort[1] = (SectionTypes)2;
             sectionTypesZandvoort[2] = (SectionTypes)2;
-            //sectionTypesZandvoort[3] = (SectionTypes)1;
-            //sectionTypesZandvoort[4] = (SectionTypes)4;
+            sectionTypesZandvoort[3] = (SectionTypes)1;
+            sectionTypesZandvoort[4] = (SectionTypes)4;
 
             SectionTypes[] sectionTypesSpa = new SectionTypes[3];
             sectionTypesSpa[0] = (SectionTypes)3;

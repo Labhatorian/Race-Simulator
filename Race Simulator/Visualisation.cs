@@ -47,7 +47,10 @@ namespace Race_Simulator
         {
             foreach (string toWrite in array)
             {
-                Console.WriteLine(SetParticipants(toWrite, data.Left, data.Right));
+                if (data.Left != null | data.Right != null)
+                {
+                    Console.WriteLine(SetParticipants(toWrite, data.Left, data.Right));
+                }
             }
         }
 
