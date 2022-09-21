@@ -17,6 +17,7 @@ namespace Controller
         private Random _random;
         public Dictionary<Section, SectionData> _positions;
         private Timer timer;
+        public event EventHandler<DriversChangedEventArgs> DriversChanged;
         
         //Haal sectiondata op als het bestaan anders maak nieuw
         //Sectiondata bevat gegevens over de deelnemers die nu in de section zitten
@@ -100,7 +101,7 @@ namespace Controller
 
         private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+            //Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
         }
 
         private void Start()
