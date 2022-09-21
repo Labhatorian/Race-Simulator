@@ -54,12 +54,12 @@ namespace Controller
         {
             competition.Tracks = new Queue<Track>();
 
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[5];
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
             sectionTypesZandvoort[0] = (SectionTypes)3;
             sectionTypesZandvoort[1] = (SectionTypes)3;
             sectionTypesZandvoort[2] = (SectionTypes)2;
-            sectionTypesZandvoort[3] = (SectionTypes)1;
-            sectionTypesZandvoort[4] = (SectionTypes)4;
+            //sectionTypesZandvoort[3] = (SectionTypes)1;
+            //sectionTypesZandvoort[4] = (SectionTypes)4;
 
             SectionTypes[] sectionTypesSpa = new SectionTypes[3];
             sectionTypesSpa[0] = (SectionTypes)3;

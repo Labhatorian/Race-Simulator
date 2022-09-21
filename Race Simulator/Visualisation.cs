@@ -12,7 +12,7 @@ namespace Race_Simulator
     {
         public static void Initialise()
         {
-            Console.BackgroundColor = ConsoleColor.Red;
+            //Console.BackgroundColor = ConsoleColor.Red;
         }
 
         //Zoek uit welk section er moet worden geprint
@@ -71,6 +71,12 @@ namespace Race_Simulator
                 String = String.Replace("#", " ");
             }
             return String;
+        }
+
+        //Handler voor bewegen drivers
+        public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
+        {   
+            DrawTrack(e.Track, Data.CurrentRace);
         }
 
         #region Graphics
