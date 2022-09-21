@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using static System.Collections.Specialized.BitVector32;
+using Section = Model.Section;
 using Timer = System.Timers.Timer;
 
 namespace Controller
@@ -60,7 +62,7 @@ namespace Controller
             {
                 participant.Equipment.Quality = _random.Next(1, 10);
                 participant.Equipment.Performance = _random.Next(1, 10);
-                participant.Equipment.Speed = _random.Next(1, 10);
+                participant.Equipment.Speed = _random.Next(1, 3);
             }
         }
 
@@ -109,6 +111,7 @@ namespace Controller
             {
                 SectionData SD = entry.Value;
                 Section Section = entry.Key;
+
                 Section NextSection = Section;
 
                 //Vind volgende section
@@ -128,17 +131,27 @@ namespace Controller
                         //Blijf dan zitten?
                     }
                 }
+                SectionData SDnext = GetSectionData(NextSection);
 
-
+                //Check of er een driver op de section zit
                 if (SD.Left != null)
                 {
-                    int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance;
+                    int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 2); ;
                     SD.DistanceLeft += Speed;
 
-                    if(SD.DistanceLeft >= 100)
+                    if(SD.DistanceLeft >= 200)
                     {
                         SD.DistanceLeft = 0;
-                        ToNextSection(NextSection, SD.Left);
+
+                        if(SDnext.Left == null)
+                        {
+                            SDnext.Left = SD.Left;
+                        } else if (SDnext.Right == null)
+                        {
+                            SDnext.Right = SD.Left;
+                        }
+
+                        DriversChanged(this, new DriversChangedEventArgs(Track));
                     }
                 }
 
@@ -147,28 +160,23 @@ namespace Controller
                     int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
                     SD.DistanceRight += Speed;
 
-                    if (SD.DistanceRight >= 100)
+                    if (SD.DistanceRight >= 200)
                     {
                         SD.DistanceRight = 0;
-                        ToNextSection(NextSection, SD.Right);
+
+                        if (SDnext.Left == null)
+                        {
+                            SDnext.Left = SD.Right;
+                        }
+                        else if (SDnext.Right == null)
+                        {
+                            SDnext.Right = SD.Right;
+                        }
+
+                        DriversChanged(this, new DriversChangedEventArgs(Track));
                     }
                 }
             }
-        }
-        
-        //Dit moet een event invoken
-        private void ToNextSection(Section section, IParticipant driver)
-        {
-            SectionData SD = GetSectionData(section);
-            if(SD.Right == null)
-            {
-                SD.Right = driver;
-            } else if(SD.Left == null)
-            {
-                SD.Left = SD.Right;
-                SD.Right = driver;
-            }
-            DriversChanged(this, new DriversChangedEventArgs(Track));
         }
 
             private void Start()
