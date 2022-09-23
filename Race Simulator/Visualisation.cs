@@ -26,7 +26,7 @@ namespace Race_Simulator
 
             foreach(Section section in track.Sections)
             {
-                //TODO Als section is meegegeven, gebruik die en stop foreach
+                //TODO Verbeteren
                 Section usedSection = section;
                 if (StopEarly)
                 {

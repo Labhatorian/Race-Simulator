@@ -57,6 +57,7 @@ namespace Controller
         }
 
         //Geef de deelnemers een willekeurig aantal kwaliteit en performance
+        //TODO Waarden verbeteren
         private void RandomizeEquipment()
         {
             foreach(IParticipant participant in Participants)
@@ -105,7 +106,7 @@ namespace Controller
 
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+           // Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
             
             //Zodat de dictionary tijdens de foreach wordt aangepast
             var newDictionary = _positions.ToDictionary(entry => entry.Key,
@@ -159,7 +160,6 @@ namespace Controller
                             SD.Left = null;
                         }
 
-                        //TODO Alleen driver zelf printen
                         DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                     }
                 }
@@ -184,7 +184,6 @@ namespace Controller
                             SD.Right = null;
                         }
 
-                        //TODO Alleen driver zelf printen
                         DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                     }
                 }
