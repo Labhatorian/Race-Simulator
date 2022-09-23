@@ -49,7 +49,7 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             timer = new Timer(1000);
-            timer.Elapsed += OnTimedEvent;
+            //timer.Elapsed += OnTimedEvent;
             
             PlaceParticipants(track, participants);
             Start();
@@ -61,12 +61,11 @@ namespace Controller
             foreach(IParticipant participant in Participants)
             {
                 participant.Equipment.Quality = _random.Next(1, 10);
-                participant.Equipment.Performance = _random.Next(1, 5);
-                participant.Equipment.Speed = _random.Next(1, 5);
+                participant.Equipment.Performance = _random.Next(1, 10);
+                participant.Equipment.Speed = _random.Next(1, 10);
             }
         }
 
-        //Plaats deelnemers in de startopstelling
         private void PlaceParticipants(Track track, List<IParticipant> Participants)
         {
             //Telt bij welk deelnemer wij zijn
@@ -190,7 +189,7 @@ namespace Controller
         private void Start()
         {
             RandomizeEquipment();
-            timer.Enabled = true;
+           timer.Enabled = true;
         }
     }
 }
