@@ -106,8 +106,12 @@ namespace Controller
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+            
+            //Zodat de dictionary tijdens de foreach wordt aangepast
+            var newDictionary = _positions.ToDictionary(entry => entry.Key,
+                                               entry => entry.Value);
 
-            foreach (KeyValuePair<Section, SectionData> entry in _positions)
+            foreach (KeyValuePair<Section, SectionData> entry in newDictionary)
             {
                 SectionData SD = entry.Value;
                 Section Section = entry.Key;
