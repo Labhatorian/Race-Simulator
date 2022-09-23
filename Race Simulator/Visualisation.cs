@@ -16,29 +16,45 @@ namespace Race_Simulator
         }
 
         //Zoek uit welk section er moet worden geprint
-        public static void DrawTrack(Track track, Race race)
+        public static void DrawTrack(Track track, Race race, Section sectionedDriver = null)
         {
+            Boolean StopEarly = false;
+            if(sectionedDriver != null)
+            {
+                StopEarly = true;
+            }
+
             foreach(Section section in track.Sections)
             {
                 //TODO Als section is meegegeven, gebruik die en stop foreach
+                Section usedSection = section;
+                if (StopEarly)
+                {
+                    usedSection = sectionedDriver;
+                }
 
-                switch (section.SectionType)
+                switch (usedSection.SectionType)
                 {
                     case SectionTypes.Straight:
-                        PrintTrack(_straight, race.GetSectionData(section));
+                        PrintTrack(_straight, race.GetSectionData(usedSection));
                         break;
                     case SectionTypes.LeftCorner:
-                        PrintTrack(_leftcorner, race.GetSectionData(section));
+                        PrintTrack(_leftcorner, race.GetSectionData(usedSection));
                         break;
                     case SectionTypes.RightCorner:
-                        PrintTrack(_rightcorner, race.GetSectionData(section));
+                        PrintTrack(_rightcorner, race.GetSectionData(usedSection));
                         break;
                     case SectionTypes.StartGrid:
-                        PrintTrack(_startgrid, race.GetSectionData(section));
+                        PrintTrack(_startgrid, race.GetSectionData(usedSection));
                         break;
                     case SectionTypes.Finish:
-                        PrintTrack(_finish, race.GetSectionData(section));
+                        PrintTrack(_finish, race.GetSectionData(usedSection));
                         break;
+                }
+
+                if(usedSection != null)
+                {
+                    break;
                 }
                 
             }
@@ -81,7 +97,7 @@ namespace Race_Simulator
         //Handler voor bewegen drivers
         public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {   
-            DrawTrack(e.Track, Data.CurrentRace);
+            DrawTrack(e.Track, Data.CurrentRace, e.Section);
         }
 
         #region Graphics
