@@ -106,7 +106,7 @@ namespace Controller
 
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-           // Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+           Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
             
             //Zodat de dictionary tijdens de foreach wordt aangepast
             var newDictionary = _positions.ToDictionary(entry => entry.Key,
@@ -130,7 +130,13 @@ namespace Controller
                     }
                     if (section == Section)
                     {
-                        Found = true;
+                        if(Section.SectionType == SectionTypes.Finish)
+                        {
+                            NextSection = Track.Sections.First.Value;
+                        } else
+                        {
+                            Found = true;
+                        }
                     }
                     else
                     {
