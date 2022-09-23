@@ -20,6 +20,7 @@ namespace Controller
         private Random _random;
         public static Dictionary<Section, SectionData> _positions;
         private Timer timer;
+
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
         
         //Haal sectiondata op als het bestaan anders maak nieuw
@@ -49,7 +50,7 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             timer = new Timer(1000);
-            //timer.Elapsed += OnTimedEvent;
+            timer.Elapsed += OnTimedEvent;
             
             PlaceParticipants(track, participants);
             Start();
