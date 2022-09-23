@@ -102,6 +102,7 @@ namespace Race_Simulator
 
         #region Graphics
 
+        //TODO Graphics aanpassen aan left en right
         private static string[] _straight    = { "|         |",  "|         |", "| @   #   |",  "|         |", "|         |", "|         |" };
         private static string[] _leftcorner  = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
         private static string[] _rightcorner = { "  - - - - -",  "/          ", "|     @    ",  "|         /", "|   #     |", "|         |" };
