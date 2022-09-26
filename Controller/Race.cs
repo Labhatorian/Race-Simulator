@@ -47,7 +47,7 @@ namespace Controller
             timer = new Timer(1000);
             timer.Elapsed += OnTimedEvent;
 
-           //Data.CurrentRace.DriversChanged += OnDriverChanged;
+           //Data.CurrentRace.DriversChanged += Visualation.OnDriverChanged;
 
             PlaceParticipants(track, participants);
             Start();
@@ -58,7 +58,7 @@ namespace Controller
         {
             foreach (IParticipant participant in Participants)
             {
-                participant.Equipment.Quality = _random.Next(1, 10);
+                participant.Equipment.Quality = _random.Next(1, 100);
                 participant.Equipment.Performance = _random.Next(3, 8);
                 participant.Equipment.Speed = _random.Next(3, 8);
             }
@@ -107,6 +107,7 @@ namespace Controller
             }
         }
 
+        //TODO Verbeter zodat left en right een functie is
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {   
            {
@@ -154,14 +155,37 @@ namespace Controller
                     SectionData SDnext = GetSectionData(NextSection);
 
                     //Check of er een driver op de section zit
+
                     if (SD.Left != null)
                     {
                         int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 3);
-                        SD.DistanceLeft += Speed;
+                        double PossibleBroken = (double) _random.Next(1, 10) * ((double) SD.Left.Equipment.Quality / 100.0);
+
+                        if (Math.Ceiling(PossibleBroken) == 5)
+                        {
+                            if (!SD.Left.Equipment.IsBroken)
+                            {
+                                SD.Left.Equipment.IsBroken = true;
+                            }
+                            else
+                            {
+                                SD.Left.Equipment.IsBroken = false;
+                                SD.Left.Equipment.Quality -= (int)PossibleBroken;
+                            }
+                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                        }
+
+                        if (!SD.Left.Equipment.IsBroken)
+                        {
+                            SD.DistanceLeft += Speed;
+                        }
 
                         if (SD.DistanceLeft >= 100)
                         {
-                            SD.DistanceLeft = 0;
+                            if (!SD.Left.Equipment.IsBroken)
+                            {
+                                SD.DistanceLeft = 0;
+                            }
 
                             if (SDnext.Left == null)
                             {
@@ -200,7 +224,26 @@ namespace Controller
                     if (SD.Right != null)
                     {
                         int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance * _random.Next(1, 3); ;
-                        SD.DistanceRight += Speed;
+                        double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Right.Equipment.Quality / 100.0);
+
+                        if (Math.Ceiling(PossibleBroken) == 5)
+                        {
+                            if (!SD.Right.Equipment.IsBroken)
+                            {
+                                SD.Right.Equipment.IsBroken = true;
+                            }
+                            else
+                            {
+                                SD.Right.Equipment.IsBroken = false;
+                                SD.Right.Equipment.Quality -= (int)PossibleBroken;
+                            }
+                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                        }
+
+                        if (!SD.Right.Equipment.IsBroken)
+                        {
+                            SD.DistanceRight += Speed;
+                        }
 
                         if (SD.DistanceRight >= 100)
                         {

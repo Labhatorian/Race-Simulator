@@ -79,7 +79,14 @@ namespace Race_Simulator
 
             if (left != null)
             {
-                String = String.Replace("@", left.Naam.Substring(0, 1));
+                if (!left.Equipment.IsBroken)
+                {
+                    String = String.Replace("@", left.Naam.Substring(0, 1));
+                }
+                else
+                {
+                    String = String.Replace("@", "|" + left.Naam.Substring(0, 1));
+                }
             } else
             {
                 String = String.Replace("@", " ");
@@ -87,7 +94,14 @@ namespace Race_Simulator
 
             if (right != null)
             {
-               String = String.Replace("#", right.Naam.Substring(0, 1));
+                if (!right.Equipment.IsBroken)
+                {
+                    String = String.Replace("#", right.Naam.Substring(0, 1));
+                } 
+                else
+                {
+                    String = String.Replace("#", right.Naam.Substring(0, 1) + "|");
+                }
             } else
             {
                 String = String.Replace("#", " ");
@@ -108,7 +122,7 @@ namespace Race_Simulator
 
         #region Graphics
 
-        //TODO Graphics aanpassen aan left en right
+        //TODO Graphics verbeteren
         private static string[] _straight    = { "|         |",  "|         |", "| @   #   |",  "|         |", "|         |", "|         |" };
         private static string[] _leftcorner  = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
         private static string[] _rightcorner = { "  - - - - -",  "/          ", "|     @    ",  "|         /", "|   #     |", "|         |" };
