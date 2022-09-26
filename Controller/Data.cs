@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Model;
+﻿using Model;
 
 namespace Controller
 {
@@ -31,6 +25,7 @@ namespace Controller
                 CurrentRace = new Race(track, competition.Participants);
             }
             Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
+            //CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
         }
 
         //Voeg deelnemers toe
@@ -46,13 +41,8 @@ namespace Controller
             DriverTwo.Naam = "Lewis Hamilton";
             DriverTwo.Equipment = new Car();
 
-            //Driver DriverThree = new Driver();
-            //DriverThree.Naam = "Charles Leclerc";
-            //DriverThree.Equipment = new Car();
-
             competition.Participants.Add(DriverOne);
             competition.Participants.Add(DriverTwo);
-            //competition.Participants.Add(DriverThree);
         }
 
         //Voeg circuits toe met hun bochten en straights

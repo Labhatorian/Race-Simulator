@@ -115,9 +115,11 @@ namespace Race_Simulator
             DrawTrack(e.Track, Data.CurrentRace, e.Section);
         }
 
-        public static void NextRace()
+        public static void OnDriversFinished(Object source, EventArgs e)
         {
-            Data.CurrentRace.DriversChanged += OnDriverChanged;
+            Data.CurrentRace = null;
+            Data.NextRace();
+            Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
         }
 
         #region Graphics

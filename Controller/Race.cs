@@ -15,6 +15,7 @@ namespace Controller
         private Timer timer;
 
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
+        public event EventHandler<EventArgs> DriversFinished;
 
         //Haal sectiondata op als het bestaan anders maak nieuw
         //Sectiondata bevat gegevens over de deelnemers die nu in de section zitten
@@ -44,7 +45,7 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
-            timer = new Timer(1000);
+            timer = new Timer(100);
             timer.Elapsed += OnTimedEvent;
 
             //Data.CurrentRace.DriversChanged += Visualation.OnDriverChanged;
@@ -134,6 +135,7 @@ namespace Controller
                             NextSection = section;
                             break;
                         }
+
                         if (section == Section)
                         {
                             if (Section.SectionType == SectionTypes.Finish)
@@ -197,6 +199,7 @@ namespace Controller
                                     if (_ParticipantsLaps[SD.Left] >= 3)
                                     {
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
+                                        break;
                                     }
                                 }
                                 SD.Left = null;
@@ -212,6 +215,7 @@ namespace Controller
                                     {
                                         SD.Left = null;
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
+                                        break;
                                     }
                                 }
                                 SD.Left = null;
@@ -259,6 +263,7 @@ namespace Controller
                                     if (_ParticipantsLaps[SD.Right] == 3)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
+                                        break;
                                     }
                                 }
                                 SD.Right = null;
@@ -273,6 +278,7 @@ namespace Controller
                                     if (_ParticipantsLaps[SD.Right] == 3)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
+                                        break;
                                     }
                                 }
                                 SD.Right = null;
@@ -283,7 +289,10 @@ namespace Controller
                     }
                 }
             }
-            timer.Start();
+            if (timer != null)
+            {
+                timer.Start();
+            }
         }
 
         private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
@@ -436,11 +445,17 @@ namespace Controller
                 timer.Stop();
                 timer.Enabled = false;
                 timer.Dispose();
+                timer = null;
                 foreach (Delegate d in DriversChanged.GetInvocationList())
                 {
                     DriversChanged -= (EventHandler<DriversChangedEventArgs>)d;
                 }
-                Data.NextRace();
+                //DriversChanged = null;
+                DriversFinished(this, new EventArgs());
+                //foreach (Delegate d in DriversFinished.GetInvocationList())
+                //{
+                //    DriversFinished -= (EventHandler<EventArgs>)d;
+                //}
             }
         }
     }
