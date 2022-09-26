@@ -13,6 +13,7 @@ namespace Race_Simulator
         public static void Initialise()
         {
             //Console.BackgroundColor = ConsoleColor.Red;
+
         }
 
         //Zoek uit welk section er moet worden geprint
@@ -98,6 +99,11 @@ namespace Race_Simulator
         public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {   
             DrawTrack(e.Track, Data.CurrentRace, e.Section);
+        }
+
+        public static void NextRace()
+        {
+            Data.CurrentRace.DriversChanged += OnDriverChanged;
         }
 
         #region Graphics

@@ -10,8 +10,6 @@ namespace Race_Simulator
             Data.Initialise();
             Visualisation.Initialise();
             Data.NextRace();
-
-            Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
             Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace);
 
             Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
