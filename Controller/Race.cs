@@ -47,7 +47,7 @@ namespace Controller
             timer = new Timer(1000);
             timer.Elapsed += OnTimedEvent;
 
-           //Data.CurrentRace.DriversChanged += Visualation.OnDriverChanged;
+            //Data.CurrentRace.DriversChanged += Visualation.OnDriverChanged;
 
             PlaceParticipants(track, participants);
             Start();
@@ -109,8 +109,8 @@ namespace Controller
 
         //TODO Verbeter zodat left en right een functie is
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
-        {   
-           {
+        {
+            {
                 Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
 
                 //Zodat de dictionary tijdens de foreach wordt aangepast
@@ -159,7 +159,7 @@ namespace Controller
                     if (SD.Left != null)
                     {
                         int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 3);
-                        double PossibleBroken = (double) _random.Next(1, 10) * ((double) SD.Left.Equipment.Quality / 100.0);
+                        double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Left.Equipment.Quality / 100.0);
 
                         if (Math.Ceiling(PossibleBroken) == 5)
                         {
@@ -286,6 +286,107 @@ namespace Controller
             timer.Start();
         }
 
+        private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
+        {
+            if (Driver != null)
+            {
+                int Speed = Driver.Equipment.Speed * Driver.Equipment.Performance * _random.Next(1, 3);
+                double PossibleBroken = (double)_random.Next(1, 10) * ((double)Driver.Equipment.Quality / 100.0);
+
+                if (Math.Ceiling(PossibleBroken) == 5)
+                {
+                    if (!Driver.Equipment.IsBroken)
+                    {
+                        Driver.Equipment.IsBroken = true;
+                    }
+                    else
+                    {
+                        Driver.Equipment.IsBroken = false;
+                        Driver.Equipment.Quality -= (int)PossibleBroken;
+                    }
+                    DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                }
+
+                if (!Driver.Equipment.IsBroken)
+                {
+                    if (!LeftOrRight)
+                    {
+                        SD.DistanceLeft += Speed;
+                    }
+                    else
+                    {
+                        SD.DistanceRight += Speed;
+                    }
+                }
+
+                if (!LeftOrRight)
+                {
+                    if (SD.DistanceLeft >= 100)
+                    {
+                        if (!Driver.Equipment.IsBroken)
+                        {
+                            SD.DistanceLeft = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    if (SD.DistanceRight >= 100)
+                    {
+                        if (!Driver.Equipment.IsBroken)
+                        {
+                            SD.DistanceRight = 0;
+                        }
+                    }
+                }
+
+                Boolean Moved = false;
+                //Verder nog niet af Misschien zo laten?
+                if (SDnext.Left == null)
+                {
+                    SDnext.Left = Driver;
+                    Moved = true;
+                    if (AddLap)
+                    {
+                        //TODO maak functie van
+                        _ParticipantsLaps[Driver] += 1;
+                        Console.WriteLine($"{Driver.Naam} Lap: {_ParticipantsLaps[Driver]}");
+                        if (_ParticipantsLaps[Driver] >= 3)
+                        {
+                            RemoveDriverAndCheck(Driver, SDnext, SD);
+                        }
+                    }
+                }
+                else if (SDnext.Right == null)
+                {
+                    SDnext.Right = Driver;
+                    Moved = true;
+                    if (AddLap)
+                    {
+                        _ParticipantsLaps[Driver] += 1;
+                        Console.WriteLine($"{Driver.Naam} Lap: {_ParticipantsLaps[Driver]}");
+                        if (_ParticipantsLaps[Driver] >= 3)
+                        {
+                            RemoveDriverAndCheck(Driver, SDnext, SD);
+                        }
+                    }
+                }
+
+                if (Moved)
+                {
+                    if (!LeftOrRight)
+                    {
+                        SD.Left = null;
+                    }
+                    else
+                    {
+                        SD.Right = null;
+                    }
+                }
+                DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+            }
+        }
+
         private void Start()
         {
             RandomizeEquipment();
@@ -303,7 +404,7 @@ namespace Controller
             {
                 SD.Right = null;
             }
-            if(SDprev.Left == driver)
+            if (SDprev.Left == driver)
             {
                 SDprev.Left = null;
             }
@@ -340,7 +441,7 @@ namespace Controller
                     DriversChanged -= (EventHandler<DriversChangedEventArgs>)d;
                 }
                 Data.NextRace();
-            } 
+            }
         }
     }
 }
