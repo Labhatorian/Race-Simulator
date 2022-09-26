@@ -1,5 +1,4 @@
 ﻿using Controller;
-using Model;
 
 namespace Race_Simulator
 {
@@ -10,6 +9,8 @@ namespace Race_Simulator
             Data.Initialise();
             Visualisation.Initialise();
             Data.NextRace();
+
+            //TODO Verplaats naar NextRace
             Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace);
 
             Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
