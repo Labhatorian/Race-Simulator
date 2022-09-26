@@ -24,21 +24,13 @@ namespace Controller
         //Volgende race dus circuit
         public static void NextRace()
         {
+            CurrentRace = null;
             Track track = competition.NextTrack();
             if (track != null)
             {
                 CurrentRace = new Race(track, competition.Participants);
             }
-        }
-
-        public static void StopAndNext()
-        {
-            CurrentRace = null;
-            NextRace();
             Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
-            //Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace);
-
-            //Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
         }
 
         //Voeg deelnemers toe
