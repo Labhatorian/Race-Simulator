@@ -21,7 +21,7 @@ namespace Model
                     Track Track = Tracks.Peek();
                     Tracks.Dequeue();
                     return Track;
-                }
+                } else { return null; }
             }
             return null;
         }
