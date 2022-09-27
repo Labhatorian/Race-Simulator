@@ -7,6 +7,11 @@ namespace Controller
         private static Competition competition { get; set; }
         public static Race CurrentRace { get; set; }
 
+        public static void SetCompetition(Competition comp)
+        {
+            competition = comp;
+        }
+
         public static void Initialise()
         {
             //Maak nieuw competitie en voeg circuit en deelnemers toe
@@ -23,9 +28,8 @@ namespace Controller
             if (track != null)
             {
                 CurrentRace = new Race(track, competition.Participants);
+                Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
             }
-            Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
-            //CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
         }
 
         //Voeg deelnemers toe
