@@ -17,14 +17,20 @@ namespace GraphicVisualisation
         
         public static Bitmap GetBitmap(string String)
         {
-            if (Bitmaps[String] == null)
+            if (Bitmaps.ContainsKey(String))
             {
-                Bitmaps.Add(String, new Bitmap(String));
-            }
-            else if (String.Equals("Empty"))
+                
+            } else
             {
-                Bitmap EmptBitmap = EmptyBitmap(500, 500);
-                Bitmaps.Add(String, EmptBitmap);
+                if (String.Equals("Empty"))
+                {
+                    Bitmap EmptBitmap = EmptyBitmap(500, 500);
+                    Bitmaps.Add(String, EmptBitmap);
+                }
+                else
+                {
+                    Bitmaps.Add(String, new Bitmap(String));
+                }
             }
 
             Bitmaps[String].Clone();
@@ -39,9 +45,14 @@ namespace GraphicVisualisation
         public static Bitmap EmptyBitmap(int x, int y)
         {
             Bitmap BM = new Bitmap(x, y);
-            Graphics image = Graphics.FromImage(BM);
-            image.Clear(Color.Green);
-            return new Bitmap(x , y, image); ;
+            SolidBrush SB = new SolidBrush(Color.Green);
+            using (Graphics graph = Graphics.FromImage(BM))
+            {
+                Rectangle ImageSize = new Rectangle(0, 0, 500, 500);
+                graph.FillRectangle(SB, ImageSize);
+            }
+
+            return BM;
         }
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
         {

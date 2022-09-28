@@ -8,8 +8,8 @@ namespace Model
 {
     public class Competition
     {
-        public List<IParticipant> Participants { get; set; }
-        public Queue<Track> Tracks { get; set; }
+        public List<IParticipant>? Participants { get; set; }
+        public Queue<Track>? Tracks { get; set; }
 
         //Haal volgende circuit op
         public Track? NextTrack()

@@ -73,7 +73,7 @@ namespace ControllerTest
             Data.NextRace();
             Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
             Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
-            Thread.Sleep(5000);
+            Thread.Sleep(30000);
             Assert.AreEqual(Data.CurrentRace, null);
         }
     }

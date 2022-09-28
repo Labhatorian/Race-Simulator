@@ -45,7 +45,7 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
-            timer = new Timer(400);
+            timer = new Timer(200);
             timer.Elapsed += OnTimedEvent;
 
             PlaceParticipants(track, participants);
@@ -181,7 +181,7 @@ namespace Controller
                             else
                             {
                                 SD.Left.Equipment.IsBroken = false;
-                                SD.Left.Equipment.Quality -= (int)PossibleBroken;
+                                SD.Left.Equipment.Quality -= 2;
                             }
                             DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
@@ -248,7 +248,7 @@ namespace Controller
                             else
                             {
                                 SD.Right.Equipment.IsBroken = false;
-                                SD.Right.Equipment.Quality -= (int)PossibleBroken;
+                                SD.Right.Equipment.Quality -= 2;
                             }
                             DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
@@ -284,6 +284,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Right] += 1;
                                     Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
+
                                     if (_ParticipantsLaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
@@ -413,6 +414,7 @@ namespace Controller
 
         private void RemoveDriverAndCheck(IParticipant driver, SectionData SD, SectionData SDprev)
         {
+            //Verwijder driver. Zorgt ervoor dat driver niet naar volgende section kan glippen
             if (SD.Left == driver)
             {
                 SD.Left = null;
@@ -421,6 +423,7 @@ namespace Controller
             {
                 SD.Right = null;
             }
+
             if (SDprev.Left == driver)
             {
                 SDprev.Left = null;

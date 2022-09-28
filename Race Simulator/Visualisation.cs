@@ -17,7 +17,7 @@ namespace Race_Simulator
         }
 
         //Zoek uit welk section er moet worden geprint
-        public static void DrawTrack(Track track, Race race, Section sectionedDriver = null)
+        public static void DrawTrack(Track track, Race race, Section? sectionedDriver = null)
         {
             Boolean StopEarly = false;
             if(sectionedDriver != null)
