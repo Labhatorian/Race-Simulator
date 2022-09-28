@@ -37,6 +37,12 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Primitives.4.3.0\lib\net45\System.Drawing.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LoadResources.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -86,6 +93,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Graphics\wip\cars.pdn" />
+    <None Include="Graphics\wip\cars2.pdn" />
+    <None Include="Graphics\wip\graphics wip.pdn" />
+    <None Include="Graphics\wip\graphics wip2.pdn" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -95,7 +107,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Graphics\" />
+    <Content Include="Graphics\broken.png" />
+    <Content Include="Graphics\finish.png" />
+    <Content Include="Graphics\green.png" />
+    <Content Include="Graphics\grey.png" />
+    <Content Include="Graphics\left.png" />
+    <Content Include="Graphics\red.png" />
+    <Content Include="Graphics\right.png" />
+    <Content Include="Graphics\start.png" />
+    <Content Include="Graphics\straight.png" />
+    <Content Include="Graphics\yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Graphics\blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Graphics\wip\image-1631086653338.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -45,10 +45,8 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
-            timer = new Timer(100);
+            timer = new Timer(400);
             timer.Elapsed += OnTimedEvent;
-
-            //Data.CurrentRace.DriversChanged += Visualation.OnDriverChanged;
 
             PlaceParticipants(track, participants);
             Start();
@@ -65,6 +63,12 @@ namespace Controller
             }
         }
 
+
+        /// <summary>
+        /// Zet participants op de starting grid
+        /// </summary>
+        /// <param name="track"></param>
+        /// <param name="Participants"></param>
         private void PlaceParticipants(Track track, List<IParticipant> Participants)
         {
             //Telt bij welk deelnemer wij zijn
@@ -108,7 +112,12 @@ namespace Controller
             }
         }
 
-        //TODO Verbeter zodat left en right een functie is
+        /// <summary>
+        /// Brein van de race. Code bevat beweging voor de drivers en veel checks(einde race) en berekeningen
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        //TODO Verbeter zodat left en right een functie is en niet zo lange code met veel hetzelfde
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             {
@@ -196,7 +205,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Left] += 1;
                                     Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
-                                    if (_ParticipantsLaps[SD.Left] >= 3)
+                                    if (_ParticipantsLaps[SD.Left] >= 4)
                                     {
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
                                         break;
@@ -211,7 +220,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Left] += 1;
                                     Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
-                                    if (_ParticipantsLaps[SD.Left] == 3)
+                                    if (_ParticipantsLaps[SD.Left] == 4)
                                     {
                                         SD.Left = null;
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
@@ -260,7 +269,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Right] += 1;
                                     Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
-                                    if (_ParticipantsLaps[SD.Right] == 3)
+                                    if (_ParticipantsLaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
                                         break;
@@ -275,7 +284,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Right] += 1;
                                     Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
-                                    if (_ParticipantsLaps[SD.Right] == 3)
+                                    if (_ParticipantsLaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
                                         break;
@@ -350,7 +359,6 @@ namespace Controller
                 }
 
                 Boolean Moved = false;
-                //Verder nog niet af Misschien zo laten?
                 if (SDnext.Left == null)
                 {
                     SDnext.Left = Driver;
@@ -450,12 +458,11 @@ namespace Controller
                 {
                     DriversChanged -= (EventHandler<DriversChangedEventArgs>)d;
                 }
-                //DriversChanged = null;
                 DriversFinished(this, new EventArgs());
-                //foreach (Delegate d in DriversFinished.GetInvocationList())
-                //{
-                //    DriversFinished -= (EventHandler<EventArgs>)d;
-                //}
+                foreach (Delegate d in DriversFinished.GetInvocationList())
+                {
+                    DriversFinished -= (EventHandler<EventArgs>)d;
+                }
             }
         }
     }
