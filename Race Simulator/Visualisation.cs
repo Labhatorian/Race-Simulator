@@ -14,32 +14,90 @@ namespace Race_Simulator
         public static void Initialise()
         {
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.SetBufferSize(200, 50);
+            Console.SetBufferSize(300, 100);
 
         }
 
         static int CurrentXPos = 0;
+        static int CurrentXCounter = 0;
+        static int CurrentYCounter = 0;
         static int CurrentYPos = 0;
         //Zoek uit welk section er moet worden geprint
         public static void DrawTrack(Track track, Race race, Section? sectionedDriver = null)
         {
-
             Console.Clear();
+            CurrentXPos = 0;
+            CurrentXCounter = 0;
+            CurrentYCounter = 0;
+            CurrentYPos = 0;
+
             foreach (Section section in track.Sections)
             {
 
                 switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
-                        PrintTrack(_straight, race.GetSectionData(section));
-                        //CurrentYPos += 6;
+                        if (CurrentDirection == Directions.East)
+                        {
+                            PrintTrack(_straighteast, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.South)
+                        {
+                            PrintTrack(_straightsouth, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.West)
+                        {
+                            PrintTrack(_straightwest, race.GetSectionData(section));
+                        } else
+                        {
+                            PrintTrack(_straight, race.GetSectionData(section));
+                        }
                         break;
                     case SectionTypes.LeftCorner:
-                        PrintTrack(_leftcorner, race.GetSectionData(section));
+                        if (CurrentDirection == Directions.East)
+                        {
+                            PrintTrack(_leftcornereast, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.South)
+                        {
+                            PrintTrack(_leftcornersouth, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.West)
+                        {
+                            PrintTrack(_leftcornerwest, race.GetSectionData(section));
+                        }
+                        else
+                        {
+                            PrintTrack(_leftcorner, race.GetSectionData(section));
+                        }
+
+                        CurrentDirection -= 1;
                         break;
                     case SectionTypes.RightCorner:
-                        PrintTrack(_rightcorner, race.GetSectionData(section));
-                        CurrentDirection += 1;
+                        if (CurrentDirection == Directions.East)
+                        {
+                            PrintTrack(_rightcornereast, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.South)
+                        {
+                            PrintTrack(_rightcornersouth, race.GetSectionData(section));
+                        }
+                        else if (CurrentDirection == Directions.West)
+                        {
+                            PrintTrack(_rightcornerwest, race.GetSectionData(section));
+                        }
+                        else
+                        {
+                            PrintTrack(_rightcorner, race.GetSectionData(section));
+                        }
+
+                        if (CurrentDirection != Directions.West)
+                        {
+                            CurrentDirection += 1;
+                        } else
+                        {
+                            CurrentDirection = 0;
+                        }
                      break;
                     case SectionTypes.StartGrid:
                         PrintTrack(_startgrid, race.GetSectionData(section));
@@ -51,7 +109,48 @@ namespace Race_Simulator
 
                 if (CurrentDirection == Directions.North)
                 {
-                    Console.MoveBufferArea(0, 0, 11, 11, 0, 6);
+                    if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
+                    {
+                        Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
+                    }
+
+                    if (section.SectionType == SectionTypes.RightCorner)
+                    {
+                        CurrentXPos = 0;
+                        CurrentYPos = 6 * (CurrentYCounter-1);
+                    }
+                }
+
+                if (CurrentDirection == Directions.East)
+                {
+                    CurrentXCounter += 1;
+                    CurrentXPos += 11;
+                    if (section.SectionType == SectionTypes.RightCorner)
+                    {
+                        CurrentYPos = 0;
+                    }
+                }
+
+                if (CurrentDirection == Directions.South)
+                {
+                    CurrentYPos += 6;
+                    CurrentYCounter += 1;
+                    if (section.SectionType == SectionTypes.RightCorner)
+                    {
+                        CurrentYPos = 6;
+                        CurrentXPos = 11 * CurrentXCounter;
+                    }
+                }
+
+                if (CurrentDirection == Directions.West)
+                {
+                    CurrentXPos -= 11;
+                    //CurrentXCounter -= 1;
+                    if (section.SectionType == SectionTypes.RightCorner)
+                    {
+                        CurrentYPos = 6 * (CurrentYCounter );
+                        CurrentXPos = 11 * (CurrentXCounter -1);
+                    }
                 }
             }
         }
@@ -62,7 +161,7 @@ namespace Race_Simulator
             string[] strings;
 
             int CounterX = CurrentXPos;
-            int CounterY = 0 + CurrentYPos;
+            int CounterY = CurrentYPos;
             foreach (string toWrite in array)
             {
                 if(CurrentDirection == Directions.North)
@@ -75,10 +174,21 @@ namespace Race_Simulator
                 {
                     Console.SetCursorPosition(CounterX, CounterY);
                     Console.Write(SetParticipants(toWrite, data.Left, data.Right));
+                    CounterY++;
+                }
+                if (CurrentDirection == Directions.South)
+                {
+                    Console.SetCursorPosition(CounterX, CounterY);
+                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
+                    CounterY++;
+                }
+                if (CurrentDirection == Directions.West)
+                {
+                    Console.SetCursorPosition(CounterX, CounterY);
+                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
+                    CounterY++;
                 }
             }
-
-            
         }
 
         //Zet de drivers op de goede plek in de section. Zet niks neer als er niemand is.
@@ -93,7 +203,7 @@ namespace Race_Simulator
                 }
                 else
                 {
-                    String = String.Replace("@", "|" + left.Naam.Substring(0, 1));
+                    String = String.Replace("@", ":");
                 }
             } else
             {
@@ -108,7 +218,7 @@ namespace Race_Simulator
                 } 
                 else
                 {
-                    String = String.Replace("#", right.Naam.Substring(0, 1) + "|");
+                    String.Replace("#", ":");
                 }
             } else
             {
@@ -131,14 +241,24 @@ namespace Race_Simulator
         }
 
         #region Graphics
-
-        //TODO Graphics verbeteren
         private static string[] _straight    = { "|         |",  "|         |", "| @   #   |",  "|         |", "|         |", "|         |" };
+        private static string[] _straighteast = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
+        private static string[] _straightsouth = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
+        private static string[] _straightwest = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
+
         private static string[] _leftcorner  = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
+        private static string[] _leftcornereast = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
+        private static string[] _leftcornersouth = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
+        private static string[] _leftcornerwest = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
+
         private static string[] _rightcorner = { "  - - - - -",  "/          ", "|     @    ",  "|         /", "|   #     |", "|         |" };
+        private static string[] _rightcornereast = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
+        private static string[] _rightcornersouth = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
+        private static string[] _rightcornerwest = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
+
+
         private static string[] _startgrid   = { "|         |" , "| $ $ $ $ |", "| @       |",  "|         |", "|     #   |", "|         |" };
         private static string[] _finish      = { "|         |",  "| ! ! ! ! |", "|     @   |",  "|         |", "|   #     |", "|         |" };
-
         #endregion
     }
 }

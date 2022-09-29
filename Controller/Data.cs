@@ -57,33 +57,74 @@ namespace Controller
         {
             competition.Tracks = new Queue<Track>();
 
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[14];
             //Naar boven
             sectionTypesZandvoort[0] = SectionTypes.StartGrid;
             sectionTypesZandvoort[1] = SectionTypes.Straight;
             sectionTypesZandvoort[2] = SectionTypes.RightCorner;
-            //sectionTypesZandvoort[0] = SectionTypes.RightCorner;
 
             //Naar rechts
-            //sectionTypesZandvoort[3] = SectionTypes.Straight;
+            sectionTypesZandvoort[3] = SectionTypes.Straight;
+            sectionTypesZandvoort[4] = SectionTypes.Straight;
+            sectionTypesZandvoort[5] = SectionTypes.RightCorner;
 
-            SectionTypes[] sectionTypesSpa = new SectionTypes[3];
-            sectionTypesSpa[0] = (SectionTypes)3;
-            sectionTypesSpa[1] = (SectionTypes)3;
-            sectionTypesSpa[2] = (SectionTypes)1;
+            //Naar Beneden
+            sectionTypesZandvoort[6] = SectionTypes.Straight;
+            sectionTypesZandvoort[7] = SectionTypes.Straight;
+            sectionTypesZandvoort[8] = SectionTypes.Straight;
+            sectionTypesZandvoort[9] = SectionTypes.RightCorner;
 
-            SectionTypes[] sectionTypesMonza = new SectionTypes[3];
-            sectionTypesMonza[0] = (SectionTypes)3;
-            sectionTypesMonza[1] = (SectionTypes)3;
-            sectionTypesMonza[2] = (SectionTypes)2;
+            //Naar Links
+            sectionTypesZandvoort[10] = SectionTypes.Straight;
+            sectionTypesZandvoort[11] = SectionTypes.Straight;
+            sectionTypesZandvoort[12] = SectionTypes.RightCorner;
+
+            //Naar boven weer
+            sectionTypesZandvoort[13] = SectionTypes.Finish;
+
+
+            SectionTypes[] sectionTypesSpa = new SectionTypes[18];
+            //Naar boven
+            sectionTypesSpa[0] = SectionTypes.StartGrid;
+            sectionTypesSpa[1] = SectionTypes.Straight;
+            sectionTypesSpa[2] = SectionTypes.RightCorner;
+
+            //Naar rechts
+            sectionTypesSpa[3] = SectionTypes.Straight;
+            sectionTypesSpa[4] = SectionTypes.Straight;
+            sectionTypesSpa[5] = SectionTypes.RightCorner;
+
+            //Naar Beneden
+            sectionTypesSpa[6] = SectionTypes.RightCorner;
+
+            // Naar Links
+            sectionTypesSpa[7] = SectionTypes.Straight;
+            sectionTypesSpa[8] = SectionTypes.LeftCorner;
+
+            //Naar Beneden
+            sectionTypesSpa[9] = SectionTypes.Straight;
+            sectionTypesSpa[10] = SectionTypes.LeftCorner;
+
+            //Naar Rechts
+            sectionTypesSpa[11] = SectionTypes.Straight;
+            sectionTypesSpa[12] = SectionTypes.RightCorner;
+
+            //Naar Beneden
+            sectionTypesSpa[13] = SectionTypes.RightCorner;
+
+            //Naar Links
+            sectionTypesSpa[14] = SectionTypes.Straight;
+            sectionTypesSpa[15] = SectionTypes.Straight;
+            sectionTypesSpa[16] = SectionTypes.RightCorner;
+
+            //Naar boven weer
+            sectionTypesSpa[17] = SectionTypes.Finish;
 
             Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
             Track TrackTwo = new Track("Spa", sectionTypesSpa);
-            Track TrackThree = new Track("Monza", sectionTypesMonza);
 
             competition.Tracks.Enqueue(TrackOne);
             competition.Tracks.Enqueue(TrackTwo);
-            competition.Tracks.Enqueue(TrackThree);
         }
     }
 }

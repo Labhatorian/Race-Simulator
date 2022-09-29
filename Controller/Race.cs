@@ -45,8 +45,8 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
-            timer = new Timer(200);
-           // timer.Elapsed += OnTimedEvent;
+            timer = new Timer(1000);
+           timer.Elapsed += OnTimedEvent;
 
             PlaceParticipants(track, participants);
             Start();
@@ -122,7 +122,7 @@ namespace Controller
         {
             {
                 // Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
-                Console.WriteLine("===============");
+                //Console.WriteLine("===============");
 
                 //Zodat de dictionary tijdens de foreach wordt aangepast
                 var newDictionary = _positions.ToDictionary(entry => entry.Key,

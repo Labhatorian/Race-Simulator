@@ -14,7 +14,7 @@ namespace Model
     public enum SectionTypes
     {
         Straight,
-        HorizStraight,
+        HorizStraight, //Unused
         LeftCorner,
         RightCorner,
         StartGrid,
