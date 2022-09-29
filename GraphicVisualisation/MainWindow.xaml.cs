@@ -41,22 +41,14 @@ namespace GraphicVisualisation
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {
             GraphicalVisualisation GV = new GraphicalVisualisation();
+            GV.DrawTrack(e.Track, "Empty");
             this.MainImage.Dispatcher.BeginInvoke(
 
                 DispatcherPriority.Render,
                 new Action(() =>
                 {
                     this.MainImage.Source = null;
-                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GV.DrawTrack(e.Track, null)); ;
-
-                    //Test bitmap
-                    //Bitmap bmp = new Bitmap(500, 500);
-                    //using (Graphics graph = Graphics.FromImage(bmp))
-                    //{
-                    //    Rectangle ImageSize = new Rectangle(0, 0, 500, 500);
-                    //    graph.FillRectangle(Brushes.White, ImageSize);
-                    //}
-                    //this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(bmp); ;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GV.DrawTrack(e.Track, e.Section.SectionType.ToString())); ;
                 }));
         }
     }

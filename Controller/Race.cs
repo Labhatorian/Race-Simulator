@@ -46,7 +46,7 @@ namespace Controller
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
             timer = new Timer(200);
-            timer.Elapsed += OnTimedEvent;
+           // timer.Elapsed += OnTimedEvent;
 
             PlaceParticipants(track, participants);
             Start();
@@ -121,7 +121,8 @@ namespace Controller
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             {
-                Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+                // Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+                Console.WriteLine("===============");
 
                 //Zodat de dictionary tijdens de foreach wordt aangepast
                 var newDictionary = _positions.ToDictionary(entry => entry.Key,
@@ -172,7 +173,7 @@ namespace Controller
                         int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 3);
                         double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Left.Equipment.Quality / 100.0);
 
-                        if (Math.Ceiling(PossibleBroken) == 5)
+                        if (Math.Ceiling(PossibleBroken) >= 7)
                         {
                             if (!SD.Left.Equipment.IsBroken)
                             {
@@ -239,7 +240,7 @@ namespace Controller
                         int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance * _random.Next(1, 3); ;
                         double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Right.Equipment.Quality / 100.0);
 
-                        if (Math.Ceiling(PossibleBroken) == 5)
+                        if (Math.Ceiling(PossibleBroken) >= 7)
                         {
                             if (!SD.Right.Equipment.IsBroken)
                             {

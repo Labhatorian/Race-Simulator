@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
+using Controller;
+using Model;
+using System.Diagnostics;
 
 namespace GraphicVisualisation
 {
@@ -15,26 +18,41 @@ namespace GraphicVisualisation
     {
         private static Dictionary<string, Bitmap> Bitmaps = new Dictionary<string, Bitmap>();
         
-        public static Bitmap GetBitmap(string String)
+        public static Bitmap GetBitmap(string Stringo)
         {
-            if (Bitmaps.ContainsKey(String))
-            {
-                
-            } else
-            {
-                if (String.Equals("Empty"))
+                if (!Bitmaps.ContainsKey(Stringo))
                 {
-                    Bitmap EmptBitmap = EmptyBitmap(500, 500);
-                    Bitmaps.Add(String, EmptBitmap);
+                    switch (Stringo)
+                    {
+                        case "Straight":
+                            Bitmap StraightLine = (Bitmap)Bitmaps["Empty"].Clone();
+                            Bitmaps.Add(Stringo, StraightLine);
+                            break;
+                        case "LeftCorner":
+                            Bitmap LeftCorner = (Bitmap)Bitmaps["Empty"].Clone();
+                            Bitmaps.Add(Stringo, LeftCorner);
+                            break;
+                        case "RightCorner":
+                            Bitmap RightCorner = (Bitmap)Bitmaps["Empty"].Clone();
+                            Bitmaps.Add(Stringo, RightCorner);
+                            break;
+                        case "StartGrid":
+                            Bitmap StartGrid = (Bitmap)Bitmaps["Empty"].Clone();
+                            Bitmaps.Add(Stringo, StartGrid);
+                            break;
+                        case "Finish":
+                            Bitmap Finish = (Bitmap)Bitmaps["Empty"].Clone();
+                            Bitmaps.Add(Stringo, Finish);
+                            break;
+                        default:
+                            Bitmap EmptBitmap = EmptyBitmap(500, 500);
+                            Bitmaps.Add("Empty", EmptBitmap);
+                            break;
+                    }
                 }
-                else
-                {
-                    Bitmaps.Add(String, new Bitmap(String));
-                }
-            }
 
-            Bitmaps[String].Clone();
-            return Bitmaps[String];
+            Bitmaps[Stringo].Clone();
+            return Bitmaps[Stringo];
         }
 
         public static void Clear()
@@ -86,5 +104,15 @@ namespace GraphicVisualisation
                 bitmap.UnlockBits(bitmapData);
             }
         }
+
+        #region GRAPHICS
+
+        const string Straight = ".\\Graphics\\straight.png";
+        const string LeftCorner = ".\\Graphics\\left.png";
+        const string RightCorner = ".\\Graphics\\right.png";
+        const string StartGrid = ".\\Graphics\\start.png";
+        const string Finish = ".\\Graphics\\finish.png";
+
+        #endregion
     }
 }

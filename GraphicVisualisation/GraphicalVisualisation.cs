@@ -14,9 +14,16 @@ namespace GraphicVisualisation
     public class GraphicalVisualisation
     {
 
-        public Bitmap DrawTrack(Track Track, Bitmap Bitmap)
+        public Bitmap DrawTrack(Track Track, String String)
         {
-            Bitmap BM = LoadResources.GetBitmap("Empty");
+            Bitmap BM;
+            if(String != null & String != "Empty")
+            {
+                BM = LoadResources.GetBitmap(String);
+            } else
+            {
+                BM = LoadResources.GetBitmap("Empty");
+            }
             return BM;
         }
         

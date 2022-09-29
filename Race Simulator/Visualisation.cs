@@ -10,67 +10,75 @@ namespace Race_Simulator
 {
     public static class Visualisation
     {
+        static Directions CurrentDirection = Directions.North;
         public static void Initialise()
         {
-            //Console.BackgroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.SetBufferSize(200, 50);
 
         }
 
+        static int CurrentXPos = 0;
+        static int CurrentYPos = 0;
         //Zoek uit welk section er moet worden geprint
         public static void DrawTrack(Track track, Race race, Section? sectionedDriver = null)
         {
-            Boolean StopEarly = false;
-            if(sectionedDriver != null)
-            {
-                StopEarly = true;
-            }
 
-            foreach(Section section in track.Sections)
+            Console.Clear();
+            foreach (Section section in track.Sections)
             {
-                //TODO Verbeteren
-                Section usedSection = section;
-                if (StopEarly)
-                {
-                    usedSection = sectionedDriver;
-                }
 
-                switch (usedSection.SectionType)
+                switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
-                        PrintTrack(_straight, race.GetSectionData(usedSection));
+                        PrintTrack(_straight, race.GetSectionData(section));
+                        //CurrentYPos += 6;
                         break;
                     case SectionTypes.LeftCorner:
-                        PrintTrack(_leftcorner, race.GetSectionData(usedSection));
+                        PrintTrack(_leftcorner, race.GetSectionData(section));
                         break;
                     case SectionTypes.RightCorner:
-                        PrintTrack(_rightcorner, race.GetSectionData(usedSection));
-                        break;
+                        PrintTrack(_rightcorner, race.GetSectionData(section));
+                        CurrentDirection += 1;
+                     break;
                     case SectionTypes.StartGrid:
-                        PrintTrack(_startgrid, race.GetSectionData(usedSection));
+                        PrintTrack(_startgrid, race.GetSectionData(section));
                         break;
                     case SectionTypes.Finish:
-                        PrintTrack(_finish, race.GetSectionData(usedSection));
+                        PrintTrack(_finish, race.GetSectionData(section));
                         break;
                 }
 
-                if(usedSection != null)
+                if (CurrentDirection == Directions.North)
                 {
-                    break;
+                    Console.MoveBufferArea(0, 0, 11, 11, 0, 6);
                 }
-                
             }
         }
 
         //Voor elk string in de graphic, print het uit met goede gegevens
         private static void PrintTrack(string[] array, SectionData data)
-        {
+        { 
+            string[] strings;
+
+            int CounterX = CurrentXPos;
+            int CounterY = 0 + CurrentYPos;
             foreach (string toWrite in array)
             {
-                if (data.Left != null | data.Right != null)
+                if(CurrentDirection == Directions.North)
                 {
-                    Console.WriteLine(SetParticipants(toWrite, data.Left, data.Right));
+                    Console.SetCursorPosition(CounterX, CounterY);
+                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
+                    CounterY++;
+                }
+                if (CurrentDirection == Directions.East)
+                {
+                    Console.SetCursorPosition(CounterX, CounterY);
+                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
                 }
             }
+
+            
         }
 
         //Zet de drivers op de goede plek in de section. Zet niks neer als er niemand is.

@@ -14,9 +14,18 @@ namespace Model
     public enum SectionTypes
     {
         Straight,
+        HorizStraight,
         LeftCorner,
         RightCorner,
         StartGrid,
         Finish
+    }
+
+    public enum Directions
+    {
+        North,
+        East,
+        South,
+        West,
     }
 }

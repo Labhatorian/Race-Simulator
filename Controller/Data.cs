@@ -29,6 +29,9 @@ namespace Controller
             {
                 CurrentRace = new Race(track, competition.Participants);
                 Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
+            } else
+            {
+                Console.WriteLine($"De competitie is afgelopen!!!!");
             }
         }
 
@@ -54,35 +57,15 @@ namespace Controller
         {
             competition.Tracks = new Queue<Track>();
 
-            SectionTypes[] sectionTypesZandvoort = new SectionTypes[19];
-            sectionTypesZandvoort[0] = (SectionTypes)3;
-            sectionTypesZandvoort[1] = (SectionTypes)2;
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            //Naar boven
+            sectionTypesZandvoort[0] = SectionTypes.StartGrid;
+            sectionTypesZandvoort[1] = SectionTypes.Straight;
+            sectionTypesZandvoort[2] = SectionTypes.RightCorner;
+            //sectionTypesZandvoort[0] = SectionTypes.RightCorner;
 
-            sectionTypesZandvoort[2] = (SectionTypes)1;
-            sectionTypesZandvoort[3] = (SectionTypes)2;
-            sectionTypesZandvoort[4] = (SectionTypes)1;
-
-            sectionTypesZandvoort[5] = (SectionTypes)2;
-            sectionTypesZandvoort[6] = (SectionTypes)1;
-            sectionTypesZandvoort[7] = (SectionTypes)2;
-
-            sectionTypesZandvoort[8] = (SectionTypes)2;
-            sectionTypesZandvoort[9] = (SectionTypes)2;
-            sectionTypesZandvoort[10] = (SectionTypes)2;
-
-            sectionTypesZandvoort[11] = (SectionTypes)1;
-
-            sectionTypesZandvoort[12] = (SectionTypes)0;
-
-            sectionTypesZandvoort[13] = (SectionTypes)2;
-            sectionTypesZandvoort[14] = (SectionTypes)1;
-
-            sectionTypesZandvoort[15] = (SectionTypes)2;
-            sectionTypesZandvoort[16] = (SectionTypes)2;
-
-            sectionTypesZandvoort[17] = (SectionTypes)0;
-
-            sectionTypesZandvoort[18] = (SectionTypes)4;
+            //Naar rechts
+            //sectionTypesZandvoort[3] = SectionTypes.Straight;
 
             SectionTypes[] sectionTypesSpa = new SectionTypes[3];
             sectionTypesSpa[0] = (SectionTypes)3;
