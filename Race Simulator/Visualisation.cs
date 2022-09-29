@@ -168,30 +168,9 @@ namespace Race_Simulator
             int CounterY = CurrentYPos;
             foreach (string toWrite in array)
             {
-                if(CurrentDirection == Directions.North)
-                {
                     Console.SetCursorPosition(CounterX, CounterY);
                     Console.Write(SetParticipants(toWrite, data.Left, data.Right));
                     CounterY++;
-                }
-                if (CurrentDirection == Directions.East)
-                {
-                    Console.SetCursorPosition(CounterX, CounterY);
-                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
-                    CounterY++;
-                }
-                if (CurrentDirection == Directions.South)
-                {
-                    Console.SetCursorPosition(CounterX, CounterY);
-                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
-                    CounterY++;
-                }
-                if (CurrentDirection == Directions.West)
-                {
-                    Console.SetCursorPosition(CounterX, CounterY);
-                    Console.Write(SetParticipants(toWrite, data.Left, data.Right));
-                    CounterY++;
-                }
             }
         }
 
@@ -207,7 +186,7 @@ namespace Race_Simulator
                 }
                 else
                 {
-                    String = String.Replace("@", "益");
+                    String = String.Replace("@", "%");
                 }
             } else
             {
@@ -222,7 +201,7 @@ namespace Race_Simulator
                 } 
                 else
                 {
-                    String.Replace("#", "益");
+                    String.Replace("#", "%");
                 }
             } else
             {

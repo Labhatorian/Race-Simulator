@@ -46,8 +46,7 @@ namespace Controller
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
             PlaceParticipants(track, participants);
-            Thread.Sleep(1000);
-            timer = new Timer(1000);
+            timer = new Timer(200);
             timer.Elapsed += OnTimedEvent;
             Start();
         }
@@ -205,6 +204,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Left] += 1;
                                     Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
+                                    Thread.Sleep(500);
                                     if (_ParticipantsLaps[SD.Left] >= 4)
                                     {
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
@@ -220,6 +220,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Left] += 1;
                                     Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
+                                    Thread.Sleep(500);
                                     if (_ParticipantsLaps[SD.Left] == 4)
                                     {
                                         SD.Left = null;
@@ -267,6 +268,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Right] += 1;
                                     Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
+                                    Thread.Sleep(500);
                                     if (_ParticipantsLaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
@@ -282,7 +284,7 @@ namespace Controller
                                 {
                                     _ParticipantsLaps[SD.Right] += 1;
                                     Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
-
+                                    Thread.Sleep(500);
                                     if (_ParticipantsLaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
