@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,9 @@ namespace Race_Simulator
         static Directions CurrentDirection = Directions.North;
         public static void Initialise()
         {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.SetBufferSize(300, 100);
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+
+            Console.SetBufferSize(150, 100);
 
         }
 
@@ -23,7 +25,7 @@ namespace Race_Simulator
         static int CurrentYCounter = 0;
         static int CurrentYPos = 0;
         //Zoek uit welk section er moet worden geprint
-        public static void DrawTrack(Track track, Race race, Section? sectionedDriver = null)
+        public static void DrawTrack(Track track, Race race)
         {
             Console.Clear();
             CurrentXPos = 0;
@@ -127,7 +129,7 @@ namespace Race_Simulator
                     CurrentXPos += 11;
                     if (section.SectionType == SectionTypes.RightCorner)
                     {
-                        CurrentYPos = 0;
+                        CurrentYPos = 6 * (CurrentYCounter);
                     }
                 }
 
@@ -137,7 +139,7 @@ namespace Race_Simulator
                     CurrentYCounter += 1;
                     if (section.SectionType == SectionTypes.RightCorner)
                     {
-                        CurrentYPos = 6;
+                        CurrentYPos = 6 * (CurrentYCounter);
                         CurrentXPos = 11 * CurrentXCounter;
                     }
                 }
@@ -145,14 +147,16 @@ namespace Race_Simulator
                 if (CurrentDirection == Directions.West)
                 {
                     CurrentXPos -= 11;
-                    //CurrentXCounter -= 1;
+                    CurrentXCounter -= 1;
                     if (section.SectionType == SectionTypes.RightCorner)
                     {
-                        CurrentYPos = 6 * (CurrentYCounter );
-                        CurrentXPos = 11 * (CurrentXCounter -1);
+                        CurrentYPos = 6 * (CurrentYCounter);
+                        CurrentXPos = 11 * (CurrentXCounter);
                     }
                 }
             }
+            Console.SetCursorPosition(0, Console.WindowTop);
+            Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
         }
 
         //Voor elk string in de graphic, print het uit met goede gegevens
@@ -203,7 +207,7 @@ namespace Race_Simulator
                 }
                 else
                 {
-                    String = String.Replace("@", ":");
+                    String = String.Replace("@", "益");
                 }
             } else
             {
@@ -218,7 +222,7 @@ namespace Race_Simulator
                 } 
                 else
                 {
-                    String.Replace("#", ":");
+                    String.Replace("#", "益");
                 }
             } else
             {
@@ -230,7 +234,7 @@ namespace Race_Simulator
         //Handler voor bewegen drivers
         public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {   
-            DrawTrack(e.Track, Data.CurrentRace, e.Section);
+            DrawTrack(e.Track, Data.CurrentRace);
         }
 
         public static void OnDriversFinished(Object source, EventArgs e)
@@ -241,24 +245,25 @@ namespace Race_Simulator
         }
 
         #region Graphics
-        private static string[] _straight    = { "|         |",  "|         |", "| @   #   |",  "|         |", "|         |", "|         |" };
-        private static string[] _straighteast = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
-        private static string[] _straightsouth = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
-        private static string[] _straightwest = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
-
-        private static string[] _leftcorner  = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
-        private static string[] _leftcornereast = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
-        private static string[] _leftcornersouth = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
-        private static string[] _leftcornerwest = { "- - - - -  ", "          \\", "    @     |", "\\         |", "|     #   |", "|         |" };
-
-        private static string[] _rightcorner = { "  - - - - -",  "/          ", "|     @    ",  "|         /", "|   #     |", "|         |" };
-        private static string[] _rightcornereast = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
-        private static string[] _rightcornersouth = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
-        private static string[] _rightcornerwest = { "  - - - - -", "/          ", "|     @    ", "|         /", "|   #     |", "|         |" };
+        private static string[] _straight        = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
+        private static string[] _straighteast    = { "_ _ _ _ _ _", "           ", "    @      ", "           ", "    #      ", "_ _ _ _ _ _" };
+        private static string[] _straightsouth   = { "|         |", "|         |", "| #   @   |", "|         |", "|         |", "|         |" };
+        private static string[] _straightwest    = { "_ _ _ _ _ _", "           ", "    #      ", "           ", "    @      ", "_ _ _ _ _ _" };
 
 
-        private static string[] _startgrid   = { "|         |" , "| $ $ $ $ |", "| @       |",  "|         |", "|     #   |", "|         |" };
-        private static string[] _finish      = { "|         |",  "| ! ! ! ! |", "|     @   |",  "|         |", "|   #     |", "|         |" };
+        private static string[] _leftcorner      = { "- - - - -  " , "          \\", "    @     |", "          |", "      #   |" , "\\         |" };
+        private static string[] _leftcornereast  = { "_         _" , "          \\", "      @   |", "          |", "  #       |" , "_ _ _ _ /  " };
+        private static string[] _leftcornersouth = { "|         \\", "|          " , "|   #      ", "|          ", "|     @   " , "\\ _ _ _ _ _" };
+        private static string[] _leftcornerwest  = { "  _ _ _ _ _" , "/          " , "|  #       ", "|          ", "|     @    " , "|          " };
+
+        private static string[] _rightcorner      = { "  _ _ _ _ _" , "/          " , "|     @    ", "|          ", "|   #      ", "|          " };
+        private static string[] _rightcornereast  = { "_ _ _ _ _  " , "          \\", "  #       |", "          |", "      @   |", "          |" };
+        private static string[] _rightcornersouth = { "/         |" , "          |" , "    #     |", "          |", "      @   |", "_ _ _ _ _ /" };
+        private static string[] _rightcornerwest  = { "|         \\", "|          " , "|  @       ", "|          ", "|   #      ", " \\ _ _ _ _ " };
+
+
+        private static string[] _startgrid        = { "|         |" , "| $ $ $ $ |", "| @       |",  "|         |", "|     #   |", "|         |" };
+        private static string[] _finish           = { "|         |",  "| ! ! ! ! |", "|     @   |",  "|         |", "|   #     |", "|         |" };
         #endregion
     }
 }

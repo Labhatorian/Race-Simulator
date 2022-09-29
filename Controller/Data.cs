@@ -28,7 +28,7 @@ namespace Controller
             if (track != null)
             {
                 CurrentRace = new Race(track, competition.Participants);
-                Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
+                //Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
             } else
             {
                 Console.WriteLine($"De competitie is afgelopen!!!!");
@@ -125,6 +125,7 @@ namespace Controller
 
             competition.Tracks.Enqueue(TrackOne);
             competition.Tracks.Enqueue(TrackTwo);
+
         }
     }
 }

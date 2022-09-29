@@ -14,7 +14,7 @@ namespace Controller
         private static Dictionary<IParticipant, int> _ParticipantsLaps;
         private Timer timer;
 
-        public event EventHandler<DriversChangedEventArgs> DriversChanged;
+        public event EventHandler<DriversChangedEventArgs>? DriversChanged;
         public event EventHandler<EventArgs> DriversFinished;
 
         //Haal sectiondata op als het bestaan anders maak nieuw
@@ -45,10 +45,10 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
-            timer = new Timer(1000);
-           timer.Elapsed += OnTimedEvent;
-
             PlaceParticipants(track, participants);
+            Thread.Sleep(1000);
+            timer = new Timer(1000);
+            timer.Elapsed += OnTimedEvent;
             Start();
         }
 
@@ -184,7 +184,6 @@ namespace Controller
                                 SD.Left.Equipment.IsBroken = false;
                                 SD.Left.Equipment.Quality -= 2;
                             }
-                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
 
                         if (!SD.Left.Equipment.IsBroken)
@@ -230,7 +229,6 @@ namespace Controller
                                 }
                                 SD.Left = null;
                             }
-
                             DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
                     }
@@ -251,7 +249,6 @@ namespace Controller
                                 SD.Right.Equipment.IsBroken = false;
                                 SD.Right.Equipment.Quality -= 2;
                             }
-                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
 
                         if (!SD.Right.Equipment.IsBroken)
@@ -294,7 +291,6 @@ namespace Controller
                                 }
                                 SD.Right = null;
                             }
-
                             DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                         }
                     }
