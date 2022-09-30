@@ -16,7 +16,7 @@ namespace Race_Simulator
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
 
-            Console.SetBufferSize(150, 100);
+            //Console.SetBufferSize(200, 200);
 
         }
 
@@ -220,7 +220,12 @@ namespace Race_Simulator
         {
             Data.CurrentRace = null;
             Data.NextRace();
-            Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
+
+            if (Data.CurrentRace != null)
+            {
+                Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
+                Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
+            }
         }
 
         #region Graphics

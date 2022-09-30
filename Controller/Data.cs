@@ -31,7 +31,14 @@ namespace Controller
                 //Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
             } else
             {
+                Console.Clear();
                 Console.WriteLine($"De competitie is afgelopen!!!!");
+                Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
+
+                foreach (IParticipant driver in competition.Participants)
+                {
+                    Console.WriteLine($"{driver.Naam}: {driver.Points}");
+                }
             }
         }
 
