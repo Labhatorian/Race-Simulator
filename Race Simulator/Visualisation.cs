@@ -15,7 +15,7 @@ namespace Race_Simulator
         public static void Initialise()
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
-
+            Console.CursorVisible = false;
             //Console.SetBufferSize(200, 200);
 
         }

@@ -6,6 +6,7 @@ namespace Race_Simulator
     {
         private static void Main(string[] args)
         {
+            Console.CursorVisible = false;
             Data.Initialise();
             Visualisation.Initialise();
             Data.NextRace();

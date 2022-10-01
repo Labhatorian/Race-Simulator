@@ -17,8 +17,11 @@ namespace Controller
         public event EventHandler<DriversChangedEventArgs>? DriversChanged;
         public event EventHandler<EventArgs> DriversFinished;
 
-        //Haal sectiondata op als het bestaan anders maak nieuw
-        //Sectiondata bevat gegevens over de deelnemers die nu in de section zitten
+        /// <summary>
+        /// Vind sectiondata van section. Als die niet bestaat, maak een nieuwe aan voor die section.
+        /// </summary>
+        /// <param name="section"></param>
+        /// <returns></returns>
         public SectionData GetSectionData(Section section)
         {
             _positions.TryGetValue(section, out var value);
@@ -35,8 +38,11 @@ namespace Controller
             }
         }
 
-        //Maak race aan
-
+        /// <summary>
+        /// Maak race aan. Haal gegevens op uit data van competitie en zet timer en event klaar. Begin dan de race
+        /// </summary>
+        /// <param name="track"></param>
+        /// <param name="participants"></param>
         public Race(Track track, List<IParticipant> participants)
         {
             Track = track;
@@ -46,12 +52,15 @@ namespace Controller
             _positions = new Dictionary<Section, SectionData>();
             _ParticipantsLaps = new Dictionary<IParticipant, int>();
             PlaceParticipants(track, participants);
-            timer = new Timer(200);
+            timer = new Timer(1000);
             timer.Elapsed += OnTimedEvent;
             Start();
         }
 
-        //Geef de deelnemers een willekeurig aantal kwaliteit en performance
+        /// <summary>
+        /// Geef de deelnemers een willekeurig waarde voor kwaliteit performance en speed
+        /// TODO Speed wordt berekend uit quality en performance? Check TASKER
+        /// </summary>
         private void RandomizeEquipment()
         {
             foreach (IParticipant participant in Participants)
@@ -64,7 +73,7 @@ namespace Controller
 
 
         /// <summary>
-        /// Zet participants op de starting grid
+        /// Zet participants op de starting grid. De eerste is LEFT en de tweede is RIGHT enzo.
         /// </summary>
         /// <param name="track"></param>
         /// <param name="Participants"></param>
@@ -113,10 +122,12 @@ namespace Controller
 
         /// <summary>
         /// Brein van de race. Code bevat beweging voor de drivers en veel checks(einde race) en berekeningen
+        /// TODO Verander summary
+        /// TODO Verbeter zodat left en right een functie is en niet zo lange code met veel hetzelfde
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        //TODO Verbeter zodat left en right een functie is en niet zo lange code met veel hetzelfde
+
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             {
@@ -170,6 +181,7 @@ namespace Controller
                     if (SD.Left != null)
                     {
                         int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 3);
+
                         double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Left.Equipment.Quality / 100.0);
 
                         if (Math.Ceiling(PossibleBroken) >= 7)
@@ -304,6 +316,15 @@ namespace Controller
             }
         }
 
+        /// <summary>
+        /// WORK IN PROGRESS
+        /// </summary>
+        /// <param name="Driver"></param>
+        /// <param name="LeftOrRight"></param>
+        /// <param name="SD"></param>
+        /// <param name="NextSection"></param>
+        /// <param name="SDnext"></param>
+        /// <param name="AddLap"></param>
         private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
         {
             if (Driver != null)
@@ -404,6 +425,9 @@ namespace Controller
             }
         }
 
+        /// <summary>
+        /// Start de race. Willekeurig equipment Timer autorestart uit zodat hij niet de thread volspamt met queries van eventhandler
+        /// </summary>
         private void Start()
         {
             RandomizeEquipment();
@@ -411,6 +435,14 @@ namespace Controller
             timer.Start();
         }
 
+        /// <summary>
+        /// Verwijder driver bij einde van race. Check of er nog iemand op het circuit zit.
+        /// TODO verbeter code
+        /// TODO Kan het checken van driver sneller? Via parameter
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="SD"></param>
+        /// <param name="SDprev"></param>
         private void RemoveDriverAndCheck(IParticipant driver, SectionData SD, SectionData SDprev)
         {
             //Verwijder driver. Zorgt ervoor dat driver niet naar volgende section kan glippen

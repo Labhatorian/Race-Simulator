@@ -53,28 +53,5 @@ namespace ControllerTest
             Track TrackTest = new Track("Test", sectionTest);
             competition.Tracks.Enqueue(TrackTest);
         }
-
-
-        [Test]
-        public void VisualisationMovementTest()
-        {
-            Data.NextRace();
-
-            Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
-            Thread.Sleep(5000);
-            
-        }
-
-
-        [Test]
-        public void VisualisationFinishedTest()
-        {
-            Setup();
-            Data.NextRace();
-            Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
-            Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
-            Thread.Sleep(30000);
-            Assert.AreEqual(Data.CurrentRace, null);
-        }
     }
 }
