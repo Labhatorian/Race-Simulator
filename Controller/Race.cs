@@ -6,14 +6,19 @@ namespace Controller
 {
     public class Race
     {
+        //Parameters voor de race
         public Track Track { get; set; }
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
-        public static Dictionary<Section, SectionData> _positions;
-        private static Dictionary<IParticipant, int> _ParticipantsLaps;
         private Timer timer;
 
+        //Houdt bij belangrijke dingen voor de race
+        public static Dictionary<Section, SectionData> _positions;
+        private static Dictionary<IParticipant, int> _participantslaps;
+       private static Dictionary<IParticipant, Boolean> _participantsfinished;
+
+        //Eventhandlers voor verplaatste driver en gefinishte driver
         public event EventHandler<DriversChangedEventArgs>? DriversChanged;
         public event EventHandler<EventArgs> DriversFinished;
 
@@ -45,13 +50,16 @@ namespace Controller
         /// <param name="participants"></param>
         public Race(Track track, List<IParticipant> participants)
         {
+            //Maak de race
             Track = track;
             Participants = participants;
             StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
-            _ParticipantsLaps = new Dictionary<IParticipant, int>();
+            _participantslaps = new Dictionary<IParticipant, int>();
             PlaceParticipants(track, participants);
+
+            //Timer en eventhandler klaar en we starten
             timer = new Timer(1000);
             timer.Elapsed += OnTimedEvent;
             Start();
@@ -59,7 +67,6 @@ namespace Controller
 
         /// <summary>
         /// Geef de deelnemers een willekeurig waarde voor kwaliteit performance en speed
-        /// TODO Speed wordt berekend uit quality en performance? Check TASKER
         /// </summary>
         private void RandomizeEquipment()
         {
@@ -113,10 +120,10 @@ namespace Controller
                 //Ga er van uit dat er genoeg plek is
             }
 
-            //Voor elk participant maak entry aan in _ParticipantsLaps
+            //Voor elk participant maak entry aan in _participantslaps
             foreach (IParticipant participant in Participants)
             {
-                _ParticipantsLaps.Add(participant, 1);
+                _participantslaps.Add(participant, 1);
             }
         }
 
@@ -131,10 +138,7 @@ namespace Controller
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
             {
-                // Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
-                //Console.WriteLine("===============");
-
-                //Zodat de dictionary tijdens de foreach wordt aangepast
+                //Zodat de dictionary tijdens de foreach niet wordt aangepast
                 var newDictionary = _positions.ToDictionary(entry => entry.Key,
                                                    entry => entry.Value);
 
@@ -214,10 +218,10 @@ namespace Controller
                                 SDnext.Left = SD.Left;
                                 if (AddLap)
                                 {
-                                    _ParticipantsLaps[SD.Left] += 1;
-                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
+                                    _participantslaps[SD.Left] += 1;
+                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_participantslaps[SD.Left]}");
                                     Thread.Sleep(500);
-                                    if (_ParticipantsLaps[SD.Left] >= 4)
+                                    if (_participantslaps[SD.Left] >= 4)
                                     {
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
                                         break;
@@ -230,10 +234,10 @@ namespace Controller
                                 SDnext.Right = SD.Left;
                                 if (AddLap)
                                 {
-                                    _ParticipantsLaps[SD.Left] += 1;
-                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_ParticipantsLaps[SD.Left]}");
+                                    _participantslaps[SD.Left] += 1;
+                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_participantslaps[SD.Left]}");
                                     Thread.Sleep(500);
-                                    if (_ParticipantsLaps[SD.Left] == 4)
+                                    if (_participantslaps[SD.Left] == 4)
                                     {
                                         SD.Left = null;
                                         RemoveDriverAndCheck(SD.Left, SDnext, SD);
@@ -278,10 +282,10 @@ namespace Controller
                                 SDnext.Left = SD.Right;
                                 if (AddLap)
                                 {
-                                    _ParticipantsLaps[SD.Right] += 1;
-                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
+                                    _participantslaps[SD.Right] += 1;
+                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_participantslaps[SD.Right]}");
                                     Thread.Sleep(500);
-                                    if (_ParticipantsLaps[SD.Right] == 4)
+                                    if (_participantslaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
                                         break;
@@ -294,10 +298,10 @@ namespace Controller
                                 SDnext.Right = SD.Right;
                                 if (AddLap)
                                 {
-                                    _ParticipantsLaps[SD.Right] += 1;
-                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_ParticipantsLaps[SD.Right]}");
+                                    _participantslaps[SD.Right] += 1;
+                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_participantslaps[SD.Right]}");
                                     Thread.Sleep(500);
-                                    if (_ParticipantsLaps[SD.Right] == 4)
+                                    if (_participantslaps[SD.Right] == 4)
                                     {
                                         RemoveDriverAndCheck(SD.Right, SDnext, SD);
                                         break;
@@ -387,9 +391,9 @@ namespace Controller
                     if (AddLap)
                     {
                         //TODO maak functie van
-                        _ParticipantsLaps[Driver] += 1;
-                        Console.WriteLine($"{Driver.Naam} Lap: {_ParticipantsLaps[Driver]}");
-                        if (_ParticipantsLaps[Driver] >= 3)
+                        _participantslaps[Driver] += 1;
+                        Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+                        if (_participantslaps[Driver] >= 3)
                         {
                             RemoveDriverAndCheck(Driver, SDnext, SD);
                         }
@@ -401,9 +405,9 @@ namespace Controller
                     Moved = true;
                     if (AddLap)
                     {
-                        _ParticipantsLaps[Driver] += 1;
-                        Console.WriteLine($"{Driver.Naam} Lap: {_ParticipantsLaps[Driver]}");
-                        if (_ParticipantsLaps[Driver] >= 3)
+                        _participantslaps[Driver] += 1;
+                        Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+                        if (_participantslaps[Driver] >= 3)
                         {
                             RemoveDriverAndCheck(Driver, SDnext, SD);
                         }
