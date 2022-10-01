@@ -12,6 +12,7 @@ namespace Controller
         public DateTime StartTime;
         private Random _random;
         private Timer timer;
+        private int FinishCounter;
 
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
@@ -347,7 +348,7 @@ namespace Controller
         }
 
         /// <summary>
-        /// Verwijder driver bij einde van race. Check of er nog iemand op het circuit zit.
+        /// Verwijder driver bij einde van race en geef punten. Check of er nog iemand op het circuit zit.
         /// </summary>
         /// <param name="driver"></param>
         /// <param name="SD"></param>
@@ -373,6 +374,20 @@ namespace Controller
                 SDprev.Right = null;
             }
 
+            //Geef ze punten gebaseerd op de Formule 1 manier
+            if(FinishCounter == 1)
+            {
+                driver.Points += 25;
+            } else if (FinishCounter == 2)
+            {
+                driver.Points += 18;
+            } else if (FinishCounter == 3)
+            {
+                driver.Points += 15;
+            } else if (FinishCounter > 3)
+            {
+                driver.Points += 12 - (2 * (FinishCounter - 3));
+            }
 
             //Check of er ergens een driver is
             Boolean DriverFound = false;

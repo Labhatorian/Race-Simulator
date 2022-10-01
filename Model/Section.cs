@@ -11,16 +11,21 @@ namespace Model
         public SectionTypes SectionType { get; set; }
     }
 
+    /// <summary>
+    /// Elk mogelijk blok van circuit
+    /// </summary>
     public enum SectionTypes
     {
         Straight,
-        HorizStraight, //Unused
         LeftCorner,
         RightCorner,
         StartGrid,
         Finish
     }
 
+    /// <summary>
+    /// Elk mogelijk richting van hierboven (blok van circuit)
+    /// </summary>
     public enum Directions
     {
         North,
