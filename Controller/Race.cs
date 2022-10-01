@@ -6,6 +6,8 @@ namespace Controller
 {
     public class Race
     {
+        //TODO is elk parameter voor elk functie wel goede naam?
+
         //Parameters voor de race
         public Track Track { get; set; }
         public List<IParticipant> Participants;
@@ -60,7 +62,7 @@ namespace Controller
             PlaceParticipants(track, participants);
 
             //Timer en eventhandler klaar en we starten
-            timer = new Timer(1000);
+            timer = new Timer(500);
             timer.Elapsed += OnTimedEvent;
             Start();
         }
@@ -180,138 +182,11 @@ namespace Controller
                     }
                     SectionData SDnext = GetSectionData(NextSection);
 
-                    //Check of er een driver op de section zit
+                    //Stuur elk driver door naar de functie DriverElapsed. De code gaat daar verder.
+                    //TODO Maak parameters na true en false voor hele klasse?
+                    DriverElapsed(SD.Left, false, SD, NextSection, SDnext, AddLap);
+                    DriverElapsed(SD.Right, true, SD, NextSection, SDnext, AddLap);
 
-                    if (SD.Left != null)
-                    {
-                        int Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance * _random.Next(1, 3);
-
-                        double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Left.Equipment.Quality / 100.0);
-
-                        if (Math.Ceiling(PossibleBroken) >= 7)
-                        {
-                            if (!SD.Left.Equipment.IsBroken)
-                            {
-                                SD.Left.Equipment.IsBroken = true;
-                            }
-                            else
-                            {
-                                SD.Left.Equipment.IsBroken = false;
-                                SD.Left.Equipment.Quality -= 2;
-                            }
-                        }
-
-                        if (!SD.Left.Equipment.IsBroken)
-                        {
-                            SD.DistanceLeft += Speed;
-                        }
-
-                        if (SD.DistanceLeft >= 100)
-                        {
-                            if (!SD.Left.Equipment.IsBroken)
-                            {
-                                SD.DistanceLeft = 0;
-                            }
-
-                            if (SDnext.Left == null)
-                            {
-                                SDnext.Left = SD.Left;
-                                if (AddLap)
-                                {
-                                    _participantslaps[SD.Left] += 1;
-                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_participantslaps[SD.Left]}");
-                                    Thread.Sleep(500);
-                                    if (_participantslaps[SD.Left] >= 4)
-                                    {
-                                        RemoveDriverAndCheck(SD.Left, SDnext, SD);
-                                        break;
-                                    }
-                                }
-                                SD.Left = null;
-                            }
-                            else if (SDnext.Right == null)
-                            {
-                                SDnext.Right = SD.Left;
-                                if (AddLap)
-                                {
-                                    _participantslaps[SD.Left] += 1;
-                                    Console.WriteLine($"{SD.Left.Naam} Lap: {_participantslaps[SD.Left]}");
-                                    Thread.Sleep(500);
-                                    if (_participantslaps[SD.Left] == 4)
-                                    {
-                                        SD.Left = null;
-                                        RemoveDriverAndCheck(SD.Left, SDnext, SD);
-                                        break;
-                                    }
-                                }
-                                SD.Left = null;
-                            }
-                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
-                        }
-                    }
-
-                    if (SD.Right != null)
-                    {
-                        int Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance * _random.Next(1, 3); ;
-                        double PossibleBroken = (double)_random.Next(1, 10) * ((double)SD.Right.Equipment.Quality / 100.0);
-
-                        if (Math.Ceiling(PossibleBroken) >= 7)
-                        {
-                            if (!SD.Right.Equipment.IsBroken)
-                            {
-                                SD.Right.Equipment.IsBroken = true;
-                            }
-                            else
-                            {
-                                SD.Right.Equipment.IsBroken = false;
-                                SD.Right.Equipment.Quality -= 2;
-                            }
-                        }
-
-                        if (!SD.Right.Equipment.IsBroken)
-                        {
-                            SD.DistanceRight += Speed;
-                        }
-
-                        if (SD.DistanceRight >= 100)
-                        {
-                            SD.DistanceRight = 0;
-
-                            if (SDnext.Left == null)
-                            {
-                                SDnext.Left = SD.Right;
-                                if (AddLap)
-                                {
-                                    _participantslaps[SD.Right] += 1;
-                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_participantslaps[SD.Right]}");
-                                    Thread.Sleep(500);
-                                    if (_participantslaps[SD.Right] == 4)
-                                    {
-                                        RemoveDriverAndCheck(SD.Right, SDnext, SD);
-                                        break;
-                                    }
-                                }
-                                SD.Right = null;
-                            }
-                            else if (SDnext.Right == null)
-                            {
-                                SDnext.Right = SD.Right;
-                                if (AddLap)
-                                {
-                                    _participantslaps[SD.Right] += 1;
-                                    Console.WriteLine($"{SD.Right.Naam} Lap: {_participantslaps[SD.Right]}");
-                                    Thread.Sleep(500);
-                                    if (_participantslaps[SD.Right] == 4)
-                                    {
-                                        RemoveDriverAndCheck(SD.Right, SDnext, SD);
-                                        break;
-                                    }
-                                }
-                                SD.Right = null;
-                            }
-                            DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
-                        }
-                    }
                 }
             }
             if (timer != null)
@@ -333,10 +208,22 @@ namespace Controller
         {
             if (Driver != null)
             {
-                int Speed = Driver.Equipment.Speed * Driver.Equipment.Performance * _random.Next(1, 3);
-                double PossibleBroken = (double)_random.Next(1, 10) * ((double)Driver.Equipment.Quality / 100.0);
+                int Speed;
+                double PossibleBroken;
+                if (!LeftOrRight)
+                {
+                    Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance;
+                    PossibleBroken = ((double)SD.Left.Equipment.Quality / 100.0);
+                } else
+                {
+                    Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance
+                    PossibleBroken = ((double)SD.Right.Equipment.Quality / 100.0);
+                }
 
-                if (Math.Ceiling(PossibleBroken) == 5)
+                Speed *= _random.Next(1, 3);
+                PossibleBroken *= (double)_random.Next(1, 5);
+
+                if (Math.Ceiling(PossibleBroken) >= 7)
                 {
                     if (!Driver.Equipment.IsBroken)
                     {
@@ -345,7 +232,7 @@ namespace Controller
                     else
                     {
                         Driver.Equipment.IsBroken = false;
-                        Driver.Equipment.Quality -= (int)PossibleBroken;
+                        Driver.Equipment.Quality -= 1;
                     }
                     DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                 }
@@ -362,6 +249,7 @@ namespace Controller
                     }
                 }
 
+                Boolean Moved = false;
                 if (!LeftOrRight)
                 {
                     if (SD.DistanceLeft >= 100)
@@ -369,6 +257,7 @@ namespace Controller
                         if (!Driver.Equipment.IsBroken)
                         {
                             SD.DistanceLeft = 0;
+                            Moved = true;
                         }
                     }
                 }
@@ -379,38 +268,26 @@ namespace Controller
                         if (!Driver.Equipment.IsBroken)
                         {
                             SD.DistanceRight = 0;
+                            Moved = true;
                         }
                     }
                 }
 
-                Boolean Moved = false;
-                if (SDnext.Left == null)
+
+                if (SDnext.Left == null & Moved)
                 {
                     SDnext.Left = Driver;
-                    Moved = true;
                     if (AddLap)
                     {
-                        //TODO maak functie van
-                        _participantslaps[Driver] += 1;
-                        Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
-                        if (_participantslaps[Driver] >= 3)
-                        {
-                            RemoveDriverAndCheck(Driver, SDnext, SD);
-                        }
+                        AddLapToDriver(Driver, SD, SDnext);
                     }
                 }
-                else if (SDnext.Right == null)
+                else if (SDnext.Right == null & Moved)
                 {
                     SDnext.Right = Driver;
-                    Moved = true;
                     if (AddLap)
                     {
-                        _participantslaps[Driver] += 1;
-                        Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
-                        if (_participantslaps[Driver] >= 3)
-                        {
-                            RemoveDriverAndCheck(Driver, SDnext, SD);
-                        }
+                        AddLapToDriver(Driver, SD, SDnext);
                     }
                 }
 
@@ -424,8 +301,22 @@ namespace Controller
                     {
                         SD.Right = null;
                     }
+                    if (timer != null)
+                    {
+                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                    }
                 }
-                DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+            }
+        }
+
+        private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
+        {
+            _participantslaps[Driver] += 1;
+            Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+            Thread.Sleep(500);
+            if (_participantslaps[Driver] >= 3)
+            {
+                RemoveDriverAndCheck(Driver, SDnext, SD);
             }
         }
 
