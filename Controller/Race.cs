@@ -6,8 +6,6 @@ namespace Controller
 {
     public class Race
     {
-        //TODO is elk parameter voor elk functie wel goede naam?
-
         //Parameters voor de race
         public Track Track { get; set; }
         public List<IParticipant> Participants;
@@ -18,7 +16,7 @@ namespace Controller
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
         private static Dictionary<IParticipant, int> _participantslaps;
-       private static Dictionary<IParticipant, Boolean> _participantsfinished;
+        private static Dictionary<IParticipant, Boolean> _participantsfinished;
 
         //Eventhandlers voor verplaatste driver en gefinishte driver
         public event EventHandler<DriversChangedEventArgs>? DriversChanged;
@@ -59,6 +57,7 @@ namespace Controller
             _random = new Random(DateTime.Now.Millisecond);
             _positions = new Dictionary<Section, SectionData>();
             _participantslaps = new Dictionary<IParticipant, int>();
+            _participantsfinished = new Dictionary<IParticipant, Boolean>();
             PlaceParticipants(track, participants);
 
             //Timer en eventhandler klaar en we starten
@@ -85,13 +84,13 @@ namespace Controller
         /// Zet participants op de starting grid. De eerste is LEFT en de tweede is RIGHT enzo.
         /// </summary>
         /// <param name="track"></param>
-        /// <param name="Participants"></param>
-        private void PlaceParticipants(Track track, List<IParticipant> Participants)
+        /// <param name="participants"></param>
+        private void PlaceParticipants(Track track, List<IParticipant> participants)
         {
             //Telt bij welk deelnemer wij zijn
             int currentAt = 0;
 
-            while (currentAt < Participants.Count)
+            while (currentAt < participants.Count)
             {
                 foreach (Section section in track.Sections)
                 {
@@ -102,7 +101,7 @@ namespace Controller
 
                         if (sectionData.Left == null)
                         {
-                            sectionData.Left = Participants[currentAt];
+                            sectionData.Left = participants[currentAt];
                             currentAt++;
 
                             //Volgende participant gaat section lijst af
@@ -110,7 +109,7 @@ namespace Controller
                         }
                         else if (sectionData.Right == null)
                         {
-                            sectionData.Right = Participants[currentAt];
+                            sectionData.Right = participants[currentAt];
                             currentAt++;
 
                             //Volgende participant gaat section lijst af
@@ -123,16 +122,16 @@ namespace Controller
             }
 
             //Voor elk participant maak entry aan in _participantslaps
-            foreach (IParticipant participant in Participants)
+            //En voor finished
+            foreach (IParticipant participant in participants)
             {
                 _participantslaps.Add(participant, 1);
+                _participantsfinished.Add(participant, false);
             }
         }
 
         /// <summary>
         /// Brein van de race. Code bevat beweging voor de drivers en veel checks(einde race) en berekeningen
-        /// TODO Verander summary
-        /// TODO Verbeter zodat left en right een functie is en niet zo lange code met veel hetzelfde
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
@@ -144,6 +143,7 @@ namespace Controller
                 var newDictionary = _positions.ToDictionary(entry => entry.Key,
                                                    entry => entry.Value);
 
+                //Zoek section op
                 foreach (KeyValuePair<Section, SectionData> entry in newDictionary)
                 {
                     SectionData SD = entry.Value;
@@ -156,6 +156,7 @@ namespace Controller
                     Boolean AddLap = false;
                     foreach (Section section in Track.Sections)
                     {
+                        //Gevonden? Ga dan nog 1 keer door voor de volgende
                         if (Found)
                         {
                             NextSection = section;
@@ -164,6 +165,7 @@ namespace Controller
 
                         if (section == Section)
                         {
+                            //Als de volgende finish is, voeg dan 1 lap toe
                             if (Section.SectionType == SectionTypes.Finish)
                             {
                                 NextSection = Track.Sections.First.Value;
@@ -183,12 +185,12 @@ namespace Controller
                     SectionData SDnext = GetSectionData(NextSection);
 
                     //Stuur elk driver door naar de functie DriverElapsed. De code gaat daar verder.
-                    //TODO Maak parameters na true en false voor hele klasse?
                     DriverElapsed(SD.Left, false, SD, NextSection, SDnext, AddLap);
                     DriverElapsed(SD.Right, true, SD, NextSection, SDnext, AddLap);
 
                 }
             }
+            //Start timer weer op. Null check om exception te vermijden bij finish
             if (timer != null)
             {
                 timer.Start();
@@ -196,7 +198,7 @@ namespace Controller
         }
 
         /// <summary>
-        /// WORK IN PROGRESS
+        /// Meerdere checks voor de drivers. Movement, breaking en laps finishen.
         /// </summary>
         /// <param name="Driver"></param>
         /// <param name="LeftOrRight"></param>
@@ -208,6 +210,7 @@ namespace Controller
         {
             if (Driver != null)
             {
+                //Pak waardes voor snelheid en kapot gaan
                 int Speed;
                 double PossibleBroken;
                 if (!LeftOrRight)
@@ -216,13 +219,14 @@ namespace Controller
                     PossibleBroken = ((double)SD.Left.Equipment.Quality / 100.0);
                 } else
                 {
-                    Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance
+                    Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
                     PossibleBroken = ((double)SD.Right.Equipment.Quality / 100.0);
                 }
 
                 Speed *= _random.Next(1, 3);
                 PossibleBroken *= (double)_random.Next(1, 5);
 
+                //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
                 if (Math.Ceiling(PossibleBroken) >= 7)
                 {
                     if (!Driver.Equipment.IsBroken)
@@ -237,6 +241,7 @@ namespace Controller
                     DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
                 }
 
+                //Voeg driver distance toe
                 if (!Driver.Equipment.IsBroken)
                 {
                     if (!LeftOrRight)
@@ -250,6 +255,7 @@ namespace Controller
                 }
 
                 Boolean Moved = false;
+                //Als distancer over 100 is, dan gaat de driver naar de volgende section
                 if (!LeftOrRight)
                 {
                     if (SD.DistanceLeft >= 100)
@@ -273,7 +279,8 @@ namespace Controller
                     }
                 }
 
-
+                //Probeer te verplaatsen naar LEFT van volgend section en anders RIGHT om inhalen te simuleren.
+                //Ook check voor laps toevoegen.
                 if (SDnext.Left == null & Moved)
                 {
                     SDnext.Left = Driver;
@@ -291,6 +298,8 @@ namespace Controller
                     }
                 }
 
+                //Als hij verplaatst is, haal de driver bij de vorige section weg om dubbele drivers te verkomen.
+                //Ook DriversChanged aanroepen zodat hij niet elke interval update.
                 if (Moved)
                 {
                     if (!LeftOrRight)
@@ -309,13 +318,20 @@ namespace Controller
             }
         }
 
+        /// <summary>
+        /// Voeg lap toe aan driver als het moet. Checkt ook voor als hij 3 laps heeft gemaakt om hem te finishen
+        /// </summary>
+        /// <param name="Driver"></param>
+        /// <param name="SD"></param>
+        /// <param name="SDnext"></param>
         private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
         {
             _participantslaps[Driver] += 1;
             Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
             Thread.Sleep(500);
-            if (_participantslaps[Driver] >= 3)
+            if (_participantslaps[Driver] >= 4)
             {
+                _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);
             }
         }
@@ -332,8 +348,6 @@ namespace Controller
 
         /// <summary>
         /// Verwijder driver bij einde van race. Check of er nog iemand op het circuit zit.
-        /// TODO verbeter code
-        /// TODO Kan het checken van driver sneller? Via parameter
         /// </summary>
         /// <param name="driver"></param>
         /// <param name="SD"></param>
@@ -363,20 +377,16 @@ namespace Controller
             //Check of er ergens een driver is
             Boolean DriverFound = false;
 
-            //Zodat de dictionary tijdens de foreach wordt aangepast
-            var newDictionary = _positions.ToDictionary(entry => entry.Key,
-                                               entry => entry.Value);
-
-            foreach (KeyValuePair<Section, SectionData> entry in newDictionary)
+            foreach(IParticipant participant in Participants)
             {
-                SectionData SeD = entry.Value;
-                if (SeD.Left != null | SeD.Right != null)
+                if (!_participantsfinished[participant])
                 {
                     DriverFound = true;
-                    break;
                 }
             }
 
+            //Als er geen driver is. Stop de race en verwijder timer en eventhandlers/
+            //Roep op driverfinished voor de volgend race
             if (!DriverFound)
             {
                 timer.Stop();
