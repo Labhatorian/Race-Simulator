@@ -4,14 +4,23 @@ namespace Controller
 {
     public static class Data
     {
+        //De belangrijkste paremeters. Competitie en huidige race
         private static Competition competition { get; set; }
         public static Race CurrentRace { get; set; }
 
-        public static void SetCompetition(Competition comp)
-        {
-            competition = comp;
-        }
+        //TODO Kan dit voor testen? Voor nu even uit
+        /// <summary>
+        /// Zet competitie voor testen
+        /// </summary>
+        /// <param name="comp"></param>
+        //public static void SetCompetition(Competition comp)
+        //{
+        //    competition = comp;
+        //}
 
+        /// <summary>
+        /// Initialiseer data en dus de competitie
+        /// </summary>
         public static void Initialise()
         {
             //Maak nieuw competitie en voeg circuit en deelnemers toe
@@ -20,7 +29,9 @@ namespace Controller
             AddTracks();
         }
 
-        //Volgende race dus circuit
+        /// <summary>
+        /// Volgende race
+        /// </summary>
         public static void NextRace()
         {
             CurrentRace = null;
@@ -28,9 +39,9 @@ namespace Controller
             if (track != null)
             {
                 CurrentRace = new Race(track, competition.Participants);
-                //Console.WriteLine($"Op naar: {Data.CurrentRace.Track.Name}!");
             } else
             {
+                //Als het afgelopen is, laat de stand zien
                 Console.Clear();
                 Console.WriteLine($"De competitie is afgelopen!!!!");
                 Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
@@ -42,7 +53,9 @@ namespace Controller
             }
         }
 
-        //Voeg deelnemers toe
+        /// <summary>
+        /// Voeg deelnemers toe aan de competitie
+        /// </summary>
         private static void AddParticipants()
         {
             competition.Participants = new List<IParticipant>();
@@ -59,7 +72,9 @@ namespace Controller
             competition.Participants.Add(DriverTwo);
         }
 
-        //Voeg circuits toe met hun bochten en straights
+        /// <summary>
+        /// Voeg de circuits toe
+        /// </summary>
         private static void AddTracks()
         {
             competition.Tracks = new Queue<Track>();
