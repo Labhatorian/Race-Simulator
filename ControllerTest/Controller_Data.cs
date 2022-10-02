@@ -20,6 +20,14 @@ namespace ControllerTest
         [Test]
         public void NextRace()
         {
+            Data.Initialise();
+            Data.NextRace();
+        }
+
+        [Test]
+        public void CompetitionFinished()
+        {
+            Data.NextRace();
             Data.NextRace();
         }
     }

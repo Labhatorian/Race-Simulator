@@ -9,7 +9,7 @@ using Model;
 namespace ControllerTest
 {
     [TestFixture]
-    internal class Model_Competition_Track
+    internal class Model
     {
         private Competition _competition;
 

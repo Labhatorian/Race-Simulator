@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Controller", "Controller\Controller.csproj", "{0514BE16-1DED-47C7-92AC-92CE1EEED344}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerTest", "ControllerTest\ControllerTest.csproj", "{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "ControllerTest\UnitTests.csproj", "{C6ACF0C0-DDCC-4D34-BEFF-E03E7D4D265E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicVisualisation", "GraphicVisualisation\GraphicVisualisation.csproj", "{F901D1E3-3967-497E-92A0-80196492FFD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphicVisualisation", "GraphicVisualisation\GraphicVisualisation.csproj", "{F901D1E3-3967-497E-92A0-80196492FFD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

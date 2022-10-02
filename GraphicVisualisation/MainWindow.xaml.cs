@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Controller;
+using Model;
+using Race_Simulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Model;
+using System.Windows.Threading;
+using System.Drawing;
+using Image = System.Drawing.Image;
+using Rectangle = System.Drawing.Rectangle;
+using Brushes = System.Drawing.Brushes;
 
 namespace GraphicVisualisation
 {
@@ -23,6 +32,24 @@ namespace GraphicVisualisation
         public MainWindow()
         {
             InitializeComponent();
+            Data.Initialise();
+            Data.NextRace();
+
+            Data.CurrentRace.DriversChanged += OnDriverChanged;
+        }
+
+        public void OnDriverChanged(Object source, DriversChangedEventArgs e)
+        {
+            GraphicalVisualisation GV = new GraphicalVisualisation();
+            GV.DrawTrack(e.Track, "Empty");
+            this.MainImage.Dispatcher.BeginInvoke(
+
+                DispatcherPriority.Render,
+                new Action(() =>
+                {
+                    this.MainImage.Source = null;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GV.DrawTrack(e.Track, e.Section.SectionType.ToString())); ;
+                }));
         }
     }
 }
