@@ -7,6 +7,7 @@ namespace Controller
         //De belangrijkste paremeters. Competitie en huidige race
         private static Competition competition { get; set; }
         public static Race CurrentRace { get; set; }
+        public static Boolean Debug { get; set; }
 
         //TODO Kan dit voor testen? Voor nu even uit
         /// <summary>
@@ -32,13 +33,13 @@ namespace Controller
         /// <summary>
         /// Volgende race
         /// </summary>
-        public static void NextRace(Boolean Debug = false)
+        public static void NextRace()
         {
             CurrentRace = null;
             Track track = competition.NextTrack();
             if (track != null)
             {
-                if (!Debug)
+                if (Debug)
                 {
                     CurrentRace = new Race(track, competition.Participants, 500);
                 }
