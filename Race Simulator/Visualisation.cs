@@ -14,7 +14,7 @@ namespace Race_Simulator
         public static void Initialise()
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.CursorVisible = false;
+          
         }
 
         //Variabelen die bij DrawTrack() horen
@@ -36,6 +36,9 @@ namespace Race_Simulator
             CurrentXCounter = 0;
             CurrentYCounter = 0;
             CurrentYPos = 0;
+            //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
+            //Dus herinneren wij de console elke keer aan met een klap
+            Console.CursorVisible = false;
 
             //Zoek uit voor elk sectie wat moet worden geprint
             //Bij left of right corner, verander richting
