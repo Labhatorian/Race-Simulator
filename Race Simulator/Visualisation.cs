@@ -96,6 +96,7 @@ namespace Race_Simulator
                                 PrintTrack(_rightcorner, race.GetSectionData(section));
                                 break;
                         }
+
                         if (CurrentDirection != Directions.West)
                         {
                             CurrentDirection += 1;
@@ -129,33 +130,31 @@ namespace Race_Simulator
                     case Directions.East:
                         CurrentXCounter += 1;
                         CurrentXPos += 11;
-                        if (section.SectionType == SectionTypes.RightCorner)
-                        {
-                            CurrentYPos = 6 * (CurrentYCounter);
-                        }
+                        SetCurrentXYPos(section, 11, 6);
                         break;
                     case Directions.South:
                         CurrentYPos += 6;
                         CurrentYCounter += 1;
-                        if (section.SectionType == SectionTypes.RightCorner)
-                        {
-                            CurrentYPos = 6 * (CurrentYCounter);
-                            CurrentXPos = 11 * CurrentXCounter;
-                        }
+                        SetCurrentXYPos(section, 11, 6);
                         break;
                     case Directions.West:
                         CurrentXPos -= 11;
                         CurrentXCounter -= 1;
-                        if (section.SectionType == SectionTypes.RightCorner)
-                        {
-                            CurrentYPos = 6 * (CurrentYCounter);
-                            CurrentXPos = 11 * (CurrentXCounter);
-                        }
+                        SetCurrentXYPos(section, 11, 6);
                         break;
                 }
             }
             Console.SetCursorPosition(0, Console.WindowTop);
             Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
+        }
+
+        private static void SetCurrentXYPos(Section section, int Xpos, int Ypos)
+        {
+            if (section.SectionType == SectionTypes.RightCorner)
+            {
+                CurrentYPos = Ypos * (CurrentYCounter);
+                CurrentXPos = Xpos * CurrentXCounter;
+            }
         }
 
         //Voor elk string in de graphic, print het uit met goede gegevens
