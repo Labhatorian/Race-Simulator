@@ -13,10 +13,10 @@ namespace Controller
         /// Zet competitie voor testen
         /// </summary>
         /// <param name="comp"></param>
-        //public static void SetCompetition(Competition comp)
-        //{
-        //    competition = comp;
-        //}
+        public static void SetCompetition(Competition comp)
+        {
+            competition = comp;
+        }
 
         /// <summary>
         /// Initialiseer data en dus de competitie
@@ -32,13 +32,20 @@ namespace Controller
         /// <summary>
         /// Volgende race
         /// </summary>
-        public static void NextRace()
+        public static void NextRace(Boolean Debug = false)
         {
             CurrentRace = null;
             Track track = competition.NextTrack();
             if (track != null)
             {
-                CurrentRace = new Race(track, competition.Participants);
+                if (!Debug)
+                {
+                    CurrentRace = new Race(track, competition.Participants, 500);
+                }
+                else
+                {
+                    CurrentRace = new Race(track, competition.Participants, 50);
+                }
             } else
             {
                 //Als het afgelopen is, laat de stand zien

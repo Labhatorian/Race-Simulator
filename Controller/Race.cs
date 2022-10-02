@@ -50,7 +50,7 @@ namespace Controller
         /// </summary>
         /// <param name="track"></param>
         /// <param name="participants"></param>
-        public Race(Track track, List<IParticipant> participants)
+        public Race(Track track, List<IParticipant> participants, int Timer)
         {
             //Maak de race
             Track = track;
@@ -63,7 +63,7 @@ namespace Controller
             PlaceParticipants(track, participants);
 
             //Timer en eventhandler klaar en we starten
-            timer = new Timer(500);
+            timer = new Timer(Timer);
             timer.Elapsed += OnTimedEvent;
             Start();
         }
