@@ -4,7 +4,7 @@ namespace Race_Simulator
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             //Maak de competitie en race aan
             Console.CursorVisible = false;

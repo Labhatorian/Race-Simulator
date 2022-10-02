@@ -11,20 +11,28 @@ namespace Race_Simulator
 {
     public static class Visualisation
     {
+        //Voor het correct plaatsen van de sections
         static Directions CurrentDirection = Directions.North;
+
+        /// <summary>
+        /// Initialiseert de console
+        /// </summary>
         public static void Initialise()
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.CursorVisible = false;
-            //Console.SetBufferSize(200, 200);
-
         }
 
+        //Variabelen die bij DrawTrack() horen
         static int CurrentXPos = 0;
         static int CurrentXCounter = 0;
         static int CurrentYCounter = 0;
         static int CurrentYPos = 0;
-        //Zoek uit welk section er moet worden geprint
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="track"></param>
+        /// <param name="race"></param>
         public static void DrawTrack(Track track, Race race)
         {
             Console.Clear();
@@ -35,64 +43,59 @@ namespace Race_Simulator
 
             foreach (Section section in track.Sections)
             {
-
                 switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
-                        if (CurrentDirection == Directions.East)
+                        switch (CurrentDirection)
                         {
-                            PrintTrack(_straighteast, race.GetSectionData(section));
-                        }
-                        else if (CurrentDirection == Directions.South)
-                        {
-                            PrintTrack(_straightsouth, race.GetSectionData(section));
-                        }
-                        else if (CurrentDirection == Directions.West)
-                        {
-                            PrintTrack(_straightwest, race.GetSectionData(section));
-                        } else
-                        {
-                            PrintTrack(_straight, race.GetSectionData(section));
+                            case Directions.East:
+                                PrintTrack(_straighteast, race.GetSectionData(section));
+                                break;
+                            case Directions.South:
+                                PrintTrack(_straightsouth, race.GetSectionData(section));
+                                break;
+                            case Directions.West:
+                                PrintTrack(_straightwest, race.GetSectionData(section));
+                                break;
+                            default:
+                                PrintTrack(_straight, race.GetSectionData(section));
+                                break;
                         }
                         break;
                     case SectionTypes.LeftCorner:
-                        if (CurrentDirection == Directions.East)
+                        switch (CurrentDirection)
                         {
-                            PrintTrack(_leftcornereast, race.GetSectionData(section));
+                            case Directions.East:
+                                PrintTrack(_leftcornereast, race.GetSectionData(section));
+                                break;
+                            case Directions.South:
+                                PrintTrack(_leftcornersouth, race.GetSectionData(section));
+                                break;
+                            case Directions.West:
+                                PrintTrack(_leftcornerwest, race.GetSectionData(section));
+                                break;
+                            default:
+                                PrintTrack(_leftcorner, race.GetSectionData(section));
+                                break;
                         }
-                        else if (CurrentDirection == Directions.South)
-                        {
-                            PrintTrack(_leftcornersouth, race.GetSectionData(section));
-                        }
-                        else if (CurrentDirection == Directions.West)
-                        {
-                            PrintTrack(_leftcornerwest, race.GetSectionData(section));
-                        }
-                        else
-                        {
-                            PrintTrack(_leftcorner, race.GetSectionData(section));
-                        }
-
                         CurrentDirection -= 1;
                         break;
                     case SectionTypes.RightCorner:
-                        if (CurrentDirection == Directions.East)
+                        switch (CurrentDirection)
                         {
-                            PrintTrack(_rightcornereast, race.GetSectionData(section));
+                            case Directions.East:
+                                PrintTrack(_rightcornereast, race.GetSectionData(section));
+                                break;
+                            case Directions.South:
+                                PrintTrack(_rightcornersouth, race.GetSectionData(section));
+                                break;
+                            case Directions.West:
+                                PrintTrack(_rightcornerwest, race.GetSectionData(section));
+                                break;
+                            default:
+                                PrintTrack(_rightcorner, race.GetSectionData(section));
+                                break;
                         }
-                        else if (CurrentDirection == Directions.South)
-                        {
-                            PrintTrack(_rightcornersouth, race.GetSectionData(section));
-                        }
-                        else if (CurrentDirection == Directions.West)
-                        {
-                            PrintTrack(_rightcornerwest, race.GetSectionData(section));
-                        }
-                        else
-                        {
-                            PrintTrack(_rightcorner, race.GetSectionData(section));
-                        }
-
                         if (CurrentDirection != Directions.West)
                         {
                             CurrentDirection += 1;
@@ -109,50 +112,46 @@ namespace Race_Simulator
                         break;
                 }
 
-                if (CurrentDirection == Directions.North)
+                switch (CurrentDirection)
                 {
-                    if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
-                    {
-                        Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
-                    }
+                    case Directions.North:
+                        if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
+                        {
+                            Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
+                        }
 
-                    if (section.SectionType == SectionTypes.RightCorner)
-                    {
-                        CurrentXPos = 0;
-                        CurrentYPos = 6 * (CurrentYCounter-1);
-                    }
-                }
-
-                if (CurrentDirection == Directions.East)
-                {
-                    CurrentXCounter += 1;
-                    CurrentXPos += 11;
-                    if (section.SectionType == SectionTypes.RightCorner)
-                    {
-                        CurrentYPos = 6 * (CurrentYCounter);
-                    }
-                }
-
-                if (CurrentDirection == Directions.South)
-                {
-                    CurrentYPos += 6;
-                    CurrentYCounter += 1;
-                    if (section.SectionType == SectionTypes.RightCorner)
-                    {
-                        CurrentYPos = 6 * (CurrentYCounter);
-                        CurrentXPos = 11 * CurrentXCounter;
-                    }
-                }
-
-                if (CurrentDirection == Directions.West)
-                {
-                    CurrentXPos -= 11;
-                    CurrentXCounter -= 1;
-                    if (section.SectionType == SectionTypes.RightCorner)
-                    {
-                        CurrentYPos = 6 * (CurrentYCounter);
-                        CurrentXPos = 11 * (CurrentXCounter);
-                    }
+                        if (section.SectionType == SectionTypes.RightCorner)
+                        {
+                            CurrentXPos = 0;
+                            CurrentYPos = 6 * (CurrentYCounter - 1);
+                        }
+                        break;
+                    case Directions.East:
+                        CurrentXCounter += 1;
+                        CurrentXPos += 11;
+                        if (section.SectionType == SectionTypes.RightCorner)
+                        {
+                            CurrentYPos = 6 * (CurrentYCounter);
+                        }
+                        break;
+                    case Directions.South:
+                        CurrentYPos += 6;
+                        CurrentYCounter += 1;
+                        if (section.SectionType == SectionTypes.RightCorner)
+                        {
+                            CurrentYPos = 6 * (CurrentYCounter);
+                            CurrentXPos = 11 * CurrentXCounter;
+                        }
+                        break;
+                    case Directions.West:
+                        CurrentXPos -= 11;
+                        CurrentXCounter -= 1;
+                        if (section.SectionType == SectionTypes.RightCorner)
+                        {
+                            CurrentYPos = 6 * (CurrentYCounter);
+                            CurrentXPos = 11 * (CurrentXCounter);
+                        }
+                        break;
                 }
             }
             Console.SetCursorPosition(0, Console.WindowTop);
