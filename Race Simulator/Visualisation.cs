@@ -1,11 +1,5 @@
 ﻿using Controller;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Race_Simulator
 {
@@ -29,18 +23,22 @@ namespace Race_Simulator
         static int CurrentYCounter = 0;
         static int CurrentYPos = 0;
         /// <summary>
-        /// 
+        /// Code dat uitzoekt welk graphic moet worden geprint. En waar hij moet worden geprint
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
+        /// TODO Sla op posities en update alleen dat positie zodat niet alles flikkert
         public static void DrawTrack(Track track, Race race)
         {
+            //Reset alles
             Console.Clear();
             CurrentXPos = 0;
             CurrentXCounter = 0;
             CurrentYCounter = 0;
             CurrentYPos = 0;
 
+            //Zoek uit voor elk sectie wat moet worden geprint
+            //Bij left of right corner, verander richting
             foreach (Section section in track.Sections)
             {
                 switch (section.SectionType)
@@ -97,6 +95,7 @@ namespace Race_Simulator
                                 break;
                         }
 
+                        //Zodat hij reset naar boven bij einde
                         if (CurrentDirection != Directions.West)
                         {
                             CurrentDirection += 1;
@@ -113,14 +112,17 @@ namespace Race_Simulator
                         break;
                 }
 
+                //Update posities voor de rest van de track
                 switch (CurrentDirection)
                 {
                     case Directions.North:
+                        //Verplaatst scherm naar onder zodat sections niet worden overwritten
                         if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
                         {
                             Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
                         }
 
+                        //Noord is anders dus kan net in functie
                         if (section.SectionType == SectionTypes.RightCorner)
                         {
                             CurrentXPos = 0;
@@ -144,10 +146,17 @@ namespace Race_Simulator
                         break;
                 }
             }
+            //Schrijf naam van circuit op
             Console.SetCursorPosition(0, Console.WindowTop);
             Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
         }
 
+        /// <summary>
+        /// Update Ypos en Xpos voor de volgende section die moet worden gevisualiseerd
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="Xpos"></param>
+        /// <param name="Ypos"></param>
         private static void SetCurrentXYPos(Section section, int Xpos, int Ypos)
         {
             if (section.SectionType == SectionTypes.RightCorner)
@@ -157,7 +166,11 @@ namespace Race_Simulator
             }
         }
 
-        //Voor elk string in de graphic, print het uit met goede gegevens
+        /// <summary>
+        /// Print graphic uit op de goede positie
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="data"></param>
         private static void PrintTrack(string[] array, SectionData data)
         { 
             string[] strings;
@@ -172,7 +185,13 @@ namespace Race_Simulator
             }
         }
 
-        //Zet de drivers op de goede plek in de section. Zet niks neer als er niemand is.
+        /// <summary>
+        /// Zet voorletter van driver neer op de goede plek. Zet niks neer als er niemand is in SectionData of % als driver kapot is
+        /// </summary>
+        /// <param name="String"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
         private static string SetParticipants(string String, IParticipant left, IParticipant right)
         {
 
@@ -208,12 +227,21 @@ namespace Race_Simulator
             return String;
         }
 
-        //Handler voor bewegen drivers
+        /// <summary>
+        /// Eventhandler voor updaten visualisatie als er iets met driver is gebeurt
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {   
             DrawTrack(e.Track, Data.CurrentRace);
         }
 
+        /// <summary>
+        /// Eventhandler voor als de race if gefinisht en de volgende race wordt gestart. Moet hier ivm aanwijzen eventhandler aan events
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         public static void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
@@ -226,6 +254,9 @@ namespace Race_Simulator
             }
         }
 
+        /// <summary>
+        /// Graphics voor de sim
+        /// </summary>
         #region Graphics
         private static string[] _straight        = { "|         |", "|         |", "| @   #   |", "|         |", "|         |", "|         |" };
         private static string[] _straighteast    = { "_ _ _ _ _ _", "           ", "    @      ", "           ", "    #      ", "_ _ _ _ _ _" };
