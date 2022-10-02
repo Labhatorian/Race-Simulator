@@ -13,7 +13,7 @@ namespace Race_Simulator
             Data.NextRace();
 
             //Voeg voor de eerste keer event handlers toe en laat het circuit zien.
-            Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace);
+            Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace, null, null);
             Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
             Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
 

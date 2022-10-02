@@ -7,6 +7,7 @@ namespace Race_Simulator
     {
         //Voor het correct plaatsen van de sections
         static Directions CurrentDirection = Directions.North;
+        private static Dictionary<Section, int[]> SectionPositions = new();
 
         /// <summary>
         /// Initialiseert de console
@@ -22,44 +23,64 @@ namespace Race_Simulator
         static int CurrentXCounter = 0;
         static int CurrentYCounter = 0;
         static int CurrentYPos = 0;
+        static int PreviousDirection;
+
         /// <summary>
         /// Code dat uitzoekt welk graphic moet worden geprint. En waar hij moet worden geprint
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
         /// TODO Sla op posities en update alleen dat positie zodat niet alles flikkert
-        public static void DrawTrack(Track track, Race race)
+        public static void DrawTrack(Track track, Race race, Section? sectiondriver, Section? previoussection)
         {
-            //Reset alles
-            Console.Clear();
+            //Reset alles    
             CurrentXPos = 0;
             CurrentXCounter = 0;
             CurrentYCounter = 0;
             CurrentYPos = 0;
+            
             //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
             //Dus herinneren wij de console elke keer aan met een klap
             Console.CursorVisible = false;
+            LinkedList<Section> Sections;
 
             //Zoek uit voor elk sectie wat moet worden geprint
             //Bij left of right corner, verander richting
-            foreach (Section section in track.Sections)
+
+            if (sectiondriver != null)
             {
+                Sections = new();
+                Sections.AddFirst(sectiondriver);
+                Sections.AddLast(previoussection);
+            } else
+            {
+                Console.Clear();
+                Sections = new(track.Sections);
+            }
+
+            foreach (Section section in Sections)
+            {
+                PreviousDirection = (int)CurrentDirection;
+                if (sectiondriver != null)
+                {
+                    CurrentDirection = (Directions)SectionPositions[section][2];
+                }
                 switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
                         switch (CurrentDirection)
                         {
                             case Directions.East:
-                                PrintTrack(_straighteast, race.GetSectionData(section));
+                                PrintTrack(_straighteast, race.GetSectionData(section), section);
                                 break;
                             case Directions.South:
-                                PrintTrack(_straightsouth, race.GetSectionData(section));
+                                PrintTrack(_straightsouth, race.GetSectionData(section), section);
                                 break;
                             case Directions.West:
-                                PrintTrack(_straightwest, race.GetSectionData(section));
+                                PrintTrack(_straightwest, race.GetSectionData(section), section);
                                 break;
                             default:
-                                PrintTrack(_straight, race.GetSectionData(section));
+                                PrintTrack(_straight, race.GetSectionData(section), section);
                                 break;
                         }
                         break;
@@ -67,39 +88,42 @@ namespace Race_Simulator
                         switch (CurrentDirection)
                         {
                             case Directions.East:
-                                PrintTrack(_leftcornereast, race.GetSectionData(section));
+                                PrintTrack(_leftcornereast, race.GetSectionData(section), section);
                                 break;
                             case Directions.South:
-                                PrintTrack(_leftcornersouth, race.GetSectionData(section));
+                                PrintTrack(_leftcornersouth, race.GetSectionData(section), section);
                                 break;
                             case Directions.West:
-                                PrintTrack(_leftcornerwest, race.GetSectionData(section));
+                                PrintTrack(_leftcornerwest, race.GetSectionData(section), section);
                                 break;
                             default:
-                                PrintTrack(_leftcorner, race.GetSectionData(section));
+                                PrintTrack(_leftcorner, race.GetSectionData(section), section);
                                 break;
                         }
-                        CurrentDirection -= 1;
+                        if (sectiondriver == null)
+                        {
+                            CurrentDirection -= 1;
+                        }
                         break;
                     case SectionTypes.RightCorner:
                         switch (CurrentDirection)
                         {
                             case Directions.East:
-                                PrintTrack(_rightcornereast, race.GetSectionData(section));
+                                PrintTrack(_rightcornereast, race.GetSectionData(section), section);
                                 break;
                             case Directions.South:
-                                PrintTrack(_rightcornersouth, race.GetSectionData(section));
+                                PrintTrack(_rightcornersouth, race.GetSectionData(section), section);
                                 break;
                             case Directions.West:
-                                PrintTrack(_rightcornerwest, race.GetSectionData(section));
+                                PrintTrack(_rightcornerwest, race.GetSectionData(section), section);
                                 break;
                             default:
-                                PrintTrack(_rightcorner, race.GetSectionData(section));
+                                PrintTrack(_rightcorner, race.GetSectionData(section), section);
                                 break;
                         }
 
                         //Zodat hij reset naar boven bij einde
-                        if (CurrentDirection != Directions.West)
+                        if (CurrentDirection != Directions.West & sectiondriver == null)
                         {
                             CurrentDirection += 1;
                         } else
@@ -108,50 +132,59 @@ namespace Race_Simulator
                         }
                      break;
                     case SectionTypes.StartGrid:
-                        PrintTrack(_startgrid, race.GetSectionData(section));
+                        PrintTrack(_startgrid, race.GetSectionData(section), section);
                         break;
                     case SectionTypes.Finish:
-                        PrintTrack(_finish, race.GetSectionData(section));
+                        PrintTrack(_finish, race.GetSectionData(section), section);
                         break;
                 }
 
-                //Update posities voor de rest van de track
-                switch (CurrentDirection)
+                //Slaat section x,y op in dictionary voor later gebruik
+                if (!SectionPositions.ContainsKey(section))
                 {
-                    case Directions.North:
-                        //Verplaatst scherm naar onder zodat sections niet worden overwritten
-                        if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
-                        {
-                            Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
-                        }
+                    SectionPositions.Add(section, new int[] { CurrentXPos, CurrentYPos, PreviousDirection});
+                    //Update posities voor de rest van de track
+                    //TODO Eigen functie?
+                    switch (CurrentDirection)
+                    {
+                        case Directions.North:
+                            //Verplaatst scherm naar onder zodat sections niet worden overwritten
+                            if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
+                            {
+                                Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
+                                SectionPositions[section][1] += 6;
+                            }
 
-                        //Noord is anders dus kan net in functie
-                        if (section.SectionType == SectionTypes.RightCorner)
-                        {
-                            CurrentXPos = 0;
-                            CurrentYPos = 6 * (CurrentYCounter - 1);
-                        }
-                        break;
-                    case Directions.East:
-                        CurrentXCounter += 1;
-                        CurrentXPos += 11;
-                        SetCurrentXYPos(section, 11, 6);
-                        break;
-                    case Directions.South:
-                        CurrentYPos += 6;
-                        CurrentYCounter += 1;
-                        SetCurrentXYPos(section, 11, 6);
-                        break;
-                    case Directions.West:
-                        CurrentXPos -= 11;
-                        CurrentXCounter -= 1;
-                        SetCurrentXYPos(section, 11, 6);
-                        break;
+                            //Noord is anders dus kan net in functie
+                            if (section.SectionType == SectionTypes.RightCorner)
+                            {
+                                CurrentXPos = 0;
+                                CurrentYPos = 6 * (CurrentYCounter - 1);
+                            }
+                            break;
+                        case Directions.East:
+                            CurrentXCounter += 1;
+                            CurrentXPos += 11;
+                            SetCurrentXYPos(section, 11, 6);
+                            break;
+                        case Directions.South:
+                            CurrentYPos += 6;
+                            CurrentYCounter += 1;
+                            SetCurrentXYPos(section, 11, 6);
+                            break;
+                        case Directions.West:
+                            CurrentXPos -= 11;
+                            CurrentXCounter -= 1;
+                            SetCurrentXYPos(section, 11, 6);
+                            break;
+                    }
                 }
             }
             //Schrijf naam van circuit op
             Console.SetCursorPosition(0, Console.WindowTop);
             Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
+
+            //TODO verplaats circuit naar midden?
         }
 
         /// <summary>
@@ -174,12 +207,23 @@ namespace Race_Simulator
         /// </summary>
         /// <param name="array"></param>
         /// <param name="data"></param>
-        private static void PrintTrack(string[] array, SectionData data)
+        private static void PrintTrack(string[] array, SectionData data, Section section)
         { 
             string[] strings;
+            int CounterX;
+            int CounterY;
 
-            int CounterX = CurrentXPos;
-            int CounterY = CurrentYPos;
+            if (!SectionPositions.ContainsKey(section))
+            {
+                CounterX = CurrentXPos;
+                CounterY = CurrentYPos;
+            } else
+            {
+                CounterX = SectionPositions[section][0];
+                CounterY = SectionPositions[section][1];
+
+            }
+            
             foreach (string toWrite in array)
             {
                     Console.SetCursorPosition(CounterX, CounterY);
@@ -237,7 +281,7 @@ namespace Race_Simulator
         /// <param name="e"></param>
         public static void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {   
-            DrawTrack(e.Track, Data.CurrentRace);
+            DrawTrack(e.Track, Data.CurrentRace, e.Section, e.PreviousSection);
         }
 
         /// <summary>
@@ -249,6 +293,7 @@ namespace Race_Simulator
         {
             Data.CurrentRace = null;
             Data.NextRace();
+            Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace, null, null);
 
             if (Data.CurrentRace != null)
             {

@@ -186,8 +186,8 @@ namespace Controller
                     SectionData SDnext = GetSectionData(NextSection);
 
                     //Stuur elk driver door naar de functie DriverElapsed. De code gaat daar verder.
-                    DriverElapsed(SD.Left, false, SD, NextSection, SDnext, AddLap);
-                    DriverElapsed(SD.Right, true, SD, NextSection, SDnext, AddLap);
+                    DriverElapsed(SD.Left, false, Section, SD, NextSection, SDnext, AddLap);
+                    DriverElapsed(SD.Right, true, Section, SD, NextSection, SDnext, AddLap);
 
                 }
             }
@@ -207,7 +207,7 @@ namespace Controller
         /// <param name="NextSection"></param>
         /// <param name="SDnext"></param>
         /// <param name="AddLap"></param>
-        private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
+        private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, Section section, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
         {
             if (Driver != null)
             {
@@ -239,7 +239,7 @@ namespace Controller
                         Driver.Equipment.IsBroken = false;
                         Driver.Equipment.Quality -= 1;
                     }
-                    DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                    DriversChanged(this, new DriversChangedEventArgs(Track, NextSection, section));
                 }
 
                 //Voeg driver distance toe
@@ -313,7 +313,7 @@ namespace Controller
                     }
                     if (timer != null)
                     {
-                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection));
+                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection, section));
                     }
                 }
             }
