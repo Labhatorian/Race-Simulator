@@ -1,4 +1,5 @@
 ﻿using Model;
+using System.Diagnostics.Metrics;
 using Section = Model.Section;
 using Timer = System.Timers.Timer;
 
@@ -74,9 +75,9 @@ namespace Controller
         {
             foreach (IParticipant participant in Participants)
             {
-                participant.Equipment.Quality = _random.Next(1, 100);
-                participant.Equipment.Performance = _random.Next(3, 8);
-                participant.Equipment.Speed = _random.Next(3, 8);
+                participant.Equipment.Quality = _random.Next(30, 100);
+                participant.Equipment.Performance = _random.Next(3, 10);
+                participant.Equipment.Speed = _random.Next(3, 10);
             }
         }
 
@@ -225,7 +226,7 @@ namespace Controller
                 }
 
                 Speed *= _random.Next(1, 3);
-                PossibleBroken *= (double)_random.Next(1, 5);
+                PossibleBroken *= (double)_random.Next(1, 10);
 
                 //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
                 if (Math.Ceiling(PossibleBroken) >= 7)
@@ -328,8 +329,11 @@ namespace Controller
         private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
         {
             _participantslaps[Driver] += 1;
+            Console.SetCursorPosition(50, 0);
             Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
             Thread.Sleep(500);
+            Console.SetCursorPosition(50, 0);
+            Console.WriteLine($"                     ");
             if (_participantslaps[Driver] >= 4)
             {
                 _participantsfinished[Driver] = true;

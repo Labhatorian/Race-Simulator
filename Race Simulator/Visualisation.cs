@@ -26,7 +26,7 @@ namespace Race_Simulator
         static int PreviousDirection;
 
         /// <summary>
-        /// Code dat uitzoekt welk graphic moet worden geprint. En waar hij moet worden geprint
+        /// Code dat uitzoekt welk graphic moet worden geprint. En waar hij moet worden geprint.
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
@@ -38,15 +38,13 @@ namespace Race_Simulator
             CurrentXCounter = 0;
             CurrentYCounter = 0;
             CurrentYPos = 0;
-            
+            LinkedList<Section> Sections;
             //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
             //Dus herinneren wij de console elke keer aan met een klap
             Console.CursorVisible = false;
-            LinkedList<Section> Sections;
 
-            //Zoek uit voor elk sectie wat moet worden geprint
-            //Bij left of right corner, verander richting
-
+            
+            //Als we alleen een deel moeten updaten, voeg alleen die sections toe
             if (sectiondriver != null)
             {
                 Sections = new();
@@ -58,13 +56,19 @@ namespace Race_Simulator
                 Sections = new(track.Sections);
             }
 
+            //Zoek uit voor elk sectie wat moet worden geprint
+            //Bij left of right corner, verander richting
             foreach (Section section in Sections)
             {
+                //Sla direction op voor als we deze moeten opslaan
                 PreviousDirection = (int)CurrentDirection;
                 if (sectiondriver != null)
                 {
                     CurrentDirection = (Directions)SectionPositions[section][2];
                 }
+
+                //Hier gaat de code langs om te kijken wat er moet worden gevisualiseerd
+                //Verandert ook direction als het moet
                 switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
@@ -139,12 +143,11 @@ namespace Race_Simulator
                         break;
                 }
 
-                //Slaat section x,y op in dictionary voor later gebruik
+                //Slaat section x,y en direction op in dictionary voor later gebruik
                 if (!SectionPositions.ContainsKey(section))
                 {
                     SectionPositions.Add(section, new int[] { CurrentXPos, CurrentYPos, PreviousDirection});
                     //Update posities voor de rest van de track
-                    //TODO Eigen functie?
                     switch (CurrentDirection)
                     {
                         case Directions.North:
@@ -152,10 +155,19 @@ namespace Race_Simulator
                             if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
                             {
                                 Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
-                                SectionPositions[section][1] += 6;
+
+                                //We moeten alles omlaag plaatsen in de dictionary als we Console.MoveBufferArea hebben gebruikt
+                                //Voorkomt dat hij verkeert print
+                                foreach(Section movedsection in Sections)
+                                {
+                                    if (SectionPositions.ContainsKey(movedsection))
+                                    {
+                                        SectionPositions[movedsection][1] += 6;
+                                    }
+                                }
                             }
 
-                            //Noord is anders dus kan net in functie
+                            //Noord is anders dus kan niet in functie
                             if (section.SectionType == SectionTypes.RightCorner)
                             {
                                 CurrentXPos = 0;
@@ -183,8 +195,6 @@ namespace Race_Simulator
             //Schrijf naam van circuit op
             Console.SetCursorPosition(0, Console.WindowTop);
             Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
-
-            //TODO verplaats circuit naar midden?
         }
 
         /// <summary>
@@ -213,6 +223,7 @@ namespace Race_Simulator
             int CounterX;
             int CounterY;
 
+            //Haalt positie op als section al is opgeslagen met haar positie. Anders is het al berekent
             if (!SectionPositions.ContainsKey(section))
             {
                 CounterX = CurrentXPos;
@@ -224,6 +235,7 @@ namespace Race_Simulator
 
             }
             
+            //Print out
             foreach (string toWrite in array)
             {
                     Console.SetCursorPosition(CounterX, CounterY);
@@ -265,7 +277,7 @@ namespace Race_Simulator
                 } 
                 else
                 {
-                    String.Replace("#", "%");
+                    String = String.Replace("#", "%");
                 }
             } else
             {
@@ -323,7 +335,7 @@ namespace Race_Simulator
         private static string[] _rightcornerwest  = { "|         \\", "|          " , "|  @       ", "|          ", "|   #      ", " \\ _ _ _ _ " };
 
 
-        private static string[] _startgrid        = { "|         |" , "| $ $ $ $ |", "| @       |",  "|         |", "|     #   |", "|         |" };
+        private static string[] _startgrid        = { "| $ $ $ $ |" , "| ^       |", "| @       |",  "|     ^   |", "|     #   |", "|         |" };
         private static string[] _finish           = { "|         |",  "| ! ! ! ! |", "|     @   |",  "|         |", "|   #     |", "|         |" };
         #endregion
     }
