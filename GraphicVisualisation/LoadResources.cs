@@ -25,27 +25,27 @@ namespace GraphicVisualisation
                     switch (Stringo)
                     {
                         case "Straight":
-                            Bitmap StraightLine = (Bitmap)Bitmaps["Empty"].Clone();
-                            Bitmaps.Add(Stringo, StraightLine);
+                            Bitmap StraightLineBM = new(Straight);
+                            Bitmaps.Add(Stringo, StraightLineBM);
                             break;
                         case "LeftCorner":
-                            Bitmap LeftCorner = (Bitmap)Bitmaps["Empty"].Clone();
-                            Bitmaps.Add(Stringo, LeftCorner);
+                            Bitmap LeftCornerBM = new(LeftCorner);
+                        Bitmaps.Add(Stringo, LeftCornerBM);
                             break;
                         case "RightCorner":
-                            Bitmap RightCorner = (Bitmap)Bitmaps["Empty"].Clone();
-                            Bitmaps.Add(Stringo, RightCorner);
+                            Bitmap RightCornerBM = new(RightCorner);
+                        Bitmaps.Add(Stringo, RightCornerBM);
                             break;
                         case "StartGrid":
-                            Bitmap StartGrid = (Bitmap)Bitmaps["Empty"].Clone();
-                            Bitmaps.Add(Stringo, StartGrid);
+                            Bitmap StartGridBM = new(StartGrid);
+                        Bitmaps.Add(Stringo, StartGridBM);
                             break;
                         case "Finish":
-                            Bitmap Finish = (Bitmap)Bitmaps["Empty"].Clone();
-                            Bitmaps.Add(Stringo, Finish);
+                            Bitmap FinishBM = new(Finish);
+                        Bitmaps.Add(Stringo, FinishBM);
                             break;
                         default:
-                            Bitmap EmptBitmap = EmptyBitmap(500, 500);
+                            Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
                             Bitmaps.Add("Empty", EmptBitmap);
                             break;
                     }
@@ -66,7 +66,7 @@ namespace GraphicVisualisation
             SolidBrush SB = new SolidBrush(Color.Green);
             using (Graphics graph = Graphics.FromImage(BM))
             {
-                Rectangle ImageSize = new Rectangle(0, 0, 500, 500);
+                Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
             }
 
@@ -107,11 +107,11 @@ namespace GraphicVisualisation
 
         #region GRAPHICS
 
-        const string Straight = ".\\Graphics\\straight.png";
-        const string LeftCorner = ".\\Graphics\\left.png";
-        const string RightCorner = ".\\Graphics\\right.png";
-        const string StartGrid = ".\\Graphics\\start.png";
-        const string Finish = ".\\Graphics\\finish.png";
+        const string Straight    = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\straight.png";
+        const string LeftCorner  = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\left.png";
+        const string RightCorner = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\right.png";
+        const string StartGrid   = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\start.png";
+        const string Finish      = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\finish.png";
 
         #endregion
     }

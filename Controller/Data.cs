@@ -39,7 +39,7 @@ namespace Controller
             Track track = competition.NextTrack();
             if (track != null)
             {
-                if (Debug)
+                if (!Debug)
                 {
                     CurrentRace = new Race(track, competition.Participants, 500);
                 }
