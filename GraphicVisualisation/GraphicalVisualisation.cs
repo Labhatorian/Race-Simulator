@@ -21,10 +21,12 @@ namespace GraphicVisualisation
         /// <returns></returns>
         /// 
         static Directions CurrentDirection = Directions.North;
+        static int CurrentXCounter = 0;
+        static int CurrentYCounter = 0;
         public static Bitmap DrawTrack(Track Track, String String)
         {
-            int CurrentXCounter = 0;
-            int CurrentYCounter = 0;
+            CurrentXCounter = 0;
+            CurrentYCounter = 0;
             int OffsetFirstNorth = CountNorth(Track);
 
             
@@ -52,23 +54,23 @@ namespace GraphicVisualisation
                             } else
                             {
                                 CurrentYCounter--;
-                                MoveDirection(section, ref CurrentYCounter, ref CurrentXCounter);
+                                MoveDirection(section);
                             }
                             break;
                         case Directions.East:
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
                             CurrentXCounter++;
-                            MoveDirection(section, ref CurrentXCounter, ref CurrentYCounter);
+                            MoveDirection(section);
                             break;
                         case Directions.South:
                              g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
                             CurrentYCounter++;
-                            MoveDirection(section, ref CurrentYCounter, ref CurrentXCounter);
+                            MoveDirection(section);
                             break;
                         case Directions.West:
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
                             CurrentXCounter--;
-                            MoveDirection(section, ref CurrentXCounter, ref CurrentYCounter);
+                            MoveDirection(section);
                             break;
                     }
                 }
@@ -94,12 +96,19 @@ namespace GraphicVisualisation
             return Counter;
         }
 
-        private static void MoveDirection(Section section, ref int CurrentCounter, ref int OtherCounter)
+        private static void MoveDirection(Section section)
         {
             Boolean ChangedDirection = false;
             if (section.SectionType == SectionTypes.RightCorner)
             {
-                CurrentDirection += 1;
+                if (CurrentDirection == Directions.West)
+                {
+                    CurrentDirection = 0;
+                }
+                else
+                {
+                    CurrentDirection += 1;
+                }
                 ChangedDirection = true;
             }
 
@@ -107,54 +116,42 @@ namespace GraphicVisualisation
             {
                 CurrentDirection -= 1;
                 ChangedDirection = true;
+
             }
 
             if (ChangedDirection)
             {
-                //ONDERSTAANDE CODE BIJ VOLGENDE COMMIT VERWIJDEREN. IS ALLEEN VOOR ARCHIEF
-                //VEROORZAAKT RAAR MEMORY CORRUPTION WAARDOOR WAARDEN NIET MEER KLOPPEN
-                //if (CurrentDirection == Directions.West)
-                //{
-                //    CurrentDirection = Directions.North;
-                //    //Currentcounter is X
-                //    //Othercounter is Y
-                //    // Y moet 3
-                //    //X moet 0
-                //    CurrentCounter = 4;
-                //    OtherCounter = -1;
-
-                //}
-
                 switch (CurrentDirection)
                 {
+                    //Unused?
                     case Directions.North:
-                        CurrentCounter--;
-                        OtherCounter++;
+                       CurrentYCounter--;
+                       CurrentXCounter++;
                         break;
                     case Directions.East:
-                        CurrentCounter--;
-                        OtherCounter++;
+                        CurrentXCounter++;
+                        CurrentYCounter++;
                         break;
                     case Directions.South:
-                        CurrentCounter--;
-                        OtherCounter++;
+                        CurrentYCounter++;
+                        CurrentXCounter--;
                         break;
                     case Directions.West:
                         //CurrentDirection = 0;
-                        CurrentCounter--;
-                        OtherCounter--;
+                        CurrentXCounter--;
+                        CurrentYCounter--;
                         break;
                 }
             }
 
-            if(CurrentCounter <= 0)
+            if(CurrentXCounter <= 0)
             {
-                CurrentCounter = 0;
+                CurrentXCounter = 0;
             }
 
-            if(OtherCounter <= 0)
+            if(CurrentYCounter <= 0)
             {
-                OtherCounter = 0;
+                CurrentYCounter = 0;
             }
         }
     }
