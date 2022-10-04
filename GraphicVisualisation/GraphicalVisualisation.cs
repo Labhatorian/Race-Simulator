@@ -296,7 +296,12 @@ namespace GraphicVisualisation
                         }
                         break;
                 }
-                    g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
+                g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
+                if (participant.Equipment.IsBroken)
+                {
+                   Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
+                    g.DrawImage(ImageBroken, Xpos, Ypos, 150, 150);
+                }
             }
         }
 
