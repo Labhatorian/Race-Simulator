@@ -44,7 +44,31 @@ namespace GraphicVisualisation
                             Bitmap FinishBM = new(Finish);
                         Bitmaps.Add(Stringo, FinishBM);
                             break;
-                        default:
+                        case "Blue":
+                        Bitmap BlueBM = new(Blue);
+                        Bitmaps.Add(Stringo, BlueBM);
+                        break;
+                        case "Green":
+                        Bitmap GreenBM = new(Green);
+                        Bitmaps.Add(Stringo, GreenBM);
+                        break;
+                        case "Grey":
+                        Bitmap GreyBM = new(Grey);
+                        Bitmaps.Add(Stringo, GreyBM);
+                        break;
+                        case "Red":
+                        Bitmap RedBM = new(Red);
+                        Bitmaps.Add(Stringo, RedBM);
+                        break;
+                        case "Yellow":
+                        Bitmap YellowBM = new(Yellow);
+                        Bitmaps.Add(Stringo, YellowBM);
+                        break;
+                        case "Broken":
+                        Bitmap BrokenBM = new(Broken);
+                        Bitmaps.Add(Stringo, BrokenBM);
+                        break;
+                    default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
                             Bitmaps.Add("Empty", EmptBitmap);
                             break;
@@ -107,12 +131,22 @@ namespace GraphicVisualisation
 
         #region GRAPHICS
 
+        //Sections
         const string Straight    = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\straight.png";
         const string LeftCorner  = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\left.png";
         const string RightCorner = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\right.png";
         const string StartGrid   = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\start.png";
         const string Finish      = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\finish.png";
 
+        //Cars
+        const string Blue = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\blue.png";
+        const string Green = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\green.png";
+        const string Grey = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\grey.png";
+        const string Red = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\red.png";
+        const string Yellow = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\yellow.png";
+
+
+        const string Broken = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\broken.png";
         #endregion
     }
 }

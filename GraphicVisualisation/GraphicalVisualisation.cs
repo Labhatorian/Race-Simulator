@@ -23,7 +23,7 @@ namespace GraphicVisualisation
         static Directions CurrentDirection = Directions.North;
         static int CurrentXCounter = 0;
         static int CurrentYCounter = 0;
-        public static Bitmap DrawTrack(Track Track, String String)
+        public static Bitmap DrawTrack(Race Race, Track Track, String String)
         {
             CurrentXCounter = 0;
             CurrentYCounter = 0;
@@ -48,7 +48,7 @@ namespace GraphicVisualisation
                             int YOffset = 500 * OffsetFirstNorth;
 
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset), 500, 500);
-
+                            DrawDrivers(Race.GetSectionData(section), g);
                             if (OffsetFirstNorth > 0){
                                 OffsetFirstNorth--;
                             } else
@@ -59,16 +59,19 @@ namespace GraphicVisualisation
                             break;
                         case Directions.East:
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
+                            DrawDrivers(Race.GetSectionData(section), g);
                             CurrentXCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.South:
                              g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
+                            DrawDrivers(Race.GetSectionData(section), g);
                             CurrentYCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.West:
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
+                            DrawDrivers(Race.GetSectionData(section), g);
                             CurrentXCounter--;
                             MoveDirection(section);
                             break;
@@ -161,6 +164,56 @@ namespace GraphicVisualisation
             if(CurrentYCounter <= 0)
             {
                 CurrentYCounter = 0;
+            }
+        }
+
+        private static void DrawDrivers(SectionData sectionData, Graphics g)
+        {
+            IParticipant[] participants = new IParticipant[2];
+            participants[0] = sectionData.Left;
+            participants[1] = sectionData.Right;
+            Bitmap ImageSection = null;
+
+            foreach (IParticipant participant in participants)
+            {
+                if (participant != null)
+                {
+                    switch (participant.TeamColor)
+                    {
+                        case TeamColors.Red:
+                            ImageSection = LoadResources.GetBitmap(TeamColors.Red.ToString());
+                            break;
+                        case TeamColors.Blue:
+                            ImageSection = LoadResources.GetBitmap(TeamColors.Blue.ToString());
+                            break;
+                        case TeamColors.Yellow:
+                            ImageSection = LoadResources.GetBitmap(TeamColors.Yellow.ToString());
+                            break;
+                        case TeamColors.Green:
+                            ImageSection = LoadResources.GetBitmap(TeamColors.Green.ToString());
+                            break;
+                        case TeamColors.Grey:
+                            ImageSection = LoadResources.GetBitmap(TeamColors.Grey.ToString());
+                            break;
+                    }
+                }
+
+                if (participants[0] == participant)
+                {
+                    if (ImageSection != null)
+                    {
+                        g.DrawImage(ImageSection, (500 * CurrentXCounter + 80), (500 * CurrentYCounter + 80), 150, 150);
+                    }
+                }
+
+                if (participants[1] == participant)
+                {
+                    if (ImageSection != null)
+                    {
+                        g.DrawImage(ImageSection, (500 * CurrentXCounter + 100), (500 * CurrentYCounter + 120), 150, 150);
+                    }
+                }
+
             }
         }
     }

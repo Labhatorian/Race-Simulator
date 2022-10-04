@@ -71,10 +71,12 @@ namespace Controller
             Driver DriverOne = new Driver();
             DriverOne.Naam = "Max Verstappen";
             DriverOne.Equipment = new Car();
+            DriverOne.TeamColor = TeamColors.Blue;
 
             Driver DriverTwo = new Driver();
-            DriverTwo.Naam = "Lewis Hamilton";
+            DriverTwo.Naam = "Charles Leclerc";
             DriverTwo.Equipment = new Car();
+            DriverTwo.TeamColor = TeamColors.Red;
 
             competition.Participants.Add(DriverOne);
             competition.Participants.Add(DriverTwo);
