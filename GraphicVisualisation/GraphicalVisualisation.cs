@@ -212,42 +212,39 @@ namespace GraphicVisualisation
                             ImageSection = LoadResources.GetBitmap(TeamColors.Grey.ToString());
                             break;
                     }
-                }
 
-                if (ImageSection != null)
-                {
-                    switch (CurrentDirection)
+
+                    if (ImageSection != null)
                     {
-                        case Directions.East:
-                            ImageSection = RotateImage(ImageSection, 90);
-                            break;
-                        case Directions.South:
-                            ImageSection = RotateImage(ImageSection, 180);
-                            break;
-                        case Directions.West:
-                            ImageSection = RotateImage(ImageSection, 270);
-                            break;
-                        default:
-                            break;
+                        switch (CurrentDirection)
+                        {
+                            case Directions.East:
+                                ImageSection = RotateImage(ImageSection, 90);
+                                break;
+                            case Directions.South:
+                                ImageSection = RotateImage(ImageSection, 180);
+                                break;
+                            case Directions.West:
+                                ImageSection = RotateImage(ImageSection, 270);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
 
-                if (SectionPositions.ContainsKey(section))
-                {
-                    if (participants[0] == participant)
+                    if (SectionPositions.ContainsKey(section))
                     {
-                        if (ImageSection != null)
+
+                        if (ImageSection != null & sectionData.Left == participant)
                         {
                             g.DrawImage(ImageSection, (SectionPositions[section][0] + 80), (SectionPositions[section][1] + 80), 150, 150);
                         }
-                    }
 
-                    if (participants[1] == participant)
-                    {
-                        if (ImageSection != null)
+                        if (ImageSection != null & sectionData.Right == participant)
                         {
                             g.DrawImage(ImageSection, (SectionPositions[section][0] + 200), (SectionPositions[section][1] + 200), 150, 150);
                         }
+
                     }
                 }
 
