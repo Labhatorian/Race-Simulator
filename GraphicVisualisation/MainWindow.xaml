@@ -15,8 +15,8 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Image x:Name="MainImage" Margin="69,70,72,49"/>
-            <DockPanel LastChildFill="False">
-                <Menu Width="100" DockPanel.Dock="Top" Height="20" VerticalAlignment="Top">
+            <DockPanel LastChildFill="False" IsEnabled="False">
+                <Menu Width="45" DockPanel.Dock="Top" Height="20" IsEnabled="False">
                     <MenuItem Header="Menu">
                         <MenuItem Header="Scherm 1"/>
                         <MenuItem Header="Scherm 2"/>
