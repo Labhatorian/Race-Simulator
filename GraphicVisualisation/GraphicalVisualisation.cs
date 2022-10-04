@@ -117,6 +117,15 @@ namespace GraphicVisualisation
                 CurrentDirection -= 1;
                 ChangedDirection = true;
 
+                if(CurrentDirection == Directions.South)
+                {
+                    CurrentXCounter += 2;
+                }
+                if (CurrentDirection == Directions.East)
+                {
+                    CurrentYCounter -= 2;
+
+                }
             }
 
             if (ChangedDirection)
