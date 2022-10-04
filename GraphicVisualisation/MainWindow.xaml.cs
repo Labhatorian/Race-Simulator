@@ -36,7 +36,7 @@ namespace GraphicVisualisation
             Data.NextRace();
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
-            //Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
+            Data.CurrentRace.DriversFinished += OnDriversFinished;
         }
 
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
@@ -49,6 +49,19 @@ namespace GraphicVisualisation
                     this.MainImage.Source = null;
                     this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(Data.CurrentRace, e.Track, e.Section.SectionType.ToString())); ;
                 }));
+        }
+
+        public void OnDriversFinished(Object source, EventArgs e)
+        {
+            Data.CurrentRace = null;
+            Data.NextRace();
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+            LoadResources.Clear();
+            if (Data.CurrentRace != null)
+            {
+                Data.CurrentRace.DriversChanged += OnDriverChanged;
+                Data.CurrentRace.DriversFinished += OnDriversFinished;
+            }
         }
     }
 }

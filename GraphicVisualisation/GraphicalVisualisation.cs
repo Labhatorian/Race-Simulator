@@ -275,19 +275,19 @@ namespace GraphicVisualisation
                         if (sectionData.Left == participant)
                         {
                             Xpos = SectionPositions[section][0] + 100;
-                            Ypos = SectionPositions[section][1] + 120;
+                            Ypos = SectionPositions[section][1] + 160;
                         }
                         if (sectionData.Right == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 150;
-                            Ypos = SectionPositions[section][1] + 120;
+                            Xpos = SectionPositions[section][0] + 180;
+                            Ypos = SectionPositions[section][1] + 150;
                         }
                         break;
                     default:
                         if (sectionData.Left == participant)
                         {
                             Xpos = SectionPositions[section][0] + 100;
-                            Ypos = SectionPositions[section][1] + 80;
+                            Ypos = SectionPositions[section][1] + 120;
                         }
                         if (sectionData.Right == participant)
                         {

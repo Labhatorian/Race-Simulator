@@ -41,7 +41,7 @@ namespace Controller
             {
                 if (!Debug)
                 {
-                    CurrentRace = new Race(track, competition.Participants, 800);
+                    CurrentRace = new Race(track, competition.Participants, 700);
                 }
                 else
                 {
@@ -155,10 +155,9 @@ namespace Controller
             Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
             Track TrackTwo = new Track("Spa", sectionTypesSpa);
 
-            competition.Tracks.Enqueue(TrackTwo);
             competition.Tracks.Enqueue(TrackOne);
+            competition.Tracks.Enqueue(TrackTwo);
             
-           
         }
     }
 }
