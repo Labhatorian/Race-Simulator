@@ -23,14 +23,12 @@ namespace GraphicVisualisation
         static Directions CurrentDirection = Directions.North;
         static int CurrentXCounter = 0;
         static int CurrentYCounter = 0;
+        static Dictionary<Section, int[]> SectionPositions = new();
         public static Bitmap DrawTrack(Race Race, Track Track, String String)
         {
             CurrentXCounter = 0;
             CurrentYCounter = 0;
             int OffsetFirstNorth = CountNorth(Track);
-
-            
-            Dictionary<Section, int[]> SectionPositions = new();
 
             Bitmap BM = LoadResources.GetBitmap("Empty");
 
@@ -40,15 +38,19 @@ namespace GraphicVisualisation
                 foreach (Section section in Track.Sections)
                 {
                     Bitmap ImageSection = LoadResources.GetBitmap(section.SectionType.ToString());                 
-                    SectionPositions.Add(section, new int[] { 500 * CurrentXCounter, 400 * CurrentYCounter });
+                    
 
                     switch (CurrentDirection)
                     {
                         case Directions.North:
                             int YOffset = 500 * OffsetFirstNorth;
-
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g);
+                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            if (!SectionPositions.ContainsKey(section))
+                            {
+                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset) });
+                            }
+                            
                             if (OffsetFirstNorth > 0){
                                 OffsetFirstNorth--;
                             } else
@@ -58,20 +60,36 @@ namespace GraphicVisualisation
                             }
                             break;
                         case Directions.East:
+                            ImageSection = RotateImage(ImageSection, 90);
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g);
+                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            if (!SectionPositions.ContainsKey(section))
+                            {
+                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                            }
                             CurrentXCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.South:
-                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g);
+                            ImageSection = RotateImage(ImageSection, 180);
+                            g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
+                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            if (!SectionPositions.ContainsKey(section))
+                            {
+                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                            }
+
                             CurrentYCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.West:
+                            ImageSection = RotateImage(ImageSection, 270);
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g);
+                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            if (!SectionPositions.ContainsKey(section))
+                            {
+                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                            }
                             CurrentXCounter--;
                             MoveDirection(section);
                             break;
@@ -135,7 +153,6 @@ namespace GraphicVisualisation
             {
                 switch (CurrentDirection)
                 {
-                    //Unused?
                     case Directions.North:
                        CurrentYCounter--;
                        CurrentXCounter++;
@@ -149,7 +166,6 @@ namespace GraphicVisualisation
                         CurrentXCounter--;
                         break;
                     case Directions.West:
-                        //CurrentDirection = 0;
                         CurrentXCounter--;
                         CurrentYCounter--;
                         break;
@@ -167,7 +183,7 @@ namespace GraphicVisualisation
             }
         }
 
-        private static void DrawDrivers(SectionData sectionData, Graphics g)
+        private static void DrawDrivers(SectionData sectionData, Graphics g, Section section)
         {
             IParticipant[] participants = new IParticipant[2];
             participants[0] = sectionData.Left;
@@ -198,23 +214,64 @@ namespace GraphicVisualisation
                     }
                 }
 
-                if (participants[0] == participant)
+                if (ImageSection != null)
                 {
-                    if (ImageSection != null)
+                    switch (CurrentDirection)
                     {
-                        g.DrawImage(ImageSection, (500 * CurrentXCounter + 80), (500 * CurrentYCounter + 80), 150, 150);
+                        case Directions.East:
+                            ImageSection = RotateImage(ImageSection, 90);
+                            break;
+                        case Directions.South:
+                            ImageSection = RotateImage(ImageSection, 180);
+                            break;
+                        case Directions.West:
+                            ImageSection = RotateImage(ImageSection, 270);
+                            break;
+                        default:
+                            break;
                     }
                 }
 
-                if (participants[1] == participant)
+                if (SectionPositions.ContainsKey(section))
                 {
-                    if (ImageSection != null)
+                    if (participants[0] == participant)
                     {
-                        g.DrawImage(ImageSection, (500 * CurrentXCounter + 100), (500 * CurrentYCounter + 120), 150, 150);
+                        if (ImageSection != null)
+                        {
+                            g.DrawImage(ImageSection, (SectionPositions[section][0] + 80), (SectionPositions[section][1] + 80), 150, 150);
+                        }
+                    }
+
+                    if (participants[1] == participant)
+                    {
+                        if (ImageSection != null)
+                        {
+                            g.DrawImage(ImageSection, (SectionPositions[section][0] + 200), (SectionPositions[section][1] + 200), 150, 150);
+                        }
                     }
                 }
 
             }
+        }
+
+        //https://stackoverflow.com/questions/36871291/how-do-you-rotate-a-bitmap-an-arbitrary-number-of-degrees
+        public static Bitmap RotateImage(Bitmap b, float angle)
+        {
+            //create a new empty bitmap to hold rotated image
+            Bitmap returnBitmap = new Bitmap(b.Width, b.Height);
+            //make a graphics object from the empty bitmap
+            using (Graphics g = Graphics.FromImage(returnBitmap))
+            {
+                //move rotation point to center of image
+                g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
+                //rotate
+                g.RotateTransform(angle);
+                //move image back
+                g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
+                //draw passed in image onto graphics object
+                g.DrawImage(b, new Point(0, 0));
+            }
+            return returnBitmap;
         }
     }
 }

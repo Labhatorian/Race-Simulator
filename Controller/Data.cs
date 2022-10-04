@@ -41,7 +41,7 @@ namespace Controller
             {
                 if (!Debug)
                 {
-                    CurrentRace = new Race(track, competition.Participants, 500);
+                    CurrentRace = new Race(track, competition.Participants, 800);
                 }
                 else
                 {

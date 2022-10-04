@@ -34,8 +34,9 @@ namespace GraphicVisualisation
             InitializeComponent();
             Data.Initialise();
             Data.NextRace();
-
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
+            //Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
         }
 
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
