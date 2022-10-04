@@ -39,9 +39,9 @@ namespace Controller
             Track track = competition.NextTrack();
             if (track != null)
             {
-                if (Debug)
+                if (!Debug)
                 {
-                    CurrentRace = new Race(track, competition.Participants, 500);
+                    CurrentRace = new Race(track, competition.Participants, 700);
                 }
                 else
                 {
@@ -71,10 +71,12 @@ namespace Controller
             Driver DriverOne = new Driver();
             DriverOne.Naam = "Max Verstappen";
             DriverOne.Equipment = new Car();
+            DriverOne.TeamColor = TeamColors.Blue;
 
             Driver DriverTwo = new Driver();
-            DriverTwo.Naam = "Lewis Hamilton";
+            DriverTwo.Naam = "Charles Leclerc";
             DriverTwo.Equipment = new Car();
+            DriverTwo.TeamColor = TeamColors.Red;
 
             competition.Participants.Add(DriverOne);
             competition.Participants.Add(DriverTwo);
@@ -155,7 +157,7 @@ namespace Controller
 
             competition.Tracks.Enqueue(TrackOne);
             competition.Tracks.Enqueue(TrackTwo);
-
+            
         }
     }
 }

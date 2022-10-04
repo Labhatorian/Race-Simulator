@@ -34,22 +34,34 @@ namespace GraphicVisualisation
             InitializeComponent();
             Data.Initialise();
             Data.NextRace();
-
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
+            Data.CurrentRace.DriversFinished += OnDriversFinished;
         }
 
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {
-            GraphicalVisualisation GV = new GraphicalVisualisation();
-            GV.DrawTrack(e.Track, "Empty");
             this.MainImage.Dispatcher.BeginInvoke(
 
                 DispatcherPriority.Render,
                 new Action(() =>
                 {
                     this.MainImage.Source = null;
-                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GV.DrawTrack(e.Track, e.Section.SectionType.ToString())); ;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(Data.CurrentRace, e.Track, e.Section.SectionType.ToString())); ;
                 }));
+        }
+
+        public void OnDriversFinished(Object source, EventArgs e)
+        {
+            Data.CurrentRace = null;
+            Data.NextRace();
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+            LoadResources.Clear();
+            if (Data.CurrentRace != null)
+            {
+                Data.CurrentRace.DriversChanged += OnDriverChanged;
+                Data.CurrentRace.DriversFinished += OnDriversFinished;
+            }
         }
     }
 }

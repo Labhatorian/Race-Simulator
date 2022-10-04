@@ -76,8 +76,8 @@ namespace Controller
             foreach (IParticipant participant in Participants)
             {
                 participant.Equipment.Quality = _random.Next(30, 100);
-                participant.Equipment.Performance = _random.Next(3, 10);
-                participant.Equipment.Speed = _random.Next(3, 10);
+                participant.Equipment.Performance = _random.Next(3, 8);
+                participant.Equipment.Speed = _random.Next(3, 8);
             }
         }
 
@@ -329,11 +329,11 @@ namespace Controller
         private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
         {
             _participantslaps[Driver] += 1;
-            Console.SetCursorPosition(50, 0);
-            Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
-            Thread.Sleep(500);
-            Console.SetCursorPosition(50, 0);
-            Console.WriteLine($"                     ");
+            //Console.SetCursorPosition(50, 0);
+            //Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+            //Thread.Sleep(500);
+            //Console.SetCursorPosition(50, 0);
+            //Console.WriteLine($"                     ");
             if (_participantslaps[Driver] >= 4)
             {
                 _participantsfinished[Driver] = true;
