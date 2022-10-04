@@ -155,8 +155,9 @@ namespace Controller
             Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
             Track TrackTwo = new Track("Spa", sectionTypesSpa);
 
-            competition.Tracks.Enqueue(TrackOne);
             competition.Tracks.Enqueue(TrackTwo);
+            competition.Tracks.Enqueue(TrackOne);
+            
            
         }
     }

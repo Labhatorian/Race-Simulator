@@ -45,7 +45,7 @@ namespace GraphicVisualisation
                         case Directions.North:
                             int YOffset = 500 * OffsetFirstNorth;
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!SectionPositions.ContainsKey(section))
                             {
                                 SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset) });
@@ -62,7 +62,7 @@ namespace GraphicVisualisation
                         case Directions.East:
                             ImageSection = RotateImage(ImageSection, 90);
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!SectionPositions.ContainsKey(section))
                             {
                                 SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
@@ -73,7 +73,7 @@ namespace GraphicVisualisation
                         case Directions.South:
                             ImageSection = RotateImage(ImageSection, 180);
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!SectionPositions.ContainsKey(section))
                             {
                                 SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
@@ -85,7 +85,7 @@ namespace GraphicVisualisation
                         case Directions.West:
                             ImageSection = RotateImage(ImageSection, 270);
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            DrawDrivers(Race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!SectionPositions.ContainsKey(section))
                             {
                                 SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
@@ -183,8 +183,9 @@ namespace GraphicVisualisation
             }
         }
 
-        private static void DrawDrivers(SectionData sectionData, Graphics g, Section section)
+        private static void PositionDrivers(SectionData sectionData, Graphics g, Section section)
         {
+            //TODO Fix positites. LEFT IS LEFT
             IParticipant[] participants = new IParticipant[2];
             participants[0] = sectionData.Left;
             participants[1] = sectionData.Right;
@@ -232,22 +233,70 @@ namespace GraphicVisualisation
                         }
                     }
 
-                    if (SectionPositions.ContainsKey(section))
-                    {
-
-                        if (ImageSection != null & sectionData.Left == participant)
-                        {
-                            g.DrawImage(ImageSection, (SectionPositions[section][0] + 80), (SectionPositions[section][1] + 80), 150, 150);
-                        }
-
-                        if (ImageSection != null & sectionData.Right == participant)
-                        {
-                            g.DrawImage(ImageSection, (SectionPositions[section][0] + 200), (SectionPositions[section][1] + 200), 150, 150);
-                        }
-
-                    }
+                    DrawDriver(sectionData, g, section, ImageSection, participant);
                 }
 
+            }
+        }
+
+        private static void DrawDriver(SectionData sectionData, Graphics g, Section section, Bitmap ImageSection, IParticipant participant)
+        {
+            int Xpos = 0;
+            int Ypos = 0;
+            if (ImageSection != null & (SectionPositions.ContainsKey(section)))
+            {
+                switch (CurrentDirection)
+                {
+                    case Directions.East:
+                        if (sectionData.Left == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 170;
+                            Ypos = SectionPositions[section][1] + 120;
+                        }
+                        if (sectionData.Right == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 20;
+                            Ypos = SectionPositions[section][1] + 160;
+                        }
+                        break;
+                    case Directions.South:
+                        if (sectionData.Left == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 200;
+                            Ypos = SectionPositions[section][1] + 200;
+                        }
+                        if (sectionData.Right == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 100;
+                            Ypos = SectionPositions[section][1] + 80;
+                        }
+                        break;
+                    case Directions.West:
+                        if (sectionData.Left == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 100;
+                            Ypos = SectionPositions[section][1] + 120;
+                        }
+                        if (sectionData.Right == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 150;
+                            Ypos = SectionPositions[section][1] + 120;
+                        }
+                        break;
+                    default:
+                        if (sectionData.Left == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 100;
+                            Ypos = SectionPositions[section][1] + 80;
+                        }
+                        if (sectionData.Right == participant)
+                        {
+                            Xpos = SectionPositions[section][0] + 250;
+                            Ypos = SectionPositions[section][1] + 220;
+                        }
+                        break;
+                }
+                    g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
             }
         }
 
