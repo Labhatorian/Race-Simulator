@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="Window2" Height="450" Width="800">
     <Grid>
-        
+        <ListView HorizontalAlignment="Left" Height="214" Margin="62,117,0,0" VerticalAlignment="Top" Width="272" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView HorizontalAlignment="Left" Height="206" Margin="450,125,0,0" VerticalAlignment="Top" Width="244" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Label" HorizontalAlignment="Left" Height="25" Margin="45,47,0,0" VerticalAlignment="Top" Width="76"/>
+
     </Grid>
 </Window>

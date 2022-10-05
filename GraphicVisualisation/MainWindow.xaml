@@ -8,8 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
-        <Controller:DataContext/>
+        <local:DataContext/>
     </Window.DataContext>
+
     <Grid>
         <Grid x:Name="MainWindow1">
             <Grid.Background>
@@ -28,7 +29,7 @@
                     </MenuItem>
                 </Menu>
             </DockPanel>
-            <Label x:Name="TrackName" Content="Label" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="TrackName" Content="{Binding trackname}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White"/>
         </Grid>
     </Grid>
 </Window>

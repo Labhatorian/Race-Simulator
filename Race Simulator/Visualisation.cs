@@ -30,7 +30,6 @@ namespace Race_Simulator
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
-        /// TODO Sla op posities en update alleen dat positie zodat niet alles flikkert
         public static void DrawTrack(Track track, Race race, Section? sectiondriver, Section? previoussection)
         {
             //Reset alles    

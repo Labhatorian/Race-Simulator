@@ -38,7 +38,7 @@ namespace GraphicVisualisation
 
             Data.Initialise();
             Data.NextRace();
-            //DataContext dataContext = new();
+            DataContext = new DataContext();
             InitializeComponent();
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;

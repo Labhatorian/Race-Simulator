@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Controller;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,15 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Controller
+namespace GraphicVisualisation
 {
     public class DataContext : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        public Func<string, string> CircuitName = (CircuitName => Data.CurrentRace.Track.Name);
+        public string trackname { get; set; }
 
         public DataContext()
         {
+            trackname = Data.CurrentRace.Track.Name;
             PropertyChanged += OnPropertyChanged;
             Data.CurrentRace.DriversChanged += OnDriverChanged;
         }
@@ -26,7 +28,7 @@ namespace Controller
 
         private void OnDriverChanged(object sender, EventArgs e)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(""));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
 
         
