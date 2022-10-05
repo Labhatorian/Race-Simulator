@@ -63,5 +63,20 @@ namespace GraphicVisualisation
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
             }
         }
+
+        private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void MenuItem_Window2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Window1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

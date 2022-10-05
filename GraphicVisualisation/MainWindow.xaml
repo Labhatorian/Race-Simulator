@@ -18,9 +18,9 @@
             <DockPanel LastChildFill="False" IsEnabled="False">
                 <Menu Width="45" DockPanel.Dock="Top" Height="20" IsEnabled="False">
                     <MenuItem Header="Menu">
-                        <MenuItem Header="Scherm 1"/>
-                        <MenuItem Header="Scherm 2"/>
-                        <MenuItem Header="Afsluiten"/>
+                        <MenuItem Header="Scherm 1" Click="MenuItem_Window1_Click"/>
+                        <MenuItem Header="Scherm 2" Click="MenuItem_Window2_Click"/>
+                        <MenuItem Header="Afsluiten" Click="MenuItem_Exit_Click"/>
                     </MenuItem>
                 </Menu>
             </DockPanel>
