@@ -329,12 +329,18 @@ namespace Controller
         private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
         {
             _participantslaps[Driver] += 1;
-            //Console.SetCursorPosition(50, 0);
-            //Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
-            //Thread.Sleep(500);
-            //Console.SetCursorPosition(50, 0);
-            //Console.WriteLine($"                     ");
-            if (_participantslaps[Driver] >= 4)
+            try
+            {
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+                Thread.Sleep(500);
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"                     ");
+            } catch (IOException)
+            {
+                //Doe niks
+            }
+                if (_participantslaps[Driver] >= 4)
             {
                 _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);

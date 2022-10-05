@@ -9,7 +9,6 @@ namespace Controller
         public static Race CurrentRace { get; set; }
         public static Boolean Debug { get; set; }
 
-        //TODO Kan dit voor testen? Voor nu even uit
         /// <summary>
         /// Zet competitie voor testen
         /// </summary>
@@ -50,13 +49,19 @@ namespace Controller
             } else
             {
                 //Als het afgelopen is, laat de stand zien
-                Console.Clear();
-                Console.WriteLine($"De competitie is afgelopen!!!!");
-                Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
-
-                foreach (IParticipant driver in competition.Participants)
+                try
                 {
-                    Console.WriteLine($"{driver.Naam}: {driver.Points}");
+                    Console.Clear();
+                    Console.WriteLine($"De competitie is afgelopen!!!!");
+                    Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
+
+                    foreach (IParticipant driver in competition.Participants)
+                    {
+                        Console.WriteLine($"{driver.Naam}: {driver.Points}");
+                    }
+                } catch (IOException)
+                {
+                    //Huil
                 }
             }
         }

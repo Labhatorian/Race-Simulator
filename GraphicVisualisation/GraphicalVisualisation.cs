@@ -243,6 +243,7 @@ namespace GraphicVisualisation
         {
             int Xpos = 0;
             int Ypos = 0;
+            Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
             if (ImageSection != null & (SectionPositions.ContainsKey(section)))
             {
                 switch (CurrentDirection)
@@ -258,6 +259,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 20;
                             Ypos = SectionPositions[section][1] + 160;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 90);
                         break;
                     case Directions.South:
                         if (sectionData.Left == participant)
@@ -270,6 +272,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 100;
                             Ypos = SectionPositions[section][1] + 80;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 180);
                         break;
                     case Directions.West:
                         if (sectionData.Left == participant)
@@ -282,6 +285,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 180;
                             Ypos = SectionPositions[section][1] + 150;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 270);
                         break;
                     default:
                         if (sectionData.Left == participant)
@@ -299,7 +303,7 @@ namespace GraphicVisualisation
                 g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
                 if (participant.Equipment.IsBroken)
                 {
-                   Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
+                   
                     g.DrawImage(ImageBroken, Xpos, Ypos, 150, 150);
                 }
             }
