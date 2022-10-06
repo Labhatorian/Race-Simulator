@@ -185,7 +185,6 @@ namespace GraphicVisualisation
 
         private static void PositionDrivers(SectionData sectionData, Graphics g, Section section)
         {
-            //TODO Fix positites. LEFT IS LEFT
             IParticipant[] participants = new IParticipant[2];
             participants[0] = sectionData.Left;
             participants[1] = sectionData.Right;

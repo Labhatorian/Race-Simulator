@@ -5,18 +5,9 @@ namespace Controller
     public static class Data
     {
         //De belangrijkste paremeters. Competitie en huidige race
-        private static Competition competition { get; set; }
+        public static Competition competition { get; set; }
         public static Race CurrentRace { get; set; }
         public static Boolean Debug { get; set; }
-
-        /// <summary>
-        /// Zet competitie voor testen
-        /// </summary>
-        /// <param name="comp"></param>
-        public static void SetCompetition(Competition comp)
-        {
-            competition = comp;
-        }
 
         /// <summary>
         /// Initialiseer data en dus de competitie

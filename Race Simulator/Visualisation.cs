@@ -310,7 +310,9 @@ namespace Race_Simulator
             {
                 Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
                 Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
+                
             }
+
         }
 
         /// <summary>

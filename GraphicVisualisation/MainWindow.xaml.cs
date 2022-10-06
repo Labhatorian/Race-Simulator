@@ -32,14 +32,18 @@ namespace GraphicVisualisation
     {
         private Window1 Window1;
         private Window2 Window2;
+        public DataContexter DataContexter { get; set; }
 
         public MainWindow()
         {
 
             Data.Initialise();
+            DataContexter = new();
+            this.DataContext = DataContexter;
+
             Data.NextRace();
-            DataContext = new DataContext();
             InitializeComponent();
+            
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
             Data.CurrentRace.DriversFinished += OnDriversFinished;
@@ -61,12 +65,19 @@ namespace GraphicVisualisation
         {
             Data.CurrentRace = null;
             Data.NextRace();
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+
+            //
             LoadResources.Clear();
             if (Data.CurrentRace != null)
             {
                 Data.CurrentRace.DriversChanged += OnDriverChanged;
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
+                GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+                Data.CurrentRace.DriversChanged += DataContexter.OnDriverChanged;
+                Data.CurrentRace.DriversFinished += DataContexter.OnDriverFinished;
+            } else
+            {
+                //niks
             }
         }
 

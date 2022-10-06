@@ -7,10 +7,6 @@
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="GraphicVisualisation.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext>
-        <local:DataContext/>
-    </Window.DataContext>
-
     <Grid>
         <Grid x:Name="MainWindow1">
             <Grid.Background>
@@ -29,7 +25,8 @@
                     </MenuItem>
                 </Menu>
             </DockPanel>
-            <Label x:Name="TrackName" Content="{Binding trackname}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="TrackName" Content="{Binding trackname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White">
+            </Label>
         </Grid>
     </Grid>
 </Window>
