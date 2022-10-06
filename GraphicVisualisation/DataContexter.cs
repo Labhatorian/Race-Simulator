@@ -46,7 +46,7 @@ namespace GraphicVisualisation
         public void OnDriverFinished(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(trackname));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Window1.));
+            
         }
 
         private string GetTrackName()

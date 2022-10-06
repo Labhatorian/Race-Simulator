@@ -38,10 +38,9 @@ namespace GraphicVisualisation
         {
 
             Data.Initialise();
+            Data.NextRace();
             DataContexter = new();
             this.DataContext = DataContexter;
-
-            Data.NextRace();
             InitializeComponent();
             
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);

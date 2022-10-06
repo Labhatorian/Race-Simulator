@@ -7,21 +7,26 @@
         mc:Ignorable="d"
         Title="Window2" Height="450" Width="800">
     <Grid>
-        <ListView HorizontalAlignment="Left" Height="214" Margin="62,117,0,0" VerticalAlignment="Top" Width="272" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView HorizontalAlignment="Left" Height="214" Margin="58,0,0,0" VerticalAlignment="Center" Width="272" d:ItemsSource="{d:SampleData ItemCount=0}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Naam}"/>
+                    <GridViewColumn Header="Kleur" DisplayMemberBinding="{Binding Path=TeamColour}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView HorizontalAlignment="Left" Height="206" Margin="450,125,0,0" VerticalAlignment="Top" Width="244" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView HorizontalAlignment="Left" Height="206" Margin="441,110,0,0" VerticalAlignment="Top" Width="299" d:ItemsSource="{d:SampleData ItemCount=0}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="LapCount" DisplayMemberBinding="{Binding Path=Laps}"/>
+                    <GridViewColumn Header="Quality" DisplayMemberBinding="{Binding Path=Quality}"/>
+                    <GridViewColumn Header="Performance" DisplayMemberBinding="{Binding Path=Performance}"/>
+                    <GridViewColumn Header="Speed" DisplayMemberBinding="{Binding Path=Speed}"/>
+                    <GridViewColumn Header="Broken" DisplayMemberBinding="{Binding Path=Broken}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="Label" HorizontalAlignment="Left" Height="25" Margin="45,47,0,0" VerticalAlignment="Top" Width="76"/>
+        <Label Content="Race Informatie" HorizontalAlignment="Center" Height="25" Margin="0,68,0,0" VerticalAlignment="Top" Width="104"/>
 
     </Grid>
 </Window>

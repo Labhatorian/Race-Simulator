@@ -13,7 +13,7 @@ namespace Controller
         public DateTime StartTime;
         private Random _random;
         private Timer timer;
-        private int FinishCounter;
+        private int FinishCounter = 0;
 
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
@@ -386,7 +386,8 @@ namespace Controller
             }
 
             //Geef ze punten gebaseerd op de Formule 1 manier
-            if(FinishCounter == 1)
+            FinishCounter += 1;
+            if (FinishCounter == 1)
             {
                 driver.Points += 25;
             } else if (FinishCounter == 2)

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Controller;
+using Model;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +25,16 @@ namespace GraphicVisualisation
         public Window1()
         {
             InitializeComponent();
+            List<IParticipant> results = Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s)).ToList();
+
+            // 3. Query execution.
+            foreach (IParticipant participant in results)
+            {
+                var row = new { Naam = participant.Naam, Points = participant.Points };
+                CompetitionList.Items.Add(row);
+            }
+            
+            //TODO Sorteer op punten
         }
     }
 }
