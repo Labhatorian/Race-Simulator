@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
     <Grid>
-        <ListView HorizontalAlignment="Left" Height="175" Margin="88,0,0,0" VerticalAlignment="Center" Width="385" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView x:Name="CompetitionList" HorizontalAlignment="Left" Height="175" Margin="88,0,0,0" VerticalAlignment="Center" Width="385" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
