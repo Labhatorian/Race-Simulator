@@ -32,6 +32,7 @@ namespace GraphicVisualisation
             Data.CurrentRace.DriversChanged += OnDriverChanged;
             Data.CurrentRace.DriversFinished += OnDriverFinished;     
             UpdateCompetitionInfo();
+            UpdateRaceInfoDrivers();
         }
         
         
@@ -67,17 +68,7 @@ namespace GraphicVisualisation
        
         private void UpdateCompetitionInfo()
         {
-            //Is dit LINQ genoeg? :P
-            tableRaceDrivers = new DataTable("Drivers");
-            tableRaceDrivers.Columns.Add("Name");
-            tableRaceDrivers.Columns.Add("TeamColour");
-            Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
-                .ToList()
-                .ForEach(i => tableRaceDrivers.Rows.Add(i.Naam, i.TeamColor.ToString()));
-        }
-        
-        public void UpdateRaceInfoDrivers()
-        {
+            
             //Is dit LINQ genoeg? :P
             table = new DataTable("Competitie");
             table.Columns.Add("Name");
@@ -85,7 +76,20 @@ namespace GraphicVisualisation
             Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
                 .ToList()
                 .ForEach(i => table.Rows.Add(i.Naam, i.Points));
-        }
+        
+    }
+
+    public void UpdateRaceInfoDrivers()
+    {
+        //Is dit LINQ genoeg? :P
+        tableRaceDrivers = new DataTable("Drivers");
+        tableRaceDrivers.Columns.Add("Naam");
+        tableRaceDrivers.Columns.Add("TeamColour");
+        Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
+            .ToList()
+            .ForEach(i => tableRaceDrivers.Rows.Add(i.Naam, i.TeamColor.ToString()));
+    }
+
 
         private void UpdateRaceDriverInfo(IParticipant driver)
         {

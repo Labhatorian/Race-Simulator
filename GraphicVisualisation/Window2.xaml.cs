@@ -32,7 +32,8 @@ namespace GraphicVisualisation
 
         private void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dataContexter.SelectedDriver = (string)DriverList.SelectedItems[0];
+            dynamic selectedItem = DriverList.SelectedItem;
+            dataContexter.SelectedDriver = selectedItem[0];
         }
     }
 }
