@@ -6,11 +6,14 @@
         xmlns:local="clr-namespace:GraphicVisualisation"
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
+    <Window.DataContext>
+        <local:DataContexter/>
+    </Window.DataContext>
     <Grid>
         <ListView x:Name="CompetitionList" HorizontalAlignment="Center" Height="175" VerticalAlignment="Center" Width="384" d:ItemsSource="{d:SampleData ItemCount=0}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Naam}"/>
+                    <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Name}"/>
                     <GridViewColumn Header="Points" DisplayMemberBinding="{Binding Path=Points}"/>
                 </GridView>
             </ListView.View>

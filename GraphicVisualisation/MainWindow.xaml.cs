@@ -63,15 +63,17 @@ namespace GraphicVisualisation
         public void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
+            Window1.Close();
+            Window2.Close();
             Data.NextRace();
 
-            //
             LoadResources.Clear();
             if (Data.CurrentRace != null)
             {
                 Data.CurrentRace.DriversChanged += OnDriverChanged;
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
                 GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+                DataContexter.UpdateRaceInfoDrivers();
                 Data.CurrentRace.DriversChanged += DataContexter.OnDriverChanged;
                 Data.CurrentRace.DriversFinished += DataContexter.OnDriverFinished;
             } else
@@ -87,13 +89,13 @@ namespace GraphicVisualisation
 
         private void MenuItem_Window2_Click(object sender, RoutedEventArgs e)
         {
-            Window2 = new Window2();
+            Window2 = new Window2(DataContexter);
             Window2.Show();
         }
 
         private void MenuItem_Window1_Click(object sender, RoutedEventArgs e)
         {
-            Window1 = new Window1();
+            Window1 = new Window1(DataContexter);
             Window1.Show();
         }
     }

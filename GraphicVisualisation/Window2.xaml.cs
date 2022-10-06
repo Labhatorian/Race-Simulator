@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +21,18 @@ namespace GraphicVisualisation
     /// </summary>
     public partial class Window2 : Window
     {
-        public Window2()
+        private DataContexter dataContexter;
+        public Window2(DataContexter dataContext)
         {
+            this.dataContexter = dataContext;
             InitializeComponent();
+            DriverList.ItemsSource = dataContexter.tableRaceDrivers.DefaultView;
+            DriverInfo.ItemsSource = dataContexter.tableRaceDriverInfo.DefaultView;
+        }
+
+        private void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dataContexter.SelectedDriver = (string)DriverList.SelectedItems[0];
         }
     }
 }

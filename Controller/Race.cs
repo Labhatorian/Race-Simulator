@@ -17,7 +17,7 @@ namespace Controller
 
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
-        private static Dictionary<IParticipant, int> _participantslaps;
+        public static Dictionary<IParticipant, int> _participantslaps;
         private static Dictionary<IParticipant, Boolean> _participantsfinished;
 
         //Eventhandlers voor verplaatste driver en gefinishte driver

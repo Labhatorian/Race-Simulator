@@ -17,36 +17,45 @@ namespace GraphicVisualisation
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        //Competitie info
-        System.Data.DataTable table = new DataTable("Competitie");
-        private System.Data.DataSet dataSet;
+        public System.Data.DataTable table = new() ;
+
+        public System.Data.DataTable tableRaceDrivers = new();
+        public System.Data.DataTable tableRaceDriverInfo = new();
+        public string SelectedDriver;
 
         public string trackname { get; set; }
-        private List<Track> TrackNames = new List<Track>(Data.competition.Tracks.ToList());
+        private List<Track> TrackNames = Data.competition.Tracks.ToList();
+
         public DataContexter()
         {
-            //trackname = GetTrackName();
             PropertyChanged += OnPropertyChanged;
             Data.CurrentRace.DriversChanged += OnDriverChanged;
-            Data.CurrentRace.DriversFinished += OnDriverFinished;
+            Data.CurrentRace.DriversFinished += OnDriverFinished;     
+            UpdateCompetitionInfo();
         }
         
         
         private void OnPropertyChanged(object sender, EventArgs e)
         {
-            string test = GetTrackName();
-            trackname = test;
+            trackname = GetTrackName();
+            UpdateCompetitionInfo();
+            if (SelectedDriver != null)
+            {
+                IParticipant driver = (IParticipant)Data.competition.Participants.Where(s => s.Naam.Equals(SelectedDriver)).Single();
+                UpdateRaceDriverInfo(driver);
+            }
         }
 
         public void OnDriverChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(trackname));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
         }
 
         public void OnDriverFinished(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(trackname));
-            
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
         }
 
         private string GetTrackName()
@@ -55,68 +64,46 @@ namespace GraphicVisualisation
             return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
         }
 
-        private void MakeCompetitionInfo()
-        {
-            // Declare variables for DataColumn and DataRow objects.
-            DataColumn column;
-            DataRow row;
-
-            // Create new DataColumn, set DataType,
-            // ColumnName and add to DataTable.
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.ColumnName = "Drivers";
-            column.ReadOnly = true;
-            column.Unique = true;
-            // Add the Column to the DataColumnCollection.
-            table.Columns.Add(column);
-
-            // Create second column.
-            //column = new DataColumn();
-            //column.DataType = System.Type.GetType("System.String");
-            //column.ColumnName = "Points";
-            //column.AutoIncrement = false;
-            //column.Caption = "Punten";
-            //column.ReadOnly = false;
-            //column.Unique = false;
-            //// Add the column to the table.
-            //table.Columns.Add(column);
-
-            // Make the ID column the primary key column.
-            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-            PrimaryKeyColumns[0] = table.Columns["Drivers"];
-            table.PrimaryKey = PrimaryKeyColumns;
-
-            // Instantiate the DataSet variable.
-            dataSet = new DataSet();
-            // Add the new DataTable to the DataSet.
-            dataSet.Tables.Add(table);
-
-            // Create three new DataRow objects and add
-            // them to the DataTable
-            foreach(IParticipant participant in Data.competition.Participants)
-            {
-                row = table.NewRow();
-                row["Drivers"] = participant.Naam;
-                row["Points"] = participant.Points;
-                table.Rows.Add(row);
-            }
-        }
-
+       
         private void UpdateCompetitionInfo()
         {
-            foreach (DataRow dr in table.Rows) // search whole table
-            {
-                foreach (IParticipant participant in Data.competition.Participants)
-                {
-                    if (dr["Driver"].Equals(participant.Naam)) // if id==2
-                    {
-                        dr["Points"] = participant.Points; //change the name
-                                                    //break; break or not depending on you
-                    }
-                }
-            }
+            //Is dit LINQ genoeg? :P
+            tableRaceDrivers = new DataTable("Drivers");
+            tableRaceDrivers.Columns.Add("Name");
+            tableRaceDrivers.Columns.Add("TeamColour");
+            Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
+                .ToList()
+                .ForEach(i => tableRaceDrivers.Rows.Add(i.Naam, i.TeamColor.ToString()));
+        }
+        
+        public void UpdateRaceInfoDrivers()
+        {
+            //Is dit LINQ genoeg? :P
+            table = new DataTable("Competitie");
+            table.Columns.Add("Name");
+            table.Columns.Add("Points");
+            Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
+                .ToList()
+                .ForEach(i => table.Rows.Add(i.Naam, i.Points));
         }
 
+        private void UpdateRaceDriverInfo(IParticipant driver)
+        {
+            //Is dit LINQ genoeg? :P
+            tableRaceDriverInfo = new DataTable("Competitie");
+            tableRaceDriverInfo.Columns.Add("LapCount");
+            tableRaceDriverInfo.Columns.Add("Quality");
+            tableRaceDriverInfo.Columns.Add("Performance");
+            tableRaceDriverInfo.Columns.Add("Speed");
+            tableRaceDriverInfo.Columns.Add("Broken");
+            int Lapcount = Race._participantslaps.Where(p => p.Key == driver).Select(p => p.Value).Single();
+            Data.competition.Participants.Where(s =>
+            {
+                return Data.CurrentRace.Participants.Contains(driver);
+            }).ToList().ForEach(i =>
+            {
+                tableRaceDriverInfo.Rows.Add(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken);
+            });
+        }
     }
 }
