@@ -22,15 +22,15 @@ namespace GraphicVisualisation
         public System.Data.DataTable tableRaceDrivers = new();
         public System.Data.DataTable tableRaceDriverInfo = new();
         public string SelectedDriver;
+        static int debug = 0;
 
         public string trackname { get; set; }
         private List<Track> TrackNames = Data.competition.Tracks.ToList();
 
         public DataContexter()
         {
+            Data.CurrentRace.DriversFinished += OnDriverFinished;
             PropertyChanged += OnPropertyChanged;
-            Data.CurrentRace.DriversChanged += OnDriverChanged;
-            Data.CurrentRace.DriversFinished += OnDriverFinished;     
             UpdateCompetitionInfo();
             UpdateRaceInfoDrivers();
         }
@@ -47,29 +47,35 @@ namespace GraphicVisualisation
             }
         }
 
+        //TODO Dit niet gebruiken voor performance. Vervangen met click event van de form 
         public void OnDriverChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
+           // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
         }
 
         public void OnDriverFinished(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
         }
 
+        
         private string GetTrackName()
-        {
-            //Liever niet zo, maar moet van opdracht
-            return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
+        { 
+            if (debug == 0)
+            {
+                debug += 1;
+                return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
+            } else
+            {
+                return "Test";
+            }
+            
         }
 
        
         private void UpdateCompetitionInfo()
         {
-            
-            //Is dit LINQ genoeg? :P
             table = new DataTable("Competitie");
             table.Columns.Add("Name");
             table.Columns.Add("Points");
@@ -81,7 +87,6 @@ namespace GraphicVisualisation
 
     public void UpdateRaceInfoDrivers()
     {
-        //Is dit LINQ genoeg? :P
         tableRaceDrivers = new DataTable("Drivers");
         tableRaceDrivers.Columns.Add("Naam");
         tableRaceDrivers.Columns.Add("TeamColour");
@@ -93,7 +98,6 @@ namespace GraphicVisualisation
 
         private void UpdateRaceDriverInfo(IParticipant driver)
         {
-            //Is dit LINQ genoeg? :P
             tableRaceDriverInfo = new DataTable("Competitie");
             tableRaceDriverInfo.Columns.Add("LapCount");
             tableRaceDriverInfo.Columns.Add("Quality");
