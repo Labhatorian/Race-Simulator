@@ -46,9 +46,7 @@ namespace GraphicVisualisation
             InitializeComponent();
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
-            Data.CurrentRace.DriversFinished += OnDriversFinished;
-
-            
+            Data.CurrentRace.DriversFinished += OnDriversFinished;  
         }
 
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
@@ -77,7 +75,6 @@ namespace GraphicVisualisation
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
                 GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
                 DataContexter.UpdateRaceInfoDrivers();
-                Data.CurrentRace.DriversChanged += DataContexter.OnDriverChanged;
                 Data.CurrentRace.DriversFinished += DataContexter.OnDriverFinished;
             } else
             {

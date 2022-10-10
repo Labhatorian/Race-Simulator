@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace GraphicVisualisation
@@ -16,6 +17,7 @@ namespace GraphicVisualisation
     public class DataContexter : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        public delegate void TableChanged(ListView listView);
 
         public System.Data.DataTable table = new() ;
 
@@ -24,18 +26,33 @@ namespace GraphicVisualisation
         public string SelectedDriver;
         static int debug = 0;
 
+        public static Window2 win2;
+
         public string trackname { get; set; }
         private List<Track> TrackNames = Data.competition.Tracks.ToList();
 
         public DataContexter()
         {
             Data.CurrentRace.DriversFinished += OnDriverFinished;
+            Data.CurrentRace.DriversChanged += OnDriverChanged;
+            trackname = GetTrackName();
+            Window2.FinishAuto += OnTableChanged;
             PropertyChanged += OnPropertyChanged;
             UpdateCompetitionInfo();
             UpdateRaceInfoDrivers();
         }
-        
-        
+
+        private void OnTableChanged(ListView listView)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Laps"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Quality"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Performance"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Speed"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Broken"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
+        }
+
         private void OnPropertyChanged(object sender, EventArgs e)
         {
             trackname = GetTrackName();
@@ -47,10 +64,9 @@ namespace GraphicVisualisation
             }
         }
 
-        //TODO Dit niet gebruiken voor performance. Vervangen met click event van de form 
         public void OnDriverChanged(object sender, EventArgs e)
         {
-           // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DriverInfo"));
         }
 
         public void OnDriverFinished(object sender, EventArgs e)
@@ -62,15 +78,7 @@ namespace GraphicVisualisation
         
         private string GetTrackName()
         { 
-            if (debug == 0)
-            {
-                debug += 1;
-                return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
-            } else
-            {
-                return "Test";
-            }
-            
+          return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
         }
 
        
@@ -107,7 +115,7 @@ namespace GraphicVisualisation
             int Lapcount = Race._participantslaps.Where(p => p.Key == driver).Select(p => p.Value).Single();
             Data.competition.Participants.Where(s =>
             {
-                return Data.CurrentRace.Participants.Contains(driver);
+                return s == driver;
             }).ToList().ForEach(i =>
             {
                 tableRaceDriverInfo.Rows.Add(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken);

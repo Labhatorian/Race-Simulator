@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static GraphicVisualisation.DataContexter;
 
 namespace GraphicVisualisation
 {
@@ -22,18 +24,21 @@ namespace GraphicVisualisation
     public partial class Window2 : Window
     {
         private DataContexter dataContexter;
+        public static event TableChanged FinishAuto;
         public Window2(DataContexter dataContext)
         {
             this.dataContexter = dataContext;
+            this.DataContext = this;
             InitializeComponent();
             DriverList.ItemsSource = dataContexter.tableRaceDrivers.DefaultView;
-            DriverInfo.ItemsSource = dataContexter.tableRaceDriverInfo.DefaultView;
+            //DriverInfo.ItemsSource = dataContexter.tableRaceDriverInfo.DefaultView;
         }
 
-        private void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dynamic selectedItem = DriverList.SelectedItem;
             dataContexter.SelectedDriver = selectedItem[0];
+            FinishAuto.Invoke(DriverInfo);
         }
     }
 }

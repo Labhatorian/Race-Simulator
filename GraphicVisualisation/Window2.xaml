@@ -10,7 +10,7 @@
         <local:DataContexter/>
     </Window.DataContext>
     <Grid>
-        <ListView x:Name="DriverList" HorizontalAlignment="Left" Height="214" Margin="58,0,0,0" VerticalAlignment="Center" Width="272" d:ItemsSource="{d:SampleData ItemCount=0}" SelectionChanged="ItemSelectionChanged">
+        <ListView x:Name="DriverList" HorizontalAlignment="Left" Height="214" Margin="58,0,0,0" VerticalAlignment="Center" Width="272" d:ItemsSource="{Binding DataContexter}" SelectionChanged="ItemSelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Naam}"/>
@@ -18,7 +18,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="DriverInfo" HorizontalAlignment="Left" Height="206" Margin="441,110,0,0" VerticalAlignment="Top" Width="299" d:ItemsSource="{d:SampleData ItemCount=0}">
+        <ListView x:Name="DriverInfo" HorizontalAlignment="Left" Height="206" Margin="441,110,0,0" VerticalAlignment="Top" Width="299" d:ItemsSource="{Binding tableRaceDriverInfo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="LapCount" DisplayMemberBinding="{Binding Path=Laps}"/>
