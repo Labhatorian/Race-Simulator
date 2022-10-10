@@ -227,7 +227,7 @@ namespace Controller
                 }
 
                 Speed *= _random.Next(1, 3);
-                PossibleBroken *= (double)_random.Next(1, 10);
+                PossibleBroken *= (double)_random.Next(1, 2);
 
                 //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
                 if (Math.Ceiling(PossibleBroken) >= 7)

@@ -24,8 +24,7 @@ namespace GraphicVisualisation
         public System.Data.DataTable tableRaceDrivers = new();
         public System.Data.DataTable tableRaceDriverInfo = new();
         public string SelectedDriver;
-        static int debug = 0;
-
+        
         public static Window2 win2;
 
         public string trackname { get; set; }
@@ -33,11 +32,16 @@ namespace GraphicVisualisation
 
         public DataContexter()
         {
+            //PropertyChanged += OnPropertyChanged;
+            DataContexterRefresh();
+        }
+
+        public void DataContexterRefresh()
+        {
             Data.CurrentRace.DriversFinished += OnDriverFinished;
             Data.CurrentRace.DriversChanged += OnDriverChanged;
-            trackname = GetTrackName();
-            Window2.FinishAuto += OnTableChanged;
-            PropertyChanged += OnPropertyChanged;
+            //trackname = GetTrackName();
+            //Window2.FinishAuto += OnTableChanged;   
             UpdateCompetitionInfo();
             UpdateRaceInfoDrivers();
         }
@@ -53,25 +57,30 @@ namespace GraphicVisualisation
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
         }
 
-        private void OnPropertyChanged(object sender, EventArgs e)
+        private void OnPropertyChanged()
         {
-            trackname = GetTrackName();
             UpdateCompetitionInfo();
             if (SelectedDriver != null)
             {
                 IParticipant driver = (IParticipant)Data.competition.Participants.Where(s => s.Naam.Equals(SelectedDriver)).Single();
                 UpdateRaceDriverInfo(driver);
             }
+            trackname = GetTrackName();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
         }
 
         public void OnDriverChanged(object sender, EventArgs e)
         {
+            trackname = GetTrackName();
+            OnPropertyChanged();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DriverInfo"));
         }
 
         public void OnDriverFinished(object sender, EventArgs e)
         {
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            trackname = GetTrackName();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
             //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
         }
 

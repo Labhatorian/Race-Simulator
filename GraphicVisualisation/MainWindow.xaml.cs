@@ -74,8 +74,7 @@ namespace GraphicVisualisation
                 Data.CurrentRace.DriversChanged += OnDriverChanged;
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
                 GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
-                DataContexter.UpdateRaceInfoDrivers();
-                Data.CurrentRace.DriversFinished += DataContexter.OnDriverFinished;
+                DataContexter.DataContexterRefresh();
             } else
             {
                 //niks
