@@ -40,10 +40,12 @@ namespace GraphicVisualisation
             Data.Initialise();
             Data.NextRace();
 
-            DataContexter = new();
-            this.DataContext = DataContexter;
-
+            //DataContexter = new();
+            //this.DataContext = DataContexter;
+            
             InitializeComponent();
+            DataContexter = (DataContexter)this.DataContext;
+
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
             Data.CurrentRace.DriversFinished += OnDriversFinished;  
@@ -89,12 +91,14 @@ namespace GraphicVisualisation
         private void MenuItem_Window2_Click(object sender, RoutedEventArgs e)
         {
             Window2 = new Window2(DataContexter);
+            Window2.Owner = this;
             Window2.Show();
         }
 
         private void MenuItem_Window1_Click(object sender, RoutedEventArgs e)
         {
             Window1 = new Window1(DataContexter);
+            Window1.Owner = this;
             Window1.Show();
         }
     }

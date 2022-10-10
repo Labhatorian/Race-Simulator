@@ -32,15 +32,15 @@ namespace GraphicVisualisation
 
         public DataContexter()
         {
-            //PropertyChanged += OnPropertyChanged;
+            trackname = GetTrackName();
             DataContexterRefresh();
+            OnPropertyChanged();
         }
 
         public void DataContexterRefresh()
         {
             Data.CurrentRace.DriversFinished += OnDriverFinished;
             Data.CurrentRace.DriversChanged += OnDriverChanged;
-            //trackname = GetTrackName();
             //Window2.FinishAuto += OnTableChanged;   
             UpdateCompetitionInfo();
             UpdateRaceInfoDrivers();
@@ -48,7 +48,7 @@ namespace GraphicVisualisation
 
         private void OnTableChanged(ListView listView)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Laps"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Quality"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Performance"));
@@ -59,29 +59,30 @@ namespace GraphicVisualisation
 
         private void OnPropertyChanged()
         {
-            UpdateCompetitionInfo();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDrivers"));
+        }
+
+        public void OnDriverChanged(object sender, EventArgs e)
+        {
+            //TODO Probeer dit naar ander plek te zetten
+            trackname = GetTrackName();
             if (SelectedDriver != null)
             {
                 IParticipant driver = (IParticipant)Data.competition.Participants.Where(s => s.Naam.Equals(SelectedDriver)).Single();
                 UpdateRaceDriverInfo(driver);
             }
-            trackname = GetTrackName();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-        }
-
-        public void OnDriverChanged(object sender, EventArgs e)
-        {
-            trackname = GetTrackName();
+            UpdateCompetitionInfo();
             OnPropertyChanged();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DriverInfo"));
         }
 
         public void OnDriverFinished(object sender, EventArgs e)
         {
             trackname = GetTrackName();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
+            UpdateCompetitionInfo();
+            OnPropertyChanged();
         }
 
         
@@ -116,7 +117,7 @@ namespace GraphicVisualisation
         private void UpdateRaceDriverInfo(IParticipant driver)
         {
             tableRaceDriverInfo = new DataTable("Competitie");
-            tableRaceDriverInfo.Columns.Add("LapCount");
+            tableRaceDriverInfo.Columns.Add("Laps");
             tableRaceDriverInfo.Columns.Add("Quality");
             tableRaceDriverInfo.Columns.Add("Performance");
             tableRaceDriverInfo.Columns.Add("Speed");

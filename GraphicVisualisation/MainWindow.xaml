@@ -8,6 +8,9 @@
         xmlns:debug="clr-namespace:System.Diagnostics;assembly=System"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:DataContexter/>
+    </Window.DataContext>
     <Grid>
         <Grid x:Name="MainWindow1">
             <Grid.Background>
@@ -18,7 +21,7 @@
             </Grid.Background>
             <Image x:Name="MainImage" Margin="69,70,72,49"/>
             <DockPanel LastChildFill="False">
-                <Menu Width="45" DockPanel.Dock="Top" Height="20">
+                <Menu Width="45" DockPanel.Dock="Top" Height="20" DataContext="{Binding Mode=OneWay}">
                     <MenuItem Header="Menu">
                         <MenuItem Header="Scherm 1" Click="MenuItem_Window1_Click"/>
                         <MenuItem Header="Scherm 2" Click="MenuItem_Window2_Click"/>

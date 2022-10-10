@@ -27,18 +27,16 @@ namespace GraphicVisualisation
         public static event TableChanged FinishAuto;
         public Window2(DataContexter dataContext)
         {
-            this.dataContexter = dataContext;
-            this.DataContext = this;
+            this.DataContext = dataContext;
             InitializeComponent();
-            DriverList.ItemsSource = dataContexter.tableRaceDrivers.DefaultView;
-            //DriverInfo.ItemsSource = dataContexter.tableRaceDriverInfo.DefaultView;
+           //DriverList.ItemsSource = dataContext.tableRaceDrivers;
+            //DriverInfo.ItemsSource = dataContext.tableRaceDriverInfo.DefaultView;
         }
 
         public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dynamic selectedItem = DriverList.SelectedItem;
             dataContexter.SelectedDriver = selectedItem[0];
-            FinishAuto.Invoke(DriverInfo);
         }
     }
 }

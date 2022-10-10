@@ -26,8 +26,7 @@ namespace GraphicVisualisation
         public Window1(DataContexter dataContexter)
         {
             InitializeComponent();
-
-            CompetitionList.ItemsSource =  dataContexter.table.DefaultView;
+          
         }
     }
 }
