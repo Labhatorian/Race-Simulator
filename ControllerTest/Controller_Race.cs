@@ -25,6 +25,7 @@ namespace UnitTests
         public void RaceTest()
         {
             //Simuleer een volledig race om events te testen
+            //Test trouwens rest van de race. Zolang dat niet erroren, is alles prima. Moeilijk te testen
             Data.Initialise();
             Data.Debug = true;
             Data.NextRace();
@@ -34,5 +35,34 @@ namespace UnitTests
             Data.Debug = false;
         }
 
+        [Test]
+        public void LapTest()
+        {
+            Data.Initialise();
+            Thread.Sleep(3000);
+            Data.competition.Tracks.Dequeue();
+            Data.competition.Tracks.Dequeue();
+
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            //Naar boven
+            sectionTypesZandvoort[0] = SectionTypes.StartGrid;
+            sectionTypesZandvoort[1] = SectionTypes.Straight;
+            sectionTypesZandvoort[2] = SectionTypes.Finish;
+
+            Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
+
+            Data.competition.Tracks.Enqueue(TrackOne);
+            Data.NextRace();
+
+            Boolean lapped = false;
+            while (!lapped)
+            {
+                foreach (KeyValuePair<IParticipant, int> entry in Race._participantslaps)
+                {
+                    Assert.GreaterOrEqual(entry.Value, 1);
+                    lapped = true;
+                }
+            }
+        }
     }
 }

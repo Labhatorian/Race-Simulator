@@ -80,7 +80,6 @@ namespace GraphicVisualisation
 
         public void OnDriverFinished(object sender, EventArgs e)
         {
-            trackname = GetTrackName();
             UpdateCompetitionInfo();
             OnPropertyChanged();
         }
@@ -88,6 +87,7 @@ namespace GraphicVisualisation
         
         private string GetTrackName()
         { 
+
           return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
         }
 
@@ -97,7 +97,7 @@ namespace GraphicVisualisation
             table = new DataTable("Competitie");
             table.Columns.Add("Name");
             table.Columns.Add("Points");
-            Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
+            Data.competition.Participants.Where(s => Data.competition.Participants.Contains(s))
                 .ToList()
                 .ForEach(i => table.Rows.Add(i.Naam, i.Points));
         
