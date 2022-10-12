@@ -69,7 +69,6 @@ namespace GraphicVisualisation
         /// <param name="e"></param>
         public void OnDriverChanged(object sender, EventArgs e)
         {
-            //TODO Probeer dit naar ander plek te zetten
             trackname = GetTrackName();
             if (SelectedDriver != null)
             {

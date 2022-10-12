@@ -9,7 +9,6 @@ namespace Controller
         public static Race CurrentRace { get; set; }
         public static Boolean Debug { get; set; }
 
-        //TODO Fix einde compititie
         public static Boolean Graphical { get; set; }
 
         /// <summary>

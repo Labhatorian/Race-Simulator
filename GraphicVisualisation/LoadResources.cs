@@ -152,7 +152,6 @@ namespace GraphicVisualisation
         }
 
         #region GRAPHICS
-        //TODO Gebruik relative paths
         //Sections
         const string Straight    = "..\\..\\..\\Graphics\\straight.png";
         const string LeftCorner  = "..\\..\\..\\Graphics\\left.png";
