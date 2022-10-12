@@ -24,13 +24,10 @@ namespace GraphicVisualisation
     public partial class Window2 : Window
     {
         private DataContexter dataContexter;
-        public static event TableChanged FinishAuto;
         public Window2(DataContexter dataContext)
         {
             this.DataContext = dataContext;
             InitializeComponent();
-           //DriverList.ItemsSource = dataContext.tableRaceDrivers;
-            //DriverInfo.ItemsSource = dataContext.tableRaceDriverInfo.DefaultView;
         }
 
         public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)

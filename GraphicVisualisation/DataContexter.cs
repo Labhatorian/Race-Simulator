@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -17,14 +18,13 @@ namespace GraphicVisualisation
     public class DataContexter : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        public delegate void TableChanged(ListView listView);
 
-        public System.Data.DataTable table = new() ;
+        public ObservableCollection<CompetitionRow> table { get; set; } = new();
 
-        public System.Data.DataTable tableRaceDrivers = new();
-        public System.Data.DataTable tableRaceDriverInfo = new();
+        public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();
+        public ObservableCollection<DriverInfo> tableRaceDriverInfo { get; set; } = new();
         public string SelectedDriver;
-        
+
         public static Window2 win2;
 
         public string trackname { get; set; }
@@ -40,21 +40,9 @@ namespace GraphicVisualisation
         public void DataContexterRefresh()
         {
             Data.CurrentRace.DriversFinished += OnDriverFinished;
-            Data.CurrentRace.DriversChanged += OnDriverChanged;
-            //Window2.FinishAuto += OnTableChanged;   
+            Data.CurrentRace.DriversChanged += OnDriverChanged;  
             UpdateCompetitionInfo();
             UpdateRaceInfoDrivers();
-        }
-
-        private void OnTableChanged(ListView listView)
-        {
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Laps"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Quality"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Performance"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Speed"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Broken"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
         }
 
         private void OnPropertyChanged()
@@ -84,52 +72,84 @@ namespace GraphicVisualisation
             OnPropertyChanged();
         }
 
-        
-        private string GetTrackName()
-        { 
 
-          return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
+        private string GetTrackName()
+        {
+            return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
         }
 
-       
+
         private void UpdateCompetitionInfo()
         {
-            table = new DataTable("Competitie");
-            table.Columns.Add("Name");
-            table.Columns.Add("Points");
+            table = new();
             Data.competition.Participants.Where(s => Data.competition.Participants.Contains(s))
                 .ToList()
-                .ForEach(i => table.Rows.Add(i.Naam, i.Points));
-        
-    }
+                .ForEach(i => table.Add(new CompetitionRow(i.Naam, i.Points)));
+        }
+
+
 
     public void UpdateRaceInfoDrivers()
     {
-        tableRaceDrivers = new DataTable("Drivers");
-        tableRaceDrivers.Columns.Add("Naam");
-        tableRaceDrivers.Columns.Add("TeamColour");
+        tableRaceDrivers = new();
         Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
             .ToList()
-            .ForEach(i => tableRaceDrivers.Rows.Add(i.Naam, i.TeamColor.ToString()));
+            .ForEach(i => tableRaceDrivers.Add(new DriverRow(i.Naam, i.TeamColor.ToString())));
     }
 
 
         private void UpdateRaceDriverInfo(IParticipant driver)
         {
-            tableRaceDriverInfo = new DataTable("Competitie");
-            tableRaceDriverInfo.Columns.Add("Laps");
-            tableRaceDriverInfo.Columns.Add("Quality");
-            tableRaceDriverInfo.Columns.Add("Performance");
-            tableRaceDriverInfo.Columns.Add("Speed");
-            tableRaceDriverInfo.Columns.Add("Broken");
+            tableRaceDriverInfo = new();
             int Lapcount = Race._participantslaps.Where(p => p.Key == driver).Select(p => p.Value).Single();
             Data.competition.Participants.Where(s =>
             {
                 return s == driver;
             }).ToList().ForEach(i =>
             {
-                tableRaceDriverInfo.Rows.Add(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken);
+                tableRaceDriverInfo.Add(new DriverInfo(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken));
             });
+        }
+    }
+    public class CompetitionRow
+    {
+        public string Name { get; set; }
+        public int Points { get; set; }
+
+        public CompetitionRow(string name, int points)
+        {
+            Name = name;
+            Points = points;
+        }
+    }
+
+    public class DriverRow
+    {
+        public string Naam { get; set; }
+        public string TeamColour { get; set; }
+
+        public DriverRow(string name, string teamColour)
+        {
+            Naam = name;
+            TeamColour = teamColour;
+        }
+    }
+
+    public class DriverInfo
+    {
+        public int LapCount { get; set; }
+        public int Quality { get; set; }
+        public int Performance { get; set; }
+        public int Speed { get; set; }
+        public Boolean Broken { get; set; }
+
+        public DriverInfo(int lapCount, int quality, int performance, int speed, bool broken)
+        {
+            LapCount = lapCount;
+            Quality = quality;
+            Performance = performance;
+            Speed = speed;
+            Broken = broken;
         }
     }
 }
