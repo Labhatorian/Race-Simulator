@@ -154,21 +154,21 @@ namespace GraphicVisualisation
         #region GRAPHICS
         //TODO Gebruik relative paths
         //Sections
-        const string Straight    = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\straight.png";
-        const string LeftCorner  = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\left.png";
-        const string RightCorner = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\right.png";
-        const string StartGrid   = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\start.png";
-        const string Finish      = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\finish.png";
+        const string Straight    = "..\\..\\..\\Graphics\\straight.png";
+        const string LeftCorner  = "..\\..\\..\\Graphics\\left.png";
+        const string RightCorner = "..\\..\\..\\Graphics\\right.png";
+        const string StartGrid   = "..\\..\\..\\Graphics\\start.png";
+        const string Finish      = "..\\..\\..\\Graphics\\finish.png";
 
         //Cars
-        const string Blue = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\blue.png";
-        const string Green = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\green.png";
-        const string Grey = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\grey.png";
-        const string Red = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\red.png";
-        const string Yellow = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\yellow.png";
+        const string Blue = "..\\..\\..\\Graphics\\blue.png";
+        const string Green = "..\\..\\..\\Graphics\\green.png";
+        const string Grey = "..\\..\\..\\Graphics\\grey.png";
+        const string Red = "..\\..\\..\\Graphics\\red.png";
+        const string Yellow = "..\\..\\..\\Graphics\\yellow.png";
 
         //Broken
-        const string Broken = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\broken.png";
+        const string Broken = "..\\..\\..\\Graphics\\broken.png";
         #endregion
     }
 }
