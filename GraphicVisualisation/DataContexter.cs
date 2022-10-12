@@ -137,7 +137,7 @@ namespace GraphicVisualisation
 
     public class DriverInfo
     {
-        public int LapCount { get; set; }
+        public int Laps { get; set; }
         public int Quality { get; set; }
         public int Performance { get; set; }
         public int Speed { get; set; }
@@ -145,7 +145,7 @@ namespace GraphicVisualisation
 
         public DriverInfo(int lapCount, int quality, int performance, int speed, bool broken)
         {
-            LapCount = lapCount;
+            Laps = lapCount;
             Quality = quality;
             Performance = performance;
             Speed = speed;

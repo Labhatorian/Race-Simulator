@@ -26,14 +26,18 @@ namespace GraphicVisualisation
         private DataContexter dataContexter;
         public Window2(DataContexter dataContext)
         {
+            this.dataContexter = dataContext;
             this.DataContext = dataContext;
             InitializeComponent();
         }
 
         public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dynamic selectedItem = DriverList.SelectedItem;
-            dataContexter.SelectedDriver = selectedItem[0];
+            DriverRow selectedItem = (DriverRow)DriverList.SelectedItem;
+            if (selectedItem != null)
+            {
+                dataContexter.SelectedDriver = selectedItem.Naam;
+            }
         }
     }
 }
