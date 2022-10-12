@@ -23,8 +23,8 @@
             <DockPanel LastChildFill="False">
                 <Menu Width="45" DockPanel.Dock="Top" Height="20" DataContext="{Binding Mode=OneWay}">
                     <MenuItem Header="Menu">
-                        <MenuItem Header="Scherm 1" Click="MenuItem_Window1_Click"/>
-                        <MenuItem Header="Scherm 2" Click="MenuItem_Window2_Click"/>
+                        <MenuItem Header="Competitieinfo" Click="MenuItem_Window1_Click"/>
+                        <MenuItem Header="Raceinfo" Click="MenuItem_Window2_Click"/>
                         <MenuItem Header="Afsluiten" Click="MenuItem_Exit_Click"/>
                     </MenuItem>
                 </Menu>

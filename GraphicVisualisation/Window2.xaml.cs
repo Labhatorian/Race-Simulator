@@ -31,6 +31,11 @@ namespace GraphicVisualisation
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Eventhandler die bij listview selecteren, de selectie doorgeeft aan de datacontext
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DriverRow selectedItem = (DriverRow)DriverList.SelectedItem;

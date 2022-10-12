@@ -18,6 +18,11 @@ namespace GraphicVisualisation
     {
         private static Dictionary<string, Bitmap> Bitmaps = new Dictionary<string, Bitmap>();
         
+        /// <summary>
+        /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
+        /// </summary>
+        /// <param name="Stringo"></param>
+        /// <returns>Bitmap</returns>
         public static Bitmap GetBitmap(string Stringo)
         {
                 if (!Bitmaps.ContainsKey(Stringo))
@@ -79,13 +84,23 @@ namespace GraphicVisualisation
             return Bitmaps[Stringo];
         }
 
+        /// <summary>
+        /// Leeg de cache van Bitmaps
+        /// </summary>
         public static void Clear()
         {
             Bitmaps = new Dictionary<string, Bitmap>();
         }
 
+        /// <summary>
+        /// Maakt een Bitmap zonder het circuit zelf
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>Bitmap</returns>
         public static Bitmap EmptyBitmap(int x, int y)
         {
+            //TODO voeg bomen toe
             Bitmap BM = new Bitmap(x, y);
             SolidBrush SB = new SolidBrush(Color.Green);
             using (Graphics graph = Graphics.FromImage(BM))
@@ -96,6 +111,13 @@ namespace GraphicVisualisation
 
             return BM;
         }
+
+        /// <summary>
+        /// Methode die de Bitmap image omzet naar een BitmapSource voor de MainImage in MainWindow
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
@@ -130,7 +152,7 @@ namespace GraphicVisualisation
         }
 
         #region GRAPHICS
-
+        //TODO Gebruik relative paths
         //Sections
         const string Straight    = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\straight.png";
         const string LeftCorner  = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\left.png";
@@ -145,7 +167,7 @@ namespace GraphicVisualisation
         const string Red = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\red.png";
         const string Yellow = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\yellow.png";
 
-
+        //Broken
         const string Broken = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\broken.png";
         #endregion
     }

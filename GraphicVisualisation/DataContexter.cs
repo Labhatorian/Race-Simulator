@@ -5,13 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace GraphicVisualisation
 {
@@ -19,17 +13,24 @@ namespace GraphicVisualisation
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Tabellen en variable voor gegevens competitie en race
+        /// </summary>
         public ObservableCollection<CompetitionRow> table { get; set; } = new();
-
         public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();
         public ObservableCollection<DriverInfo> tableRaceDriverInfo { get; set; } = new();
         public string SelectedDriver;
 
-        public static Window2 win2;
-
+        /// <summary>
+        /// Voor de label bovenaan de scherm. Laat circuitnaam zien
+        /// TrackNames wordt niet geupdatet tijdens de competitie
+        /// </summary>
         public string trackname { get; set; }
         private List<Track> TrackNames = Data.competition.Tracks.ToList();
 
+        /// <summary>
+        /// Begin met als eerst gegevens ophalen zodat er geen leeg label en tabellen zijn bij opstarten
+        /// </summary>
         public DataContexter()
         {
             trackname = GetTrackName();
@@ -37,6 +38,9 @@ namespace GraphicVisualisation
             OnPropertyChanged();
         }
 
+        /// <summary>
+        /// Om na elk race opnieuw op te halen
+        /// </summary>
         public void DataContexterRefresh()
         {
             Data.CurrentRace.DriversFinished += OnDriverFinished;
@@ -45,6 +49,9 @@ namespace GraphicVisualisation
             UpdateRaceInfoDrivers();
         }
 
+        /// <summary>
+        /// Elke keer als iets verandert. Update alle properties, zodat de updates te zien is op het scherm
+        /// </summary>
         private void OnPropertyChanged()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
@@ -53,6 +60,13 @@ namespace GraphicVisualisation
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDrivers"));
         }
 
+        /// <summary>
+        /// Eventhandler die trackname ophaalt. Wordt hier gedaan omdat bij OnDriverFinished niet mogelijk is, de volgende race is nog niet bekend.
+        /// Kijkt of bij tabel van race driver is geselecteerd en update de tabel als dat zo is
+        /// Update competitie tabel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnDriverChanged(object sender, EventArgs e)
         {
             //TODO Probeer dit naar ander plek te zetten
@@ -66,19 +80,29 @@ namespace GraphicVisualisation
             OnPropertyChanged();
         }
 
+        /// <summary>
+        /// Bij einde van race, update competitie info
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnDriverFinished(object sender, EventArgs e)
         {
             UpdateCompetitionInfo();
             OnPropertyChanged();
         }
 
-
+        /// <summary>
+        /// Haalt trackname op met lambda uit variable
+        /// </summary>
+        /// <returns></returns>
         private string GetTrackName()
         {
             return TrackNames.Select(x => Data.CurrentRace.Track.Name).First();
         }
 
-
+        /// <summary>
+        /// Haalt naam en punten op van elk coureur in de competitie
+        /// </summary>
         private void UpdateCompetitionInfo()
         {
             table = new();
@@ -88,8 +112,10 @@ namespace GraphicVisualisation
         }
 
 
-
-    public void UpdateRaceInfoDrivers()
+        /// <summary>
+        /// Haalt naam en kleur op van elk coureur in de competitie
+        /// </summary>
+        public void UpdateRaceInfoDrivers()
     {
         tableRaceDrivers = new();
         Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
@@ -97,7 +123,10 @@ namespace GraphicVisualisation
             .ForEach(i => tableRaceDrivers.Add(new DriverRow(i.Naam, i.TeamColor.ToString())));
     }
 
-
+        /// <summary>
+        /// Als een driver is geselecteerd, haal de informatie op van de geselecteerde driver
+        /// </summary>
+        /// <param name="driver"></param>
         private void UpdateRaceDriverInfo(IParticipant driver)
         {
             tableRaceDriverInfo = new();
@@ -111,6 +140,10 @@ namespace GraphicVisualisation
             });
         }
     }
+
+    /// <summary>
+    /// Class voor de tabel van competitie
+    /// </summary>
     public class CompetitionRow
     {
         public string Name { get; set; }
@@ -123,6 +156,9 @@ namespace GraphicVisualisation
         }
     }
 
+    /// <summary>
+    /// Class voor de tabel van drivers in race
+    /// </summary>
     public class DriverRow
     {
         public string Naam { get; set; }
@@ -135,6 +171,9 @@ namespace GraphicVisualisation
         }
     }
 
+    /// <summary>
+    /// Class voor de tabel van specifieke driver
+    /// </summary>
     public class DriverInfo
     {
         public int Laps { get; set; }

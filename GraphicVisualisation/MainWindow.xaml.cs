@@ -33,16 +33,14 @@ namespace GraphicVisualisation
         private Window1 Window1;
         private Window2 Window2;
         public DataContexter DataContexter { get; set; }
-
+        /// <summary>
+        /// De nieuwe Main(). Maak competitie en start volgende race.
+        /// </summary>
         public MainWindow()
-        {
-
+        { 
             Data.Initialise();
             Data.NextRace();
 
-            //DataContexter = new();
-            //this.DataContext = DataContexter;
-            
             InitializeComponent();
             DataContexter = (DataContexter)this.DataContext;
 
@@ -51,6 +49,11 @@ namespace GraphicVisualisation
             Data.CurrentRace.DriversFinished += OnDriversFinished;  
         }
 
+        /// <summary>
+        /// Elke keer dat driver changed. Haal nieuwe Bitmap op en laat dat zien op MainImage
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         public void OnDriverChanged(Object source, DriversChangedEventArgs e)
         {
             this.MainImage.Dispatcher.BeginInvoke(
@@ -63,6 +66,11 @@ namespace GraphicVisualisation
                 }));
         }
 
+        /// <summary>
+        /// Als race klaar is. Ga naar volgend race en laat anders geen circuit zien maar wel window met competitiegegevens
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         public void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
@@ -79,15 +87,25 @@ namespace GraphicVisualisation
                 DataContexter.DataContexterRefresh();
             } else
             {
-                //niks
+                //TODO Niks zien en laat competitie window zien
             }
         }
 
+        /// <summary>
+        /// Eventhandler voor menubutton sluiten. Sluit het programma af
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Eventhandler voor menubutton Competitieinfo. Laat window ziet met competitie info
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Window2_Click(object sender, RoutedEventArgs e)
         {
             Window2 = new Window2(DataContexter);
@@ -95,6 +113,11 @@ namespace GraphicVisualisation
             Window2.Show();
         }
 
+        /// <summary>
+        /// Eventhandler voor menubutton Raceinfo. Laat window ziet met race info
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Window1_Click(object sender, RoutedEventArgs e)
         {
             Window1 = new Window1(DataContexter);

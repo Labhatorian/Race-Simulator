@@ -341,7 +341,7 @@ namespace Controller
             {
                 //Doe niks
             }
-                if (_participantslaps[Driver] >= 1)
+                if (_participantslaps[Driver] >= 3)
             {
                 _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);

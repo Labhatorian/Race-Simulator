@@ -27,7 +27,6 @@ namespace GraphicVisualisation
         {
             this.DataContext = dataContexter;
             InitializeComponent();
-          
         }
     }
 }
