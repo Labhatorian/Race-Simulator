@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
-using Controller;
-using Model;
-using System.Diagnostics;
 
 namespace GraphicVisualisation
 {
@@ -21,57 +15,57 @@ namespace GraphicVisualisation
         /// <summary>
         /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
         /// </summary>
-        /// <param name="Stringo"></param>
+        /// <param name="SectionString"></param>
         /// <returns>Bitmap</returns>
-        public static Bitmap GetBitmap(string Stringo)
+        public static Bitmap GetBitmap(string SectionString)
         {
-                if (!Bitmaps.ContainsKey(Stringo))
+                if (!Bitmaps.ContainsKey(SectionString))
                 {
-                    switch (Stringo)
+                    switch (SectionString)
                     {
                         case "Straight":
                             Bitmap StraightLineBM = new(Straight);
-                            Bitmaps.Add(Stringo, StraightLineBM);
+                            Bitmaps.Add(SectionString, StraightLineBM);
                             break;
                         case "LeftCorner":
                             Bitmap LeftCornerBM = new(LeftCorner);
-                        Bitmaps.Add(Stringo, LeftCornerBM);
+                        Bitmaps.Add(SectionString, LeftCornerBM);
                             break;
                         case "RightCorner":
                             Bitmap RightCornerBM = new(RightCorner);
-                        Bitmaps.Add(Stringo, RightCornerBM);
+                        Bitmaps.Add(SectionString, RightCornerBM);
                             break;
                         case "StartGrid":
                             Bitmap StartGridBM = new(StartGrid);
-                        Bitmaps.Add(Stringo, StartGridBM);
+                        Bitmaps.Add(SectionString, StartGridBM);
                             break;
                         case "Finish":
                             Bitmap FinishBM = new(Finish);
-                        Bitmaps.Add(Stringo, FinishBM);
+                        Bitmaps.Add(SectionString, FinishBM);
                             break;
                         case "Blue":
                         Bitmap BlueBM = new(Blue);
-                        Bitmaps.Add(Stringo, BlueBM);
+                        Bitmaps.Add(SectionString, BlueBM);
                         break;
                         case "Green":
                         Bitmap GreenBM = new(Green);
-                        Bitmaps.Add(Stringo, GreenBM);
+                        Bitmaps.Add(SectionString, GreenBM);
                         break;
                         case "Grey":
                         Bitmap GreyBM = new(Grey);
-                        Bitmaps.Add(Stringo, GreyBM);
+                        Bitmaps.Add(SectionString, GreyBM);
                         break;
                         case "Red":
                         Bitmap RedBM = new(Red);
-                        Bitmaps.Add(Stringo, RedBM);
+                        Bitmaps.Add(SectionString, RedBM);
                         break;
                         case "Yellow":
                         Bitmap YellowBM = new(Yellow);
-                        Bitmaps.Add(Stringo, YellowBM);
+                        Bitmaps.Add(SectionString, YellowBM);
                         break;
                         case "Broken":
                         Bitmap BrokenBM = new(Broken);
-                        Bitmaps.Add(Stringo, BrokenBM);
+                        Bitmaps.Add(SectionString, BrokenBM);
                         break;
                     default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
@@ -80,8 +74,8 @@ namespace GraphicVisualisation
                     }
                 }
 
-            Bitmaps[Stringo].Clone();
-            return Bitmaps[Stringo];
+            Bitmaps[SectionString].Clone();
+            return Bitmaps[SectionString];
         }
 
         /// <summary>
@@ -108,7 +102,6 @@ namespace GraphicVisualisation
                 Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
             }
-
             return BM;
         }
 

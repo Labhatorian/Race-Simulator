@@ -16,7 +16,8 @@ namespace GraphicVisualisation
         /// <summary>
         /// Tabellen en variable voor gegevens competitie en race
         /// </summary>
-        public ObservableCollection<CompetitionRow> table { get; set; } = new();
+        /// TODO namen
+        public ObservableCollection<CompetitionRow> Competition { get; set; } = new();
         public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();
         public ObservableCollection<DriverInfo> tableRaceDriverInfo { get; set; } = new();
         public string SelectedDriver;
@@ -52,10 +53,11 @@ namespace GraphicVisualisation
         /// <summary>
         /// Elke keer als iets verandert. Update alle properties, zodat de updates te zien is op het scherm
         /// </summary>
+        /// TODO nameof
         private void OnPropertyChanged()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("table"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Competition"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDrivers"));
         }
@@ -104,10 +106,10 @@ namespace GraphicVisualisation
         /// </summary>
         private void UpdateCompetitionInfo()
         {
-            table = new();
+            Competition = new();
             Data.competition.Participants.Where(s => Data.competition.Participants.Contains(s))
                 .ToList()
-                .ForEach(i => table.Add(new CompetitionRow(i.Naam, i.Points)));
+                .ForEach(i => Competition.Add(new CompetitionRow(i.Naam, i.Points)));
         }
 
 
