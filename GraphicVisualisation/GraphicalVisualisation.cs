@@ -13,17 +13,18 @@ namespace GraphicVisualisation
 {
     public static class GraphicalVisualisation
     {
-        /// <summary>
-        /// Bouw het circuit image. Gebruik een groot leeg afbeelding met de naam van het circuit en zet daar alle bitmaps in.
-        /// </summary>
-        /// <param name="Track"></param>
-        /// <param name="String"></param>
-        /// <returns></returns>
-        /// 
         static Directions CurrentDirection = Directions.North;
         static int CurrentXCounter = 0;
         static int CurrentYCounter = 0;
         static Dictionary<Section, int[]> SectionPositions = new();
+
+        /// <summary>
+        /// Maakt één afbeelding van het circuit met alles er op en er aan en geeft dat door aan MainImage in MainWindow
+        /// </summary>
+        /// <param name="Race"></param>
+        /// <param name="Track"></param>
+        /// <param name="String"></param>
+        /// <returns>Bitmap</returns>
         public static Bitmap DrawTrack(Race Race, Track Track, String String)
         {
             CurrentXCounter = 0;
@@ -34,15 +35,13 @@ namespace GraphicVisualisation
 
             using (Graphics g = Graphics.FromImage(BM))
             {
-
                 foreach (Section section in Track.Sections)
                 {
                     Bitmap ImageSection = LoadResources.GetBitmap(section.SectionType.ToString());                 
-                    
-
                     switch (CurrentDirection)
                     {
                         case Directions.North:
+                            //Deze offset komt voort uit de console visualisatie. We beginnen met de StartGrid en die moet niet linksboven gedrawd worden.
                             int YOffset = 500 * OffsetFirstNorth;
                             g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset), 500, 500);
                             PositionDrivers(Race.GetSectionData(section), g, section);
@@ -100,6 +99,11 @@ namespace GraphicVisualisation
             return BM;
         }
 
+        /// <summary>
+        /// Telt op hoe veel sections er zijn tot de eerste corner bij begin van race
+        /// </summary>
+        /// <param name="track"></param>
+        /// <returns></returns>
         private static int CountNorth(Track track)
         {
             int Counter = 0;
@@ -117,6 +121,10 @@ namespace GraphicVisualisation
             return Counter;
         }
 
+        /// <summary>
+        /// Verandert Direction en dus ook X en Y
+        /// </summary>
+        /// <param name="section"></param>
         private static void MoveDirection(Section section)
         {
             Boolean ChangedDirection = false;
@@ -183,14 +191,20 @@ namespace GraphicVisualisation
             }
         }
 
+        /// <summary>
+        /// Methode dat de drivers op het scherm positioneert en goede kleur geeft
+        /// </summary>
+        /// <param name="sectionData"></param>
+        /// <param name="g"></param>
+        /// <param name="section"></param>
         private static void PositionDrivers(SectionData sectionData, Graphics g, Section section)
         {
-            //TODO Fix positites. LEFT IS LEFT
             IParticipant[] participants = new IParticipant[2];
             participants[0] = sectionData.Left;
             participants[1] = sectionData.Right;
             Bitmap ImageSection = null;
 
+            //Haal kleur en direction op
             foreach (IParticipant participant in participants)
             {
                 if (participant != null)
@@ -239,10 +253,20 @@ namespace GraphicVisualisation
             }
         }
 
+        /// <summary>
+        /// Methode dat driver op het bitmap plaatst per direction
+        /// De X en Y wordt geoffset en komt uit de opgeslagen posities van toen het circuit werd gedrawd
+        /// </summary>
+        /// <param name="sectionData"></param>
+        /// <param name="g"></param>
+        /// <param name="section"></param>
+        /// <param name="ImageSection"></param>
+        /// <param name="participant"></param>
         private static void DrawDriver(SectionData sectionData, Graphics g, Section section, Bitmap ImageSection, IParticipant participant)
         {
             int Xpos = 0;
             int Ypos = 0;
+            Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
             if (ImageSection != null & (SectionPositions.ContainsKey(section)))
             {
                 switch (CurrentDirection)
@@ -258,6 +282,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 20;
                             Ypos = SectionPositions[section][1] + 160;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 90);
                         break;
                     case Directions.South:
                         if (sectionData.Left == participant)
@@ -270,6 +295,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 100;
                             Ypos = SectionPositions[section][1] + 80;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 180);
                         break;
                     case Directions.West:
                         if (sectionData.Left == participant)
@@ -282,6 +308,7 @@ namespace GraphicVisualisation
                             Xpos = SectionPositions[section][0] + 180;
                             Ypos = SectionPositions[section][1] + 150;
                         }
+                        ImageBroken = RotateImage(ImageBroken, 270);
                         break;
                     default:
                         if (sectionData.Left == participant)
@@ -299,13 +326,19 @@ namespace GraphicVisualisation
                 g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
                 if (participant.Equipment.IsBroken)
                 {
-                   Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
+                   
                     g.DrawImage(ImageBroken, Xpos, Ypos, 150, 150);
                 }
             }
         }
 
-        //https://stackoverflow.com/questions/36871291/how-do-you-rotate-a-bitmap-an-arbitrary-number-of-degrees
+        /// <summary>
+        /// Draait bitmap om met een gekozen graad
+        /// https://stackoverflow.com/questions/36871291/how-do-you-rotate-a-bitmap-an-arbitrary-number-of-degrees
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="angle"></param>
+        /// <returns>Bitmap</returns>
         public static Bitmap RotateImage(Bitmap b, float angle)
         {
             //create a new empty bitmap to hold rotated image

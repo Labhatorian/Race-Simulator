@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Controller;
+using Model;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +23,9 @@ namespace GraphicVisualisation
     /// </summary>
     public partial class Window1 : Window
     {
-        public Window1()
+        public Window1(DataContexter dataContexter)
         {
+            this.DataContext = dataContexter;
             InitializeComponent();
         }
     }

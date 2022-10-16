@@ -13,11 +13,11 @@ namespace Controller
         public DateTime StartTime;
         private Random _random;
         private Timer timer;
-        private int FinishCounter;
+        private int FinishCounter = 0;
 
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
-        private static Dictionary<IParticipant, int> _participantslaps;
+        public static Dictionary<IParticipant, int> _participantslaps;
         private static Dictionary<IParticipant, Boolean> _participantsfinished;
 
         //Eventhandlers voor verplaatste driver en gefinishte driver
@@ -75,9 +75,10 @@ namespace Controller
         {
             foreach (IParticipant participant in Participants)
             {
-                participant.Equipment.Quality = _random.Next(30, 100);
-                participant.Equipment.Performance = _random.Next(3, 8);
-                participant.Equipment.Speed = _random.Next(3, 8);
+                //TODO Verbeteren
+                participant.Equipment.Quality = _random.Next(40, 100);
+                participant.Equipment.Performance = _random.Next(4, 8);
+                participant.Equipment.Speed = _random.Next(4, 8);
             }
         }
 
@@ -226,7 +227,7 @@ namespace Controller
                 }
 
                 Speed *= _random.Next(1, 3);
-                PossibleBroken *= (double)_random.Next(1, 10);
+                PossibleBroken *= (double)_random.Next(1, 2);
 
                 //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
                 if (Math.Ceiling(PossibleBroken) >= 7)
@@ -329,12 +330,18 @@ namespace Controller
         private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
         {
             _participantslaps[Driver] += 1;
-            //Console.SetCursorPosition(50, 0);
-            //Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
-            //Thread.Sleep(500);
-            //Console.SetCursorPosition(50, 0);
-            //Console.WriteLine($"                     ");
-            if (_participantslaps[Driver] >= 4)
+            try
+            {
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+                Thread.Sleep(500);
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"                     ");
+            } catch (IOException)
+            {
+                //Doe niks
+            }
+                if (_participantslaps[Driver] >= 3)
             {
                 _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);
@@ -379,7 +386,8 @@ namespace Controller
             }
 
             //Geef ze punten gebaseerd op de Formule 1 manier
-            if(FinishCounter == 1)
+            FinishCounter += 1;
+            if (FinishCounter == 1)
             {
                 driver.Points += 25;
             } else if (FinishCounter == 2)

@@ -5,19 +5,11 @@ namespace Controller
     public static class Data
     {
         //De belangrijkste paremeters. Competitie en huidige race
-        private static Competition competition { get; set; }
+        public static Competition competition { get; set; }
         public static Race CurrentRace { get; set; }
         public static Boolean Debug { get; set; }
 
-        //TODO Kan dit voor testen? Voor nu even uit
-        /// <summary>
-        /// Zet competitie voor testen
-        /// </summary>
-        /// <param name="comp"></param>
-        public static void SetCompetition(Competition comp)
-        {
-            competition = comp;
-        }
+        public static Boolean Graphical { get; set; }
 
         /// <summary>
         /// Initialiseer data en dus de competitie
@@ -50,13 +42,19 @@ namespace Controller
             } else
             {
                 //Als het afgelopen is, laat de stand zien
-                Console.Clear();
-                Console.WriteLine($"De competitie is afgelopen!!!!");
-                Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
-
-                foreach (IParticipant driver in competition.Participants)
+                try
                 {
-                    Console.WriteLine($"{driver.Naam}: {driver.Points}");
+                    Console.Clear();
+                    Console.WriteLine($"De competitie is afgelopen!!!!");
+                    Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
+
+                    foreach (IParticipant driver in competition.Participants)
+                    {
+                        Console.WriteLine($"{driver.Naam}: {driver.Points}");
+                    }
+                } catch (IOException)
+                {
+           
                 }
             }
         }

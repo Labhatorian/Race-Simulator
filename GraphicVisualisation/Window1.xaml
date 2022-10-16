@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
     <Grid>
-        
+        <ListView x:Name="CompetitionList" HorizontalAlignment="Center" Height="175" VerticalAlignment="Center" Width="384" ItemsSource="{Binding Path=table}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Name}"/>
+                    <GridViewColumn Header="Points" DisplayMemberBinding="{Binding Path=Points}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Competitiepunten" HorizontalAlignment="Center" Margin="0,54,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>

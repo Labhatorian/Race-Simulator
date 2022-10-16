@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static GraphicVisualisation.DataContexter;
 
 namespace GraphicVisualisation
 {
@@ -19,9 +23,26 @@ namespace GraphicVisualisation
     /// </summary>
     public partial class Window2 : Window
     {
-        public Window2()
+        private DataContexter dataContexter;
+        public Window2(DataContexter dataContext)
         {
+            this.dataContexter = dataContext;
+            this.DataContext = dataContext;
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Eventhandler die bij listview selecteren, de selectie doorgeeft aan de datacontext
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DriverRow selectedItem = (DriverRow)DriverList.SelectedItem;
+            if (selectedItem != null)
+            {
+                dataContexter.SelectedDriver = selectedItem.Naam;
+            }
         }
     }
 }

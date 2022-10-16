@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
-using Controller;
-using Model;
-using System.Diagnostics;
 
 namespace GraphicVisualisation
 {
@@ -18,55 +12,60 @@ namespace GraphicVisualisation
     {
         private static Dictionary<string, Bitmap> Bitmaps = new Dictionary<string, Bitmap>();
         
-        public static Bitmap GetBitmap(string Stringo)
+        /// <summary>
+        /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
+        /// </summary>
+        /// <param name="SectionString"></param>
+        /// <returns>Bitmap</returns>
+        public static Bitmap GetBitmap(string SectionString)
         {
-                if (!Bitmaps.ContainsKey(Stringo))
+                if (!Bitmaps.ContainsKey(SectionString))
                 {
-                    switch (Stringo)
+                    switch (SectionString)
                     {
                         case "Straight":
                             Bitmap StraightLineBM = new(Straight);
-                            Bitmaps.Add(Stringo, StraightLineBM);
+                            Bitmaps.Add(SectionString, StraightLineBM);
                             break;
                         case "LeftCorner":
                             Bitmap LeftCornerBM = new(LeftCorner);
-                        Bitmaps.Add(Stringo, LeftCornerBM);
+                        Bitmaps.Add(SectionString, LeftCornerBM);
                             break;
                         case "RightCorner":
                             Bitmap RightCornerBM = new(RightCorner);
-                        Bitmaps.Add(Stringo, RightCornerBM);
+                        Bitmaps.Add(SectionString, RightCornerBM);
                             break;
                         case "StartGrid":
                             Bitmap StartGridBM = new(StartGrid);
-                        Bitmaps.Add(Stringo, StartGridBM);
+                        Bitmaps.Add(SectionString, StartGridBM);
                             break;
                         case "Finish":
                             Bitmap FinishBM = new(Finish);
-                        Bitmaps.Add(Stringo, FinishBM);
+                        Bitmaps.Add(SectionString, FinishBM);
                             break;
                         case "Blue":
                         Bitmap BlueBM = new(Blue);
-                        Bitmaps.Add(Stringo, BlueBM);
+                        Bitmaps.Add(SectionString, BlueBM);
                         break;
                         case "Green":
                         Bitmap GreenBM = new(Green);
-                        Bitmaps.Add(Stringo, GreenBM);
+                        Bitmaps.Add(SectionString, GreenBM);
                         break;
                         case "Grey":
                         Bitmap GreyBM = new(Grey);
-                        Bitmaps.Add(Stringo, GreyBM);
+                        Bitmaps.Add(SectionString, GreyBM);
                         break;
                         case "Red":
                         Bitmap RedBM = new(Red);
-                        Bitmaps.Add(Stringo, RedBM);
+                        Bitmaps.Add(SectionString, RedBM);
                         break;
                         case "Yellow":
                         Bitmap YellowBM = new(Yellow);
-                        Bitmaps.Add(Stringo, YellowBM);
+                        Bitmaps.Add(SectionString, YellowBM);
                         break;
                         case "Broken":
                         Bitmap BrokenBM = new(Broken);
-                        Bitmaps.Add(Stringo, BrokenBM);
+                        Bitmaps.Add(SectionString, BrokenBM);
                         break;
                     default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
@@ -75,17 +74,27 @@ namespace GraphicVisualisation
                     }
                 }
 
-            Bitmaps[Stringo].Clone();
-            return Bitmaps[Stringo];
+            Bitmaps[SectionString].Clone();
+            return Bitmaps[SectionString];
         }
 
+        /// <summary>
+        /// Leeg de cache van Bitmaps
+        /// </summary>
         public static void Clear()
         {
             Bitmaps = new Dictionary<string, Bitmap>();
         }
 
+        /// <summary>
+        /// Maakt een Bitmap zonder het circuit zelf
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>Bitmap</returns>
         public static Bitmap EmptyBitmap(int x, int y)
         {
+            //TODO voeg bomen toe
             Bitmap BM = new Bitmap(x, y);
             SolidBrush SB = new SolidBrush(Color.Green);
             using (Graphics graph = Graphics.FromImage(BM))
@@ -93,9 +102,15 @@ namespace GraphicVisualisation
                 Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
             }
-
             return BM;
         }
+
+        /// <summary>
+        /// Methode die de Bitmap image omzet naar een BitmapSource voor de MainImage in MainWindow
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
@@ -130,23 +145,22 @@ namespace GraphicVisualisation
         }
 
         #region GRAPHICS
-
         //Sections
-        const string Straight    = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\straight.png";
-        const string LeftCorner  = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\left.png";
-        const string RightCorner = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\right.png";
-        const string StartGrid   = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\start.png";
-        const string Finish      = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\finish.png";
+        const string Straight    = "..\\..\\..\\Graphics\\straight.png";
+        const string LeftCorner  = "..\\..\\..\\Graphics\\left.png";
+        const string RightCorner = "..\\..\\..\\Graphics\\right.png";
+        const string StartGrid   = "..\\..\\..\\Graphics\\start.png";
+        const string Finish      = "..\\..\\..\\Graphics\\finish.png";
 
         //Cars
-        const string Blue = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\blue.png";
-        const string Green = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\green.png";
-        const string Grey = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\grey.png";
-        const string Red = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\red.png";
-        const string Yellow = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\yellow.png";
+        const string Blue = "..\\..\\..\\Graphics\\blue.png";
+        const string Green = "..\\..\\..\\Graphics\\green.png";
+        const string Grey = "..\\..\\..\\Graphics\\grey.png";
+        const string Red = "..\\..\\..\\Graphics\\red.png";
+        const string Yellow = "..\\..\\..\\Graphics\\yellow.png";
 
-
-        const string Broken = "C:\\Users\\Harris\\source\\repos\\Race Simulator\\GraphicVisualisation\\Graphics\\broken.png";
+        //Broken
+        const string Broken = "..\\..\\..\\Graphics\\broken.png";
         #endregion
     }
 }
