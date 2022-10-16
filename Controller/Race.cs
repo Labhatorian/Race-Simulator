@@ -245,15 +245,24 @@ namespace Controller
                 }
 
                 //Voeg driver distance toe
+                //Als speler op MoveDriver button heeft gedrukt, voeg extra distance toe
                 if (!Driver.Equipment.IsBroken)
                 {
                     if (!LeftOrRight)
                     {
                         SD.DistanceLeft += Speed;
+                        if (Driver.Equipment.UserAddedDistance)
+                        {
+                            SD.DistanceLeft += 20;
+                        }
                     }
                     else
                     {
                         SD.DistanceRight += Speed;
+                        if (Driver.Equipment.UserAddedDistance)
+                        {
+                            SD.DistanceLeft += 20;
+                        }
                     }
                 }
 

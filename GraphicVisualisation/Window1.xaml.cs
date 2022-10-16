@@ -23,10 +23,20 @@ namespace GraphicVisualisation
     /// </summary>
     public partial class Window1 : Window
     {
+        public IParticipant SelectedDriver { get; set; }
         public Window1(DataContexter dataContexter)
         {
             this.DataContext = dataContexter;
             InitializeComponent();
+        }
+
+        public void ItemSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CompetitionRow selectedItem = (CompetitionRow)CompetitionList.SelectedItem;
+            if (selectedItem != null)
+            {
+                SelectedDriver = (IParticipant)Data.competition.Participants.Where(s => s.Naam.Equals(selectedItem.Name)).Single();
+            } 
         }
     }
 }
