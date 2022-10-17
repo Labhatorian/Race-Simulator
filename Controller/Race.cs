@@ -75,7 +75,6 @@ namespace Controller
         {
             foreach (IParticipant participant in Participants)
             {
-                //TODO Verbeteren
                 participant.Equipment.Quality = _random.Next(40, 100);
                 participant.Equipment.Performance = _random.Next(4, 8);
                 participant.Equipment.Speed = _random.Next(4, 8);
@@ -215,26 +214,34 @@ namespace Controller
             {
                 //Pak waardes voor snelheid en kapot gaan
                 int Speed;
-                double PossibleBroken;
+                int PossibleBroken;
                 if (!LeftOrRight)
                 {
                     Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance;
-                    PossibleBroken = ((double)SD.Left.Equipment.Quality / 100.0);
+                    PossibleBroken = (SD.Left.Equipment.Quality);
                 } else
                 {
                     Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
-                    PossibleBroken = ((double)SD.Right.Equipment.Quality / 100.0);
+                    PossibleBroken = (SD.Right.Equipment.Quality);
                 }
 
                 Speed *= _random.Next(1, 3);
-                PossibleBroken *= (double)_random.Next(1, 2);
+
+                if (!Driver.Equipment.IsBroken)
+                {
+                    PossibleBroken += _random.Next(-25, 30);
+                } else
+                {
+                    PossibleBroken += _random.Next(-25, 0);
+                }
 
                 //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
-                if (Math.Ceiling(PossibleBroken) >= 7)
+                if (PossibleBroken <= 30)
                 {
                     if (!Driver.Equipment.IsBroken)
                     {
                         Driver.Equipment.IsBroken = true;
+                        Driver.ToTakePitstop = true;
                     }
                     else
                     {
@@ -246,7 +253,7 @@ namespace Controller
 
                 //Voeg driver distance toe
                 //Als speler op MoveDriver button heeft gedrukt, voeg extra distance toe
-                if (!Driver.Equipment.IsBroken)
+                if (!Driver.Equipment.IsBroken && !Driver.TakingPitstop)
                 {
                     if (!LeftOrRight)
                     {
@@ -264,6 +271,9 @@ namespace Controller
                             SD.DistanceLeft += 20;
                         }
                     }
+                } else if (Driver.TakingPitstop)
+                {
+                    Driver.TakingPitstop = false;
                 }
 
                 Boolean Moved = false;
@@ -296,17 +306,20 @@ namespace Controller
                 if (SDnext.Left == null & Moved)
                 {
                     SDnext.Left = Driver;
-                    if (AddLap)
-                    {
-                        AddLapToDriver(Driver, SD, SDnext);
-                    }
                 }
                 else if (SDnext.Right == null & Moved)
                 {
-                    SDnext.Right = Driver;
-                    if (AddLap)
+                    SDnext.Right = Driver; 
+                }
+
+                if (AddLap & Moved)
+                {
+                    AddLapToDriver(Driver, SD, SDnext);
+                    if (Driver.ToTakePitstop)
                     {
-                        AddLapToDriver(Driver, SD, SDnext);
+                        Driver.ToTakePitstop = false;
+                        Driver.Equipment.Quality += 25;
+                        Driver.TakingPitstop = true;
                     }
                 }
 
@@ -350,7 +363,7 @@ namespace Controller
             {
                 //Doe niks
             }
-                if (_participantslaps[Driver] >= 3)
+                if (_participantslaps[Driver] >= 4)
             {
                 _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);

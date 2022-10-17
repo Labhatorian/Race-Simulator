@@ -12,6 +12,8 @@ namespace Model
         int Points { get; set; }
         IEquipment Equipment { get; set; }
         TeamColors TeamColor { get; set; }
+        Boolean ToTakePitstop { get; set; }
+        Boolean TakingPitstop { get; set; }
     }
 
     public enum TeamColors

@@ -16,7 +16,20 @@ namespace GraphicVisualisation
         /// <summary>
         /// Tabellen en variable voor gegevens competitie en race
         /// </summary>
-        /// TODO namen
+        /// 
+        /// TODO namen, volg conventies
+        /// TODO Alle summary checken
+        /// TODO Voeg pitstop tie
+        /// TODO Maak windows mooier
+        /// TODO voeg window titels toe
+        /// TODO Voeg icons toe
+        /// TODO Verbeter tests. Elk mogelijk functie testen!
+        /// TODO Check namingconventions
+        /// TODO Verbeter driver positie bij straight west
+        /// TODO Geluiden (Copyright free)
+        /// TODO Finish toont competitie info en geen circuit
+        /// TODO Maak README af
+        /// TODO Geef andere naam Quality in tabel
         public ObservableCollection<CompetitionRow> CompetitionStats { get; set; } = new();
         public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();
         public ObservableCollection<DriverInfo> tableRaceDriverInfo { get; set; } = new();

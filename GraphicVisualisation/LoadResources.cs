@@ -67,6 +67,10 @@ namespace GraphicVisualisation
                         Bitmap BrokenBM = new(Broken);
                         Bitmaps.Add(SectionString, BrokenBM);
                         break;
+                        case "Pitstop":
+                        Bitmap PitstopBM = new(Pitstop);
+                        Bitmaps.Add(SectionString, PitstopBM);
+                        break;
                     default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
                             Bitmaps.Add("Empty", EmptBitmap);
@@ -161,6 +165,7 @@ namespace GraphicVisualisation
 
         //Broken
         const string Broken = "..\\..\\..\\Graphics\\broken.png";
+        const string Pitstop = "..\\..\\..\\Graphics\\pitstop.png";
         #endregion
     }
 }

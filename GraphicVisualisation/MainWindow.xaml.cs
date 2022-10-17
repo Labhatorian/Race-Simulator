@@ -127,9 +127,12 @@ namespace GraphicVisualisation
 
         private void AddDistanceToDriver(object sender, RoutedEventArgs e)
         {
-            if(Window1.SelectedDriver is not null)
+            if (Window1 is not null)
             {
-                Window1.SelectedDriver.Equipment.UserAddedDistance = true;
+                if (Window1.SelectedDriver is not null)
+                {
+                    Window1.SelectedDriver.Equipment.UserAddedDistance = true;
+                }
             }
         }
     }
