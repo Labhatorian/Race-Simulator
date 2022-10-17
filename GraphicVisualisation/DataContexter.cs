@@ -77,7 +77,7 @@ namespace GraphicVisualisation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OnDriverChanged(object sender, EventArgs e)
+        private void OnDriverChanged(object sender, EventArgs e)
         {
             trackname = GetTrackName();
             if (SelectedDriver != null)
@@ -95,7 +95,7 @@ namespace GraphicVisualisation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OnDriverFinished(object sender, EventArgs e)
+        private void OnDriverFinished(object sender, EventArgs e)
         {
             UpdateCompetitionInfo();         
             OnPropertyChanged(trackname);
@@ -126,7 +126,7 @@ namespace GraphicVisualisation
         /// <summary>
         /// Haalt naam en kleur op van elk coureur in de competitie
         /// </summary>
-        public void UpdateRaceInfoDrivers()
+        private void UpdateRaceInfoDrivers()
     {
         tableRaceDrivers = new();
         Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))

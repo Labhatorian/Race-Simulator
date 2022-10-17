@@ -95,6 +95,7 @@ namespace UnitTests
         [Test]
         public void CircuitTest()
         {
+            //Moeilijk te testen want je moet het wel kunnen zien
             Data.Initialise();
             Data.NextRace();
             GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
@@ -103,6 +104,13 @@ namespace UnitTests
         [Test]
         public void DataContextTest()
         {
+            //Test alle datacontext mogelijk
+            //Maak race aan
+            //Haal data op
+            //Kijk of data klopt met gegevens die er zijn.
         }
+
+        [Test]
+        public void 
     }
 }

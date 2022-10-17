@@ -29,6 +29,8 @@ namespace ControllerTest
         {
             Data.NextRace();
             Data.NextRace();
+            Data.NextRace();
+            Assert.IsNull(Data.CurrentRace);
         }
     }
 }

@@ -72,8 +72,6 @@ namespace GraphicVisualisation
         public async void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
-            //Window1.Close();
-            //Window2.Close();
             Data.NextRace();
 
             LoadResources.Clear();

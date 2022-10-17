@@ -26,6 +26,8 @@ namespace UnitTests
         {
             //Simuleer een volledig race om events te testen
             //Test trouwens rest van de race. Zolang dat niet erroren, is alles prima. Moeilijk te testen
+            //Uiterst best gedaan om wat functionaliteit van race te testen
+            //Is niet helemaal mogelijk doordat timer functie en private
             Data.Initialise();
             Data.Debug = true;
             Data.NextRace();
@@ -64,5 +66,12 @@ namespace UnitTests
                 }
             }
         }
+
+        [Test]
+        public void GetSectionDataTest()
+        {
+            //Maak circuit aan, probeer sectiondata te krijgen en dan alweer om te kijken of hetzelfde is en probeern null
+        }
+
     }
 }
