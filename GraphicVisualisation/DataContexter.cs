@@ -19,17 +19,13 @@ namespace GraphicVisualisation
         /// 
         /// TODO namen, volg conventies
         /// TODO Alle summary checken
-        /// TODO Voeg pitstop tie
         /// TODO Maak windows mooier
         /// TODO voeg window titels toe
         /// TODO Voeg icons toe
         /// TODO Verbeter tests. Elk mogelijk functie testen!
         /// TODO Check namingconventions
-        /// TODO Verbeter driver positie bij straight west
         /// TODO Geluiden (Copyright free)
-        /// TODO Finish toont competitie info en geen circuit
         /// TODO Maak README af
-        /// TODO Geef andere naam Quality in tabel
         public ObservableCollection<CompetitionRow> CompetitionStats { get; set; } = new();
         public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();
         public ObservableCollection<DriverInfo> tableRaceDriverInfo { get; set; } = new();
@@ -49,7 +45,7 @@ namespace GraphicVisualisation
         {
             trackname = GetTrackName();
             DataContexterRefresh();
-            OnPropertyChanged();
+            OnPropertyChanged(trackname);
         }
 
         /// <summary>
@@ -66,10 +62,9 @@ namespace GraphicVisualisation
         /// <summary>
         /// Elke keer als iets verandert. Update alle properties, zodat de updates te zien is op het scherm
         /// </summary>
-        /// TODO nameof
-        private void OnPropertyChanged()
+        private void OnPropertyChanged<T>(T property)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("trackname"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(property)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CompetitionStats"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDriverInfo"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("tableRaceDrivers"));
@@ -89,9 +84,10 @@ namespace GraphicVisualisation
             {
                 IParticipant driver = (IParticipant)Data.competition.Participants.Where(s => s.Naam.Equals(SelectedDriver)).Single();
                 UpdateRaceDriverInfo(driver);
+                OnPropertyChanged(tableRaceDriverInfo);
             }
             UpdateCompetitionInfo();
-            OnPropertyChanged();
+            OnPropertyChanged(trackname);
         }
 
         /// <summary>
@@ -101,8 +97,8 @@ namespace GraphicVisualisation
         /// <param name="e"></param>
         public void OnDriverFinished(object sender, EventArgs e)
         {
-            UpdateCompetitionInfo();
-            OnPropertyChanged();
+            UpdateCompetitionInfo();         
+            OnPropertyChanged(trackname);
         }
 
         /// <summary>
@@ -123,6 +119,7 @@ namespace GraphicVisualisation
             Data.competition.Participants.Where(s => Data.competition.Participants.Contains(s))
                 .ToList()
                 .ForEach(i => CompetitionStats.Add(new CompetitionRow(i.Naam, i.Points)));
+            OnPropertyChanged(CompetitionStats);
         }
 
 
@@ -135,7 +132,8 @@ namespace GraphicVisualisation
         Data.competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
             .ToList()
             .ForEach(i => tableRaceDrivers.Add(new DriverRow(i.Naam, i.TeamColor.ToString())));
-    }
+            OnPropertyChanged(tableRaceDrivers);
+        }
 
         /// <summary>
         /// Als een driver is geselecteerd, haal de informatie op van de geselecteerde driver
@@ -152,6 +150,7 @@ namespace GraphicVisualisation
             {
                 tableRaceDriverInfo.Add(new DriverInfo(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken));
             });
+            OnPropertyChanged(tableRaceDriverInfo);
         }
     }
 

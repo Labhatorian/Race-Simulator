@@ -40,11 +40,9 @@ namespace GraphicVisualisation
         { 
             Data.Initialise();
             Data.NextRace();
-
             InitializeComponent();
             DataContexter = (DataContexter)this.DataContext;
 
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
             Data.CurrentRace.DriversFinished += OnDriversFinished;  
         }
@@ -71,7 +69,7 @@ namespace GraphicVisualisation
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        public void OnDriversFinished(Object source, EventArgs e)
+        public async void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
             //Window1.Close();
@@ -87,7 +85,16 @@ namespace GraphicVisualisation
                 DataContexter.DataContexterRefresh();
             } else
             {
-                //TODO Niks zien en laat competitie window zien
+                SectionTypes[] sectionTypesEmptyTrack = new SectionTypes[0];
+                Track EmptyTrack = new Track("", sectionTypesEmptyTrack);
+                
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    this.MainImage.Source = null;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(null, EmptyTrack, null));
+                    Window1 = new Window1(DataContexter);
+                    Window1.Owner = this;
+                    Window1.Show();
+                });
             }
         }
 
