@@ -1,5 +1,6 @@
 ﻿using Model;
 using System.Diagnostics.Metrics;
+using System.Media;
 using Section = Model.Section;
 using Timer = System.Timers.Timer;
 
@@ -14,6 +15,7 @@ namespace Controller
         private Random _random;
         private Timer timer;
         private int FinishCounter = 0;
+        private SoundPlayer soundPlayer;
 
         //Houdt bij belangrijke dingen voor de race
         public static Dictionary<Section, SectionData> _positions;
@@ -61,6 +63,12 @@ namespace Controller
             _participantslaps = new Dictionary<IParticipant, int>();
             _participantsfinished = new Dictionary<IParticipant, Boolean>();
             PlaceParticipants(track, participants);
+
+            //Titel: Dramatic Music
+            //Creator: PureDesign Girl - https://freesound.org/people/PureDesignGirl/
+            //Source: https://freesound.org/people/PureDesignGirl/sounds/538828/
+            //License: 'CC BY 4.0' - https://creativecommons.org/licenses/by/4.0/
+            soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
 
             //Timer en eventhandler klaar en we starten
             timer = new Timer(Timer);
@@ -363,7 +371,7 @@ namespace Controller
             {
                 //Doe niks
             }
-                if (_participantslaps[Driver] >= 1)
+                if (_participantslaps[Driver] >= 4)
             {
                 _participantsfinished[Driver] = true;
                 RemoveDriverAndCheck(Driver, SDnext, SD);
@@ -378,6 +386,7 @@ namespace Controller
             RandomizeEquipment();
             timer.AutoReset = false;
             timer.Start();
+            soundPlayer.PlayLooping();
         }
 
         /// <summary>
@@ -438,6 +447,8 @@ namespace Controller
             //Roep op driverfinished voor de volgend race
             if (!DriverFound)
             {
+                soundPlayer.Stop();
+                soundPlayer = null;
                 timer.Stop();
                 timer.Enabled = false;
                 timer.Dispose();

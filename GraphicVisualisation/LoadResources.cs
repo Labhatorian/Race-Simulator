@@ -161,24 +161,24 @@ namespace GraphicVisualisation
 
         #region GRAPHICS
         //Sections
-        const string Straight    = "..\\..\\..\\Graphics\\straight.png";
-        const string LeftCorner  = "..\\..\\..\\Graphics\\left.png";
-        const string RightCorner = "..\\..\\..\\Graphics\\right.png";
-        const string StartGrid   = "..\\..\\..\\Graphics\\start.png";
-        const string Finish      = "..\\..\\..\\Graphics\\finish.png";
+        const string Straight    = "..\\..\\..\\Content\\straight.png";
+        const string LeftCorner  = "..\\..\\..\\Content\\left.png";
+        const string RightCorner = "..\\..\\..\\Content\\right.png";
+        const string StartGrid   = "..\\..\\..\\Content\\start.png";
+        const string Finish      = "..\\..\\..\\Content\\finish.png";
 
-        const string Tree = "..\\..\\..\\Graphics\\tree.png";
+        const string Tree = "..\\..\\..\\Content\\tree.png";
 
         //Cars
-        const string Blue = "..\\..\\..\\Graphics\\blue.png";
-        const string Green = "..\\..\\..\\Graphics\\green.png";
-        const string Grey = "..\\..\\..\\Graphics\\grey.png";
-        const string Red = "..\\..\\..\\Graphics\\red.png";
-        const string Yellow = "..\\..\\..\\Graphics\\yellow.png";
+        const string Blue = "..\\..\\..\\Content\\blue.png";
+        const string Green = "..\\..\\..\\Content\\green.png";
+        const string Grey = "..\\..\\..\\Content\\grey.png";
+        const string Red = "..\\..\\..\\Content\\red.png";
+        const string Yellow = "..\\..\\..\\Content\\yellow.png";
 
         //Broken
-        const string Broken = "..\\..\\..\\Graphics\\broken.png";
-        const string Pitstop = "..\\..\\..\\Graphics\\pitstop.png";
+        const string Broken = "..\\..\\..\\Content\\broken.png";
+        const string Pitstop = "..\\..\\..\\Content\\pitstop.png";
         #endregion
     }
 }

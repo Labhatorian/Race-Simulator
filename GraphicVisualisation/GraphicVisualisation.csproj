@@ -7,6 +7,36 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\blue.png" />
+    <None Remove="Content\broken.png" />
+    <None Remove="Content\finish.png" />
+    <None Remove="Content\green.png" />
+    <None Remove="Content\grey.png" />
+    <None Remove="Content\left.png" />
+    <None Remove="Content\pitstop.png" />
+    <None Remove="Content\racemusic.mp3" />
+    <None Remove="Content\red.png" />
+    <None Remove="Content\right.png" />
+    <None Remove="Content\start.png" />
+    <None Remove="Content\straight.png" />
+    <None Remove="Content\tree.png" />
+    <None Remove="Content\yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\blue.png" />
+    <Content Include="Content\broken.png" />
+    <Content Include="Content\finish.png" />
+    <Content Include="Content\green.png" />
+    <Content Include="Content\grey.png" />
+    <Content Include="Content\left.png" />
+    <Content Include="Content\pitstop.png" />
+    <Content Include="Content\racemusic.mp3" />
+    <Content Include="Content\red.png" />
+    <Content Include="Content\right.png" />
+    <Content Include="Content\start.png" />
+    <Content Include="Content\straight.png" />
+    <Content Include="Content\tree.png" />
+    <Content Include="Content\yellow.png" />
     <Content Include="Graphics\broken.png" />
     <Content Include="Graphics\finish.png" />
     <Content Include="Graphics\green.png" />
@@ -20,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Graphics\blue.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Graphics\wip\image-1631086653338.PNG" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Controller\Controller.csproj" />
