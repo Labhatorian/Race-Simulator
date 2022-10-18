@@ -71,12 +71,16 @@ namespace GraphicVisualisation
                         Bitmap PitstopBM = new(Pitstop);
                         Bitmaps.Add(SectionString, PitstopBM);
                         break;
+                        case "Tree":
+                        Bitmap TreeBM = new(Tree);
+                        Bitmaps.Add(SectionString, TreeBM);
+                        break;
                     default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
                             Bitmaps.Add("Empty", EmptBitmap);
                             break;
                     }
-                }
+            }
 
             Bitmaps[SectionString].Clone();
             return Bitmaps[SectionString];
@@ -98,13 +102,20 @@ namespace GraphicVisualisation
         /// <returns>Bitmap</returns>
         public static Bitmap EmptyBitmap(int x, int y)
         {
-            //TODO voeg bomen toe
             Bitmap BM = new Bitmap(x, y);
             SolidBrush SB = new SolidBrush(Color.Green);
+            Bitmap Tree = GetBitmap("Tree");
+            Random random = new Random();
+
             using (Graphics graph = Graphics.FromImage(BM))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
+
+                for(int i = 0; i <= 10; i++)
+                {
+                    graph.DrawImage(Tree, random.Next(0, x)-100, random.Next(0, y)-300, 500, 500);
+                }
             }
             return BM;
         }
@@ -155,6 +166,8 @@ namespace GraphicVisualisation
         const string RightCorner = "..\\..\\..\\Graphics\\right.png";
         const string StartGrid   = "..\\..\\..\\Graphics\\start.png";
         const string Finish      = "..\\..\\..\\Graphics\\finish.png";
+
+        const string Tree = "..\\..\\..\\Graphics\\tree.png";
 
         //Cars
         const string Blue = "..\\..\\..\\Graphics\\blue.png";
