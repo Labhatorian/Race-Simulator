@@ -21,6 +21,7 @@
     <None Remove="Content\straight.png" />
     <None Remove="Content\tree.png" />
     <None Remove="Content\yellow.png" />
+    <None Remove="red.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\blue.png" />
@@ -64,5 +65,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="red.png" />
   </ItemGroup>
 </Project>

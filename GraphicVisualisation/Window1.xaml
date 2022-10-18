@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicVisualisation"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="Race Simulator - Competitie Statistieken" Height="450" Width="800" Icon="/red.png" ShowInTaskbar="False">
     <Grid>
         <ListView x:Name="CompetitionList" HorizontalAlignment="Center" Height="175" VerticalAlignment="Center" Width="384" ItemsSource="{Binding Path=CompetitionStats}" SelectionChanged="ItemSelectionChanged">
             <ListView.View>

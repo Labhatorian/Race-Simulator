@@ -20,11 +20,8 @@ namespace GraphicVisualisation
         /// TODO namen, volg conventies
         /// TODO Alle summary checken
         /// TODO Maak windows mooier
-        /// TODO voeg window titels toe
-        /// TODO Voeg icons toe
         /// TODO Verbeter tests. Elk mogelijk functie testen!
         /// TODO Check namingconventions
-        /// TODO Geluiden (Copyright free)
         /// TODO Maak README af
         public ObservableCollection<CompetitionRow> CompetitionStats { get; set; } = new();
         public ObservableCollection<DriverRow> tableRaceDrivers { get; set; } = new();

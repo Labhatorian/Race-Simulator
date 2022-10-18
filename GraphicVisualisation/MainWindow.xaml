@@ -7,7 +7,7 @@
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="GraphicVisualisation.MainWindow"
         xmlns:debug="clr-namespace:System.Diagnostics;assembly=System"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Race Simulator" Height="450" Width="800" Icon="/red.png">
     <Window.DataContext>
         <local:DataContexter/>
     </Window.DataContext>

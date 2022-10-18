@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicVisualisation"
         mc:Ignorable="d"
-        Title="Window2" Height="450" Width="800">
+        Title="Race Simulator - Race Informatie" Height="450" Width="800" ShowInTaskbar="False" Icon="/red.png">
     <Grid>
         <ListView x:Name="DriverList" HorizontalAlignment="Left" Height="214" Margin="91,0,0,0" VerticalAlignment="Center" Width="272" ItemsSource="{Binding Path=tableRaceDrivers}" SelectionChanged="ItemSelectionChanged">
             <ListView.View>
