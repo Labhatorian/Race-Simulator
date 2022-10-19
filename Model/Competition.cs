@@ -21,9 +21,9 @@ namespace Model
             {
                 if (Tracks.Count > 0)
                 {
-                    Track Track = Tracks.Peek();
+                    Track track = Tracks.Peek();
                     Tracks.Dequeue();
-                    return Track;
+                    return track;
                 } else { return null; }
             }
             return null;

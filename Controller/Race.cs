@@ -1,5 +1,4 @@
 ﻿using Model;
-using System.Diagnostics.Metrics;
 using System.Media;
 using Section = Model.Section;
 using Timer = System.Timers.Timer;
@@ -11,16 +10,15 @@ namespace Controller
         //Parameters voor de race
         public Track Track { get; set; }
         public List<IParticipant> Participants;
-        public DateTime StartTime;
         private Random _random;
-        private Timer timer;
-        private int FinishCounter = 0;
-        private SoundPlayer soundPlayer;
+        private Timer _timer;
+        private int _finishCounter = 0;
+        private SoundPlayer _soundPlayer;
 
         //Houdt bij belangrijke dingen voor de race
-        public static Dictionary<Section, SectionData> _positions;
-        public static Dictionary<IParticipant, int> _participantslaps;
-        private static Dictionary<IParticipant, Boolean> _participantsfinished;
+        public static Dictionary<Section, SectionData> positions;
+        public static Dictionary<IParticipant, int> participantsLaps;
+        private static Dictionary<IParticipant, Boolean> s_participantsFinished;
 
         //Eventhandlers voor verplaatste driver en gefinishte driver
         public event EventHandler<DriversChangedEventArgs>? DriversChanged;
@@ -33,7 +31,7 @@ namespace Controller
         /// <returns></returns>
         public SectionData GetSectionData(Section section)
         {
-            _positions.TryGetValue(section, out var value);
+            positions.TryGetValue(section, out var value);
 
             if (value != null)
             {
@@ -42,42 +40,41 @@ namespace Controller
             else
             {
                 SectionData sectionData = new SectionData();
-                _positions.Add(section, sectionData);
+                positions.Add(section, sectionData);
                 return sectionData;
             }
         }
 
         /// <summary>
-        /// Maak race aan. Haal gegevens op uit data van competitie en zet timer en event klaar. Begin dan de race
+        /// Maak race aan. Haal gegevens op uit data van competitie en zet de timer, event en muziek klaar. Begin dan de race
         /// </summary>
         /// <param name="track"></param>
         /// <param name="participants"></param>
-        public Race(Track track, List<IParticipant> participants, int Timer)
+        public Race(Track track, List<IParticipant> participants, int timer)
         {
             //Maak de race
             Track = track;
             Participants = participants;
-            StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
-            _positions = new Dictionary<Section, SectionData>();
-            _participantslaps = new Dictionary<IParticipant, int>();
-            _participantsfinished = new Dictionary<IParticipant, Boolean>();
+            positions = new Dictionary<Section, SectionData>();
+            participantsLaps = new Dictionary<IParticipant, int>();
+            s_participantsFinished = new Dictionary<IParticipant, Boolean>();
             PlaceParticipants(track, participants);
 
             //Titel: Dramatic Music
             //Creator: PureDesign Girl - https://freesound.org/people/PureDesignGirl/
             //Source: https://freesound.org/people/PureDesignGirl/sounds/538828/
             //License: 'CC BY 4.0' - https://creativecommons.org/licenses/by/4.0/
-            soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
+            _soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
 
-            //Timer en eventhandler klaar en we starten
-            timer = new Timer(Timer);
-            timer.Elapsed += OnTimedEvent;
+            //timer en eventhandler klaar en we starten
+            _timer = new Timer(timer);
+            _timer.Elapsed += OnTimedEvent;
             Start();
         }
 
         /// <summary>
-        /// Geef de deelnemers een willekeurig waarde voor kwaliteit performance en speed
+        /// Geef de deelnemers een willekeurig waarde voor quality, performance en speed
         /// </summary>
         private void RandomizeEquipment()
         {
@@ -99,6 +96,7 @@ namespace Controller
         {
             //Telt bij welk deelnemer wij zijn
             int currentAt = 0;
+            Boolean participantPlaced = false;
 
             while (currentAt < participants.Count)
             {
@@ -113,6 +111,7 @@ namespace Controller
                         {
                             sectionData.Left = participants[currentAt];
                             currentAt++;
+                            participantPlaced = true;
 
                             //Volgende participant gaat section lijst af
                             break;
@@ -121,6 +120,7 @@ namespace Controller
                         {
                             sectionData.Right = participants[currentAt];
                             currentAt++;
+                            participantPlaced = true;
 
                             //Volgende participant gaat section lijst af
                             break;
@@ -128,15 +128,22 @@ namespace Controller
                         //Als section vol is, gaat hij naar de volgende
                     }
                 }
-                //Ga er van uit dat er genoeg plek is
+                //Participant is niet geplaatst??? Gooi error
+                if (!participantPlaced)
+                {
+                    throw new Exception("Not enough place for all participants on track");
+                } else
+                {
+                    participantPlaced = false;
+                }        
             }
 
-            //Voor elk participant maak entry aan in _participantslaps
+            //Voor elk participant maak entry aan in participantsLaps
             //En voor finished
             foreach (IParticipant participant in participants)
             {
-                _participantslaps.Add(participant, 1);
-                _participantsfinished.Add(participant, false);
+                participantsLaps.Add(participant, 1);
+                s_participantsFinished.Add(participant, false);
             }
         }
 
@@ -150,202 +157,209 @@ namespace Controller
         {
             {
                 //Zodat de dictionary tijdens de foreach niet wordt aangepast
-                var newDictionary = _positions.ToDictionary(entry => entry.Key,
+                var newDictionary = positions.ToDictionary(entry => entry.Key,
                                                    entry => entry.Value);
 
                 //Zoek section op
                 foreach (KeyValuePair<Section, SectionData> entry in newDictionary)
                 {
-                    SectionData SD = entry.Value;
-                    Section Section = entry.Key;
+                    SectionData sectionData = entry.Value;
+                    Section sectionTrack = entry.Key;
 
-                    Section NextSection = Section;
+                    Section nextSection = sectionTrack;
 
                     //Vind volgende section
-                    Boolean Found = false;
-                    Boolean AddLap = false;
+                    Boolean found = false;
+                    Boolean addLap = false;
                     foreach (Section section in Track.Sections)
                     {
                         //Gevonden? Ga dan nog 1 keer door voor de volgende
-                        if (Found)
+                        if (found)
                         {
-                            NextSection = section;
+                            nextSection = section;
                             break;
                         }
 
-                        if (section == Section)
+                        if (section == sectionTrack)
                         {
                             //Als de volgende finish is, voeg dan 1 lap toe
-                            if (Section.SectionType == SectionTypes.Finish)
+                            if (sectionTrack.SectionType == SectionTypes.Finish)
                             {
-                                NextSection = Track.Sections.First.Value;
-                                AddLap = true;
+                                nextSection = Track.Sections.First.Value;
+                                addLap = true;
                                 break;
                             }
                             else
                             {
-                                Found = true;
+                                found = true;
                             }
                         }
                         else
                         {
-                            //Blijf dan zitten?
+                            //Blijf dan zitten
                         }
                     }
-                    SectionData SDnext = GetSectionData(NextSection);
+                    SectionData sectionDataNext = GetSectionData(nextSection);
 
                     //Stuur elk driver door naar de functie DriverElapsed. De code gaat daar verder.
-                    DriverElapsed(SD.Left, false, Section, SD, NextSection, SDnext, AddLap);
-                    DriverElapsed(SD.Right, true, Section, SD, NextSection, SDnext, AddLap);
+                    DriverElapsed(sectionData.Left, false, sectionTrack, sectionData, nextSection, sectionDataNext, addLap);
+                    DriverElapsed(sectionData.Right, true, sectionTrack, sectionData, nextSection, sectionDataNext, addLap);
 
                 }
             }
-            //Start timer weer op. Null check om exception te vermijden bij finish
-            if (timer != null)
+            //Start _timer weer op. Null check om exception te vermijden bij finish
+            if (_timer != null)
             {
-                timer.Start();
+                _timer.Start();
             }
         }
 
         /// <summary>
         /// Meerdere checks voor de drivers. Movement, breaking en laps finishen.
+        /// Brein van de sim.
         /// </summary>
-        /// <param name="Driver"></param>
-        /// <param name="LeftOrRight"></param>
-        /// <param name="SD"></param>
-        /// <param name="NextSection"></param>
-        /// <param name="SDnext"></param>
-        /// <param name="AddLap"></param>
-        private void DriverElapsed(IParticipant Driver, Boolean LeftOrRight, Section section, SectionData SD, Section NextSection, SectionData SDnext, Boolean AddLap)
+        /// <param name="driver"></param>
+        /// <param name="leftOrRight"></param>
+        /// <param name="sectionData"></param>
+        /// <param name="nextSection"></param>
+        /// <param name="sectionDataNext"></param>
+        /// <param name="addLap"></param>
+        private void DriverElapsed(IParticipant driver, Boolean leftOrRight, Section section, SectionData sectionData, Section nextSection, SectionData sectionDataNext, Boolean addLap)
         {
-            if (Driver != null)
+            if (driver != null)
             {
                 //Pak waardes voor snelheid en kapot gaan
-                int Speed;
-                int PossibleBroken;
-                if (!LeftOrRight)
+                int speed;
+                int possibleBroken;
+
+                if (!leftOrRight)
                 {
-                    Speed = SD.Left.Equipment.Speed * SD.Left.Equipment.Performance;
-                    PossibleBroken = (SD.Left.Equipment.Quality);
+                    speed = sectionData.Left.Equipment.Speed * sectionData.Left.Equipment.Performance;
+                    possibleBroken = (sectionData.Left.Equipment.Quality);
                 } else
                 {
-                    Speed = SD.Right.Equipment.Speed * SD.Right.Equipment.Performance;
-                    PossibleBroken = (SD.Right.Equipment.Quality);
+                    speed = sectionData.Right.Equipment.Speed * sectionData.Right.Equipment.Performance;
+                    possibleBroken = (sectionData.Right.Equipment.Quality);
                 }
 
-                Speed *= _random.Next(1, 3);
-
-                if (!Driver.Equipment.IsBroken)
+                //Maakt de race minder voorspelbaar
+                speed *= _random.Next(1, 3);
+                // Zorg ervoor dat als driver kapot is, hij wel door gaan
+                if (!driver.Equipment.IsBroken)
                 {
-                    PossibleBroken += _random.Next(-25, 30);
+                    possibleBroken += _random.Next(-25, 30);
                 } else
                 {
-                    PossibleBroken += _random.Next(-25, 0);
+                    possibleBroken += _random.Next(-25, 0);
                 }
 
                 //Heeft de driver een ongeluk? Dan staat hij stil maar kan wel verder als hij weer kapot gaat. - - maakt +
-                if (PossibleBroken <= 30)
+                //Daarnaast moet hij natuurlijk een pitstop nemen om schade te herstellen
+                if (possibleBroken <= 30)
                 {
-                    if (!Driver.Equipment.IsBroken)
+                    if (!driver.Equipment.IsBroken)
                     {
-                        Driver.Equipment.IsBroken = true;
-                        Driver.ToTakePitstop = true;
+                        driver.Equipment.IsBroken = true;
+                        driver.ToTakePitstop = true;
                     }
                     else
                     {
-                        Driver.Equipment.IsBroken = false;
-                        Driver.Equipment.Quality -= 1;
+                        driver.Equipment.IsBroken = false;
+                        driver.Equipment.Quality -= 1;
                     }
-                    DriversChanged(this, new DriversChangedEventArgs(Track, NextSection, section));
+                    DriversChanged(this, new DriversChangedEventArgs(Track, nextSection, section));
                 }
 
                 //Voeg driver distance toe
                 //Als speler op MoveDriver button heeft gedrukt, voeg extra distance toe
-                if (!Driver.Equipment.IsBroken && !Driver.TakingPitstop)
+                //Dit gebeurt maar 1 keer per event zodat het nog wel een soort spel krijgt en het spel niet breekt.
+                //Maar de gebruiker heeft de illusie dat er wel meer gebeurd als er op de knop wordt gehammerd
+                if (!driver.Equipment.IsBroken && !driver.TakingPitstop)
                 {
-                    if (!LeftOrRight)
+                    if (!leftOrRight)
                     {
-                        SD.DistanceLeft += Speed;
-                        if (Driver.Equipment.UserAddedDistance)
+                        sectionData.DistanceLeft += speed;
+                        if (driver.Equipment.UserAddedDistance)
                         {
-                            SD.DistanceLeft += 20;
+                            sectionData.DistanceLeft += 20;
                         }
                     }
                     else
                     {
-                        SD.DistanceRight += Speed;
-                        if (Driver.Equipment.UserAddedDistance)
+                        sectionData.DistanceRight += speed;
+                        if (driver.Equipment.UserAddedDistance)
                         {
-                            SD.DistanceLeft += 20;
+                            sectionData.DistanceLeft += 20;
                         }
                     }
-                } else if (Driver.TakingPitstop)
+                } else if (driver.TakingPitstop)
                 {
-                    Driver.TakingPitstop = false;
+                    driver.TakingPitstop = false;
                 }
 
-                Boolean Moved = false;
+
+                Boolean moved = false;
                 //Als distancer over 100 is, dan gaat de driver naar de volgende section
-                if (!LeftOrRight)
+                if (!leftOrRight)
                 {
-                    if (SD.DistanceLeft >= 100)
+                    if (sectionData.DistanceLeft >= 100)
                     {
-                        if (!Driver.Equipment.IsBroken)
+                        if (!driver.Equipment.IsBroken)
                         {
-                            SD.DistanceLeft = 0;
-                            Moved = true;
+                            sectionData.DistanceLeft = 0;
+                            moved = true;
                         }
                     }
                 }
                 else
                 {
-                    if (SD.DistanceRight >= 100)
+                    if (sectionData.DistanceRight >= 100)
                     {
-                        if (!Driver.Equipment.IsBroken)
+                        if (!driver.Equipment.IsBroken)
                         {
-                            SD.DistanceRight = 0;
-                            Moved = true;
+                            sectionData.DistanceRight = 0;
+                            moved = true;
                         }
                     }
                 }
 
                 //Probeer te verplaatsen naar LEFT van volgend section en anders RIGHT om inhalen te simuleren.
                 //Ook check voor laps toevoegen.
-                if (SDnext.Left == null & Moved)
+                if (sectionDataNext.Left == null & moved)
                 {
-                    SDnext.Left = Driver;
+                    sectionDataNext.Left = driver;
                 }
-                else if (SDnext.Right == null & Moved)
+                else if (sectionDataNext.Right == null & moved)
                 {
-                    SDnext.Right = Driver; 
+                    sectionDataNext.Right = driver; 
                 }
 
-                if (AddLap & Moved)
+                if (addLap & moved)
                 {
-                    AddLapToDriver(Driver, SD, SDnext);
-                    if (Driver.ToTakePitstop)
+                    AddLapToDriver(driver, sectionData, sectionDataNext);
+                    if (driver.ToTakePitstop)
                     {
-                        Driver.ToTakePitstop = false;
-                        Driver.Equipment.Quality += 25;
-                        Driver.TakingPitstop = true;
+                        driver.ToTakePitstop = false;
+                        driver.Equipment.Quality += 25;
+                        driver.TakingPitstop = true;
                     }
                 }
 
                 //Als hij verplaatst is, haal de driver bij de vorige section weg om dubbele drivers te verkomen.
                 //Ook DriversChanged aanroepen zodat hij niet elke interval update.
-                if (Moved)
+                if (moved)
                 {
-                    if (!LeftOrRight)
+                    if (!leftOrRight)
                     {
-                        SD.Left = null;
+                        sectionData.Left = null;
                     }
                     else
                     {
-                        SD.Right = null;
+                        sectionData.Right = null;
                     }
-                    if (timer != null)
+                    if (_timer != null)
                     {
-                        DriversChanged(this, new DriversChangedEventArgs(Track, NextSection, section));
+                        DriversChanged(this, new DriversChangedEventArgs(Track, nextSection, section));
                     }
                 }
             }
@@ -354,105 +368,106 @@ namespace Controller
         /// <summary>
         /// Voeg lap toe aan driver als het moet. Checkt ook voor als hij 3 laps heeft gemaakt om hem te finishen
         /// </summary>
-        /// <param name="Driver"></param>
-        /// <param name="SD"></param>
-        /// <param name="SDnext"></param>
-        private void AddLapToDriver(IParticipant Driver, SectionData SD, SectionData SDnext)
+        /// <param name="driver"></param>
+        /// <param name="sectionData"></param>
+        /// <param name="sectionDataNext"></param>
+        private void AddLapToDriver(IParticipant driver, SectionData sectionData, SectionData sectionDataNext)
         {
-            _participantslaps[Driver] += 1;
+            participantsLaps[driver] += 1;
             try
             {
                 Console.SetCursorPosition(50, 0);
-                Console.WriteLine($"{Driver.Naam} Lap: {_participantslaps[Driver]}");
+                Console.WriteLine($"{driver.Naam} Lap: {participantsLaps[driver]}");
                 Thread.Sleep(500);
                 Console.SetCursorPosition(50, 0);
                 Console.WriteLine($"                     ");
             } catch (IOException)
             {
-                //Doe niks
+                //Doe niks, we zitten in de WPF project.
             }
-                if (_participantslaps[Driver] >= 4)
+                if (participantsLaps[driver] >= 4)
             {
-                _participantsfinished[Driver] = true;
-                RemoveDriverAndCheck(Driver, SDnext, SD);
+                s_participantsFinished[driver] = true;
+                RemoveLappedDriverAndCheck(driver, sectionDataNext, sectionData);
             }
         }
 
         /// <summary>
-        /// Start de race. Willekeurig equipment Timer autorestart uit zodat hij niet de thread volspamt met queries van eventhandler
+        /// Start de race. Willekeurig equipment timer autorestart uit zodat hij niet de thread volspamt met queries van eventhandler.
+        /// Start ook muziek op
         /// </summary>
         private void Start()
         {
             RandomizeEquipment();
-            timer.AutoReset = false;
-            timer.Start();
-            soundPlayer.PlayLooping();
+            _timer.AutoReset = false;
+            _timer.Start();
+            _soundPlayer.PlayLooping();
         }
 
         /// <summary>
-        /// Verwijder driver bij einde van race en geef punten. Check of er nog iemand op het circuit zit.
+        /// Verwijder driver bij einde van race en geef punten op de Formule 1 manier. Check of er nog iemand op het circuit zit.
         /// </summary>
         /// <param name="driver"></param>
-        /// <param name="SD"></param>
-        /// <param name="SDprev"></param>
-        private void RemoveDriverAndCheck(IParticipant driver, SectionData SD, SectionData SDprev)
+        /// <param name="sectionData"></param>
+        /// <param name="previousSectionData"></param>
+        private void RemoveLappedDriverAndCheck(IParticipant driver, SectionData sectionData, SectionData previousSectionData)
         {
             //Verwijder driver. Zorgt ervoor dat driver niet naar volgende section kan glippen
-            if (SD.Left == driver)
+            if (sectionData.Left == driver)
             {
-                SD.Left = null;
+                sectionData.Left = null;
             }
-            else if (SD.Right == driver)
+            else if (sectionData.Right == driver)
             {
-                SD.Right = null;
+                sectionData.Right = null;
             }
 
-            if (SDprev.Left == driver)
+            if (previousSectionData.Left == driver)
             {
-                SDprev.Left = null;
+                previousSectionData.Left = null;
             }
-            else if (SDprev.Right == driver)
+            else if (previousSectionData.Right == driver)
             {
-                SDprev.Right = null;
+                previousSectionData.Right = null;
             }
 
             //Geef ze punten gebaseerd op de Formule 1 manier
-            FinishCounter += 1;
-            if (FinishCounter == 1)
+            _finishCounter += 1;
+            if (_finishCounter == 1)
             {
                 driver.Points += 25;
-            } else if (FinishCounter == 2)
+            } else if (_finishCounter == 2)
             {
                 driver.Points += 18;
-            } else if (FinishCounter == 3)
+            } else if (_finishCounter == 3)
             {
                 driver.Points += 15;
-            } else if (FinishCounter > 3)
+            } else if (_finishCounter > 3)
             {
-                driver.Points += 12 - (2 * (FinishCounter - 3));
+                driver.Points += 12 - (2 * (_finishCounter - 3));
             }
 
             //Check of er ergens een driver is
-            Boolean DriverFound = false;
+            Boolean driverFound = false;
 
             foreach(IParticipant participant in Participants)
             {
-                if (!_participantsfinished[participant])
+                if (!s_participantsFinished[participant])
                 {
-                    DriverFound = true;
+                    driverFound = true;
                 }
             }
 
-            //Als er geen driver is. Stop de race en verwijder timer en eventhandlers/
+            //Als er geen driver is. Stop de race en verwijder _timer en eventhandlers en muziek
             //Roep op driverfinished voor de volgend race
-            if (!DriverFound)
+            if (!driverFound)
             {
-                soundPlayer.Stop();
-                soundPlayer = null;
-                timer.Stop();
-                timer.Enabled = false;
-                timer.Dispose();
-                timer = null;
+                _soundPlayer.Stop();
+                _soundPlayer = null;
+                _timer.Stop();
+                _timer.Enabled = false;
+                _timer.Dispose();
+                _timer = null;
                 foreach (Delegate d in DriversChanged.GetInvocationList())
                 {
                     DriversChanged -= (EventHandler<DriversChangedEventArgs>)d;

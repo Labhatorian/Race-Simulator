@@ -14,11 +14,11 @@ namespace Model
         /// </summary>
         /// <param name="track"></param>
         /// <param name="section"></param>
-        public DriversChangedEventArgs(Track track, Section section, Section previoussection)
+        public DriversChangedEventArgs(Track track, Section section, Section previousSection)
         {
             Track = track;
             Section = section;  
-            PreviousSection = previoussection;
+            PreviousSection = previousSection;
         }
 
         public Track Track { get; set; }

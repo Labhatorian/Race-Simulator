@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Race Simulator - Race Informatie" Height="320" Width="650" ShowInTaskbar="False" Icon="/red.png">
     <Grid>
-        <ListView x:Name="DriverList" HorizontalAlignment="Left" Height="214" Margin="10,52,0,0" VerticalAlignment="Top" Width="272" ItemsSource="{Binding Path=tableRaceDrivers}" SelectionChanged="ItemSelectionChanged">
+        <ListView x:Name="DriverList" HorizontalAlignment="Left" Height="214" Margin="10,52,0,0" VerticalAlignment="Top" Width="272" ItemsSource="{Binding Path=RaceDrivers}" SelectionChanged="ItemSelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Naam}"/>
@@ -15,7 +15,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="DriverInfo" HorizontalAlignment="Left" Height="214" Margin="311,52,0,0" VerticalAlignment="Top" Width="299" ItemsSource="{Binding Path=tableRaceDriverInfo}">
+        <ListView x:Name="DriverInfo" HorizontalAlignment="Left" Height="214" Margin="311,52,0,0" VerticalAlignment="Top" Width="299" ItemsSource="{Binding Path=RaceDriversDriverInfo}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="LapCount" DisplayMemberBinding="{Binding Path=Laps}"/>

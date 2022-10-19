@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Race Simulator" Height="450" Width="800" Icon="/red.png">
     <Window.DataContext>
-        <local:DataContexter/>
+        <local:RaceSimDataContext/>
     </Window.DataContext>
     <Grid>
         <Grid x:Name="MainWindow1">

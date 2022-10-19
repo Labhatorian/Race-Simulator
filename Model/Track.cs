@@ -29,14 +29,14 @@ namespace Model
         /// <returns></returns>
         private LinkedList<Section> ConvertSections(SectionTypes[] sections)
         {
-            LinkedList<Section> SectionList = new LinkedList<Section>();
+            LinkedList<Section> sectionList = new LinkedList<Section>();
             foreach (SectionTypes sectionType in sections)
             {
                 Section section = new Section();
                 section.SectionType = sectionType;
-                SectionList.AddLast(section);
+                sectionList.AddLast(section);
             }
-            return SectionList;
+            return sectionList;
         }
     }
 }

@@ -5,11 +5,9 @@ namespace Controller
     public static class Data
     {
         //De belangrijkste paremeters. Competitie en huidige race
-        public static Competition competition { get; set; }
+        public static Competition Competition { get; set; }
         public static Race CurrentRace { get; set; }
         public static Boolean Debug { get; set; }
-
-        public static Boolean Graphical { get; set; }
 
         /// <summary>
         /// Initialiseer data en dus de competitie
@@ -17,7 +15,7 @@ namespace Controller
         public static void Initialise()
         {
             //Maak nieuw competitie en voeg circuit en deelnemers toe
-            competition = new Competition();
+            Competition = new Competition();
             AddParticipants();
             AddTracks();
         }
@@ -28,16 +26,16 @@ namespace Controller
         public static void NextRace()
         {
             CurrentRace = null;
-            Track track = competition.NextTrack();
+            Track track = Competition.NextTrack();
             if (track != null)
             {
                 if (!Debug)
                 {
-                    CurrentRace = new Race(track, competition.Participants, 700);
+                    CurrentRace = new Race(track, Competition.Participants, 700);
                 }
                 else
                 {
-                    CurrentRace = new Race(track, competition.Participants, 50);
+                    CurrentRace = new Race(track, Competition.Participants, 50);
                 }
             } else
             {
@@ -48,13 +46,13 @@ namespace Controller
                     Console.WriteLine($"De competitie is afgelopen!!!!");
                     Console.WriteLine($"De WK-stand is uiteindelijk geworden:");
 
-                    foreach (IParticipant driver in competition.Participants)
+                    foreach (IParticipant driver in Competition.Participants)
                     {
                         Console.WriteLine($"{driver.Naam}: {driver.Points}");
                     }
                 } catch (IOException)
                 {
-           
+                    //We zitten in de WPF project. Dit wordt in GraphicalVisualisation afgehandelt.
                 }
             }
         }
@@ -64,20 +62,20 @@ namespace Controller
         /// </summary>
         private static void AddParticipants()
         {
-            competition.Participants = new List<IParticipant>();
+            Competition.Participants = new List<IParticipant>();
 
-            Driver DriverOne = new Driver();
-            DriverOne.Naam = "Max Verstappen";
-            DriverOne.Equipment = new Car();
-            DriverOne.TeamColor = TeamColors.Blue;
+            Driver driverOne = new Driver();
+            driverOne.Naam = "Max Verstappen";
+            driverOne.Equipment = new Car();
+            driverOne.TeamColor = TeamColors.Blue;
 
-            Driver DriverTwo = new Driver();
-            DriverTwo.Naam = "Charles Leclerc";
-            DriverTwo.Equipment = new Car();
-            DriverTwo.TeamColor = TeamColors.Red;
+            Driver driverTwo = new Driver();
+            driverTwo.Naam = "Charles Leclerc";
+            driverTwo.Equipment = new Car();
+            driverTwo.TeamColor = TeamColors.Red;
 
-            competition.Participants.Add(DriverOne);
-            competition.Participants.Add(DriverTwo);
+            Competition.Participants.Add(driverOne);
+            Competition.Participants.Add(driverTwo);
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace Controller
         /// </summary>
         private static void AddTracks()
         {
-            competition.Tracks = new Queue<Track>();
+            Competition.Tracks = new Queue<Track>();
 
             SectionTypes[] sectionTypesZandvoort = new SectionTypes[14];
             //Naar boven
@@ -150,11 +148,11 @@ namespace Controller
             //Naar boven weer
             sectionTypesSpa[17] = SectionTypes.Finish;
 
-            Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
-            Track TrackTwo = new Track("Spa", sectionTypesSpa);
+            Track trackOne = new Track("Zandvoort", sectionTypesZandvoort);
+            Track trackTwo = new Track("Spa", sectionTypesSpa);
 
-            competition.Tracks.Enqueue(TrackOne);
-            competition.Tracks.Enqueue(TrackTwo);
+            Competition.Tracks.Enqueue(trackOne);
+            Competition.Tracks.Enqueue(trackTwo);
             
         }
     }

@@ -42,8 +42,8 @@ namespace UnitTests
         {
             Data.Initialise();
             Thread.Sleep(3000);
-            Data.competition.Tracks.Dequeue();
-            Data.competition.Tracks.Dequeue();
+            Data.Competition.Tracks.Dequeue();
+            Data.Competition.Tracks.Dequeue();
 
             SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
             //Naar boven
@@ -53,13 +53,13 @@ namespace UnitTests
 
             Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
 
-            Data.competition.Tracks.Enqueue(TrackOne);
+            Data.Competition.Tracks.Enqueue(TrackOne);
             Data.NextRace();
 
             Boolean lapped = false;
             while (!lapped)
             {
-                foreach (KeyValuePair<IParticipant, int> entry in Race._participantslaps)
+                foreach (KeyValuePair<IParticipant, int> entry in Race.participantsLaps)
                 {
                     Assert.GreaterOrEqual(entry.Value, 1);
                     lapped = true;

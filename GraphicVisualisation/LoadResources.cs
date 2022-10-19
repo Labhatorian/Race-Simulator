@@ -15,65 +15,65 @@ namespace GraphicVisualisation
         /// <summary>
         /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
         /// </summary>
-        /// <param name="SectionString"></param>
+        /// <param name="bitmapString"></param>
         /// <returns>Bitmap</returns>
-        public static Bitmap GetBitmap(string SectionString)
+        public static Bitmap GetBitmap(string bitmapString)
         {
-                if (!Bitmaps.ContainsKey(SectionString))
+                if (!Bitmaps.ContainsKey(bitmapString))
                 {
-                    switch (SectionString)
+                    switch (bitmapString)
                     {
                         case "Straight":
                             Bitmap StraightLineBM = new(Straight);
-                            Bitmaps.Add(SectionString, StraightLineBM);
+                            Bitmaps.Add(bitmapString, StraightLineBM);
                             break;
                         case "LeftCorner":
                             Bitmap LeftCornerBM = new(LeftCorner);
-                        Bitmaps.Add(SectionString, LeftCornerBM);
+                        Bitmaps.Add(bitmapString, LeftCornerBM);
                             break;
                         case "RightCorner":
                             Bitmap RightCornerBM = new(RightCorner);
-                        Bitmaps.Add(SectionString, RightCornerBM);
+                        Bitmaps.Add(bitmapString, RightCornerBM);
                             break;
                         case "StartGrid":
                             Bitmap StartGridBM = new(StartGrid);
-                        Bitmaps.Add(SectionString, StartGridBM);
+                        Bitmaps.Add(bitmapString, StartGridBM);
                             break;
                         case "Finish":
                             Bitmap FinishBM = new(Finish);
-                        Bitmaps.Add(SectionString, FinishBM);
+                        Bitmaps.Add(bitmapString, FinishBM);
                             break;
                         case "Blue":
                         Bitmap BlueBM = new(Blue);
-                        Bitmaps.Add(SectionString, BlueBM);
+                        Bitmaps.Add(bitmapString, BlueBM);
                         break;
                         case "Green":
                         Bitmap GreenBM = new(Green);
-                        Bitmaps.Add(SectionString, GreenBM);
+                        Bitmaps.Add(bitmapString, GreenBM);
                         break;
                         case "Grey":
                         Bitmap GreyBM = new(Grey);
-                        Bitmaps.Add(SectionString, GreyBM);
+                        Bitmaps.Add(bitmapString, GreyBM);
                         break;
                         case "Red":
                         Bitmap RedBM = new(Red);
-                        Bitmaps.Add(SectionString, RedBM);
+                        Bitmaps.Add(bitmapString, RedBM);
                         break;
                         case "Yellow":
                         Bitmap YellowBM = new(Yellow);
-                        Bitmaps.Add(SectionString, YellowBM);
+                        Bitmaps.Add(bitmapString, YellowBM);
                         break;
                         case "Broken":
                         Bitmap BrokenBM = new(Broken);
-                        Bitmaps.Add(SectionString, BrokenBM);
+                        Bitmaps.Add(bitmapString, BrokenBM);
                         break;
                         case "Pitstop":
                         Bitmap PitstopBM = new(Pitstop);
-                        Bitmaps.Add(SectionString, PitstopBM);
+                        Bitmaps.Add(bitmapString, PitstopBM);
                         break;
                         case "Tree":
                         Bitmap TreeBM = new(Tree);
-                        Bitmaps.Add(SectionString, TreeBM);
+                        Bitmaps.Add(bitmapString, TreeBM);
                         break;
                     default:
                             Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
@@ -82,8 +82,8 @@ namespace GraphicVisualisation
                     }
             }
 
-            Bitmaps[SectionString].Clone();
-            return Bitmaps[SectionString];
+            Bitmaps[bitmapString].Clone();
+            return Bitmaps[bitmapString];
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace GraphicVisualisation
         }
 
         /// <summary>
-        /// Maakt een Bitmap zonder het circuit zelf
+        /// Maakt een Bitmap zonder het circuit zelf. Voegt willekeurig 10 bomen toe
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>

@@ -13,90 +13,88 @@ namespace GraphicVisualisation
 {
     public static class GraphicalVisualisation
     {
-        static Directions CurrentDirection = Directions.North;
-        static int CurrentXCounter = 0;
-        static int CurrentYCounter = 0;
-        static Dictionary<Section, int[]> SectionPositions = new();
+        private static Directions s_currentDirection = Directions.North;
+        private static int s_currentXCounter = 0;
+        private static int s_currentYCounter = 0;
+        private static Dictionary<Section, int[]> s_sectionPositions = new();
 
         /// <summary>
         /// Maakt één afbeelding van het circuit met alles er op en er aan en geeft dat door aan MainImage in MainWindow
         /// </summary>
-        /// <param name="Race"></param>
-        /// <param name="Track"></param>
-        /// <param name="String"></param>
+        /// <param name="race"></param>
+        /// <param name="track"></param>
         /// <returns>Bitmap</returns>
-        public static Bitmap DrawTrack(Race Race, Track Track, String String)
+        public static Bitmap DrawTrack(Race race, Track track)
         {
-            CurrentXCounter = 0;
-            CurrentYCounter = 0;
-            int OffsetFirstNorth = CountNorth(Track);
+            s_currentXCounter = 0;
+            s_currentYCounter = 0;
+            int offsetFirstTimeNorth = CountNorth(track);
 
-            Bitmap BM = LoadResources.GetBitmap("Empty");
+            Bitmap bitMap = LoadResources.GetBitmap("Empty");
 
-            using (Graphics g = Graphics.FromImage(BM))
+            using (Graphics g = Graphics.FromImage(bitMap))
             {
-                foreach (Section section in Track.Sections)
+                foreach (Section section in track.Sections)
                 {
-                    Bitmap ImageSection = LoadResources.GetBitmap(section.SectionType.ToString());                 
-                    switch (CurrentDirection)
+                    Bitmap imageSection = LoadResources.GetBitmap(section.SectionType.ToString());                 
+                    switch (s_currentDirection)
                     {
                         case Directions.North:
                             //Deze offset komt voort uit de console visualisatie. We beginnen met de StartGrid en die moet niet linksboven gedrawd worden.
-                            int YOffset = 500 * OffsetFirstNorth;
-                            g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!SectionPositions.ContainsKey(section))
+                            int yOffset = 500 * offsetFirstTimeNorth;
+                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset), 500, 500);
+                            PositionDrivers(race.GetSectionData(section), g, section);
+                            if (!s_sectionPositions.ContainsKey(section))
                             {
-                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter + YOffset) });
+                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset) });
                             }
                             
-                            if (OffsetFirstNorth > 0){
-                                OffsetFirstNorth--;
+                            if (offsetFirstTimeNorth > 0){
+                                offsetFirstTimeNorth--;
                             } else
                             {
-                                CurrentYCounter--;
+                                s_currentYCounter--;
                                 MoveDirection(section);
                             }
                             break;
                         case Directions.East:
-                            ImageSection = RotateImage(ImageSection, 90);
-                            g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!SectionPositions.ContainsKey(section))
+                            imageSection = RotateImage(imageSection, 90);
+                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
+                            PositionDrivers(race.GetSectionData(section), g, section);
+                            if (!s_sectionPositions.ContainsKey(section))
                             {
-                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
                             }
-                            CurrentXCounter++;
+                            s_currentXCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.South:
-                            ImageSection = RotateImage(ImageSection, 180);
-                            g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!SectionPositions.ContainsKey(section))
+                            imageSection = RotateImage(imageSection, 180);
+                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
+                            PositionDrivers(race.GetSectionData(section), g, section);
+                            if (!s_sectionPositions.ContainsKey(section))
                             {
-                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
                             }
 
-                            CurrentYCounter++;
+                            s_currentYCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.West:
-                            ImageSection = RotateImage(ImageSection, 270);
-                            g.DrawImage(ImageSection, (500 * CurrentXCounter), (500 * CurrentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!SectionPositions.ContainsKey(section))
+                            imageSection = RotateImage(imageSection, 270);
+                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
+                            PositionDrivers(race.GetSectionData(section), g, section);
+                            if (!s_sectionPositions.ContainsKey(section))
                             {
-                                SectionPositions.Add(section, new int[] { (500 * CurrentXCounter), (500 * CurrentYCounter) });
+                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
                             }
-                            CurrentXCounter--;
+                            s_currentXCounter--;
                             MoveDirection(section);
                             break;
                     }
                 }
-            }
-            
-            return BM;
+            }     
+            return bitMap;
         }
 
         /// <summary>
@@ -106,7 +104,7 @@ namespace GraphicVisualisation
         /// <returns></returns>
         private static int CountNorth(Track track)
         {
-            int Counter = 0;
+            int counter = 0;
             foreach(Section section in track.Sections)
             {
                 if(section.SectionType == SectionTypes.RightCorner || section.SectionType == SectionTypes.LeftCorner)
@@ -115,79 +113,79 @@ namespace GraphicVisualisation
                     
                 } else
                 {
-                    Counter++;
+                    counter++;
                 }
             }
-            return Counter;
+            return counter;
         }
 
         /// <summary>
-        /// Verandert Direction en dus ook X en Y
+        /// Verandert Direction en dus ook xCounter en yCounter zodat elk section op de goede plek terecht komt
         /// </summary>
         /// <param name="section"></param>
         private static void MoveDirection(Section section)
         {
-            Boolean ChangedDirection = false;
+            Boolean changedDirection = false;
             if (section.SectionType == SectionTypes.RightCorner)
             {
-                if (CurrentDirection == Directions.West)
+                if (s_currentDirection == Directions.West)
                 {
-                    CurrentDirection = 0;
+                    s_currentDirection = 0;
                 }
                 else
                 {
-                    CurrentDirection += 1;
+                    s_currentDirection += 1;
                 }
-                ChangedDirection = true;
+                changedDirection = true;
             }
 
             if (section.SectionType == SectionTypes.LeftCorner)
             {
-                CurrentDirection -= 1;
-                ChangedDirection = true;
+                s_currentDirection -= 1;
+                changedDirection = true;
 
-                if(CurrentDirection == Directions.South)
+                if(s_currentDirection == Directions.South)
                 {
-                    CurrentXCounter += 2;
+                    s_currentXCounter += 2;
                 }
-                if (CurrentDirection == Directions.East)
+                if (s_currentDirection == Directions.East)
                 {
-                    CurrentYCounter -= 2;
+                    s_currentYCounter -= 2;
 
                 }
             }
 
-            if (ChangedDirection)
+            if (changedDirection)
             {
-                switch (CurrentDirection)
+                switch (s_currentDirection)
                 {
                     case Directions.North:
-                       CurrentYCounter--;
-                       CurrentXCounter++;
+                       s_currentYCounter--;
+                       s_currentXCounter++;
                         break;
                     case Directions.East:
-                        CurrentXCounter++;
-                        CurrentYCounter++;
+                        s_currentXCounter++;
+                        s_currentYCounter++;
                         break;
                     case Directions.South:
-                        CurrentYCounter++;
-                        CurrentXCounter--;
+                        s_currentYCounter++;
+                        s_currentXCounter--;
                         break;
                     case Directions.West:
-                        CurrentXCounter--;
-                        CurrentYCounter--;
+                        s_currentXCounter--;
+                        s_currentYCounter--;
                         break;
                 }
             }
 
-            if(CurrentXCounter <= 0)
+            if(s_currentXCounter <= 0)
             {
-                CurrentXCounter = 0;
+                s_currentXCounter = 0;
             }
 
-            if(CurrentYCounter <= 0)
+            if(s_currentYCounter <= 0)
             {
-                CurrentYCounter = 0;
+                s_currentYCounter = 0;
             }
         }
 
@@ -202,7 +200,7 @@ namespace GraphicVisualisation
             IParticipant[] participants = new IParticipant[2];
             participants[0] = sectionData.Left;
             participants[1] = sectionData.Right;
-            Bitmap ImageSection = null;
+            Bitmap imageSection = null;
 
             //Haal kleur en direction op
             foreach (IParticipant participant in participants)
@@ -212,44 +210,42 @@ namespace GraphicVisualisation
                     switch (participant.TeamColor)
                     {
                         case TeamColors.Red:
-                            ImageSection = LoadResources.GetBitmap(TeamColors.Red.ToString());
+                            imageSection = LoadResources.GetBitmap(TeamColors.Red.ToString());
                             break;
                         case TeamColors.Blue:
-                            ImageSection = LoadResources.GetBitmap(TeamColors.Blue.ToString());
+                            imageSection = LoadResources.GetBitmap(TeamColors.Blue.ToString());
                             break;
                         case TeamColors.Yellow:
-                            ImageSection = LoadResources.GetBitmap(TeamColors.Yellow.ToString());
+                            imageSection = LoadResources.GetBitmap(TeamColors.Yellow.ToString());
                             break;
                         case TeamColors.Green:
-                            ImageSection = LoadResources.GetBitmap(TeamColors.Green.ToString());
+                            imageSection = LoadResources.GetBitmap(TeamColors.Green.ToString());
                             break;
                         case TeamColors.Grey:
-                            ImageSection = LoadResources.GetBitmap(TeamColors.Grey.ToString());
+                            imageSection = LoadResources.GetBitmap(TeamColors.Grey.ToString());
                             break;
                     }
 
 
-                    if (ImageSection != null)
+                    if (imageSection != null)
                     {
-                        switch (CurrentDirection)
+                        switch (s_currentDirection)
                         {
                             case Directions.East:
-                                ImageSection = RotateImage(ImageSection, 90);
+                                imageSection = RotateImage(imageSection, 90);
                                 break;
                             case Directions.South:
-                                ImageSection = RotateImage(ImageSection, 180);
+                                imageSection = RotateImage(imageSection, 180);
                                 break;
                             case Directions.West:
-                                ImageSection = RotateImage(ImageSection, 270);
+                                imageSection = RotateImage(imageSection, 270);
                                 break;
                             default:
                                 break;
                         }
                     }
-
-                    DrawDriver(sectionData, g, section, ImageSection, participant);
+                    DrawDriver(sectionData, g, section, imageSection, participant);
                 }
-
             }
         }
 
@@ -260,85 +256,84 @@ namespace GraphicVisualisation
         /// <param name="sectionData"></param>
         /// <param name="g"></param>
         /// <param name="section"></param>
-        /// <param name="ImageSection"></param>
+        /// <param name="imageSection"></param>
         /// <param name="participant"></param>
-        private static void DrawDriver(SectionData sectionData, Graphics g, Section section, Bitmap ImageSection, IParticipant participant)
+        private static void DrawDriver(SectionData sectionData, Graphics g, Section section, Bitmap imageSection, IParticipant participant)
         {
-            int Xpos = 0;
-            int Ypos = 0;
-            Bitmap ImageBroken = LoadResources.GetBitmap("Broken");
-            Bitmap ImagePitstop = LoadResources.GetBitmap("Pitstop");
-            if (ImageSection != null & (SectionPositions.ContainsKey(section)))
+            int xPos = 0;
+            int yPos = 0;
+            Bitmap imageBroken = LoadResources.GetBitmap("Broken");
+            Bitmap imagePitstop = LoadResources.GetBitmap("Pitstop");
+            if (imageSection != null & (s_sectionPositions.ContainsKey(section)))
             {
-                switch (CurrentDirection)
+                switch (s_currentDirection)
                 {
                     case Directions.East:
                         if (sectionData.Left == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 170;
-                            Ypos = SectionPositions[section][1] + 120;
+                            xPos = s_sectionPositions[section][0] + 170;
+                            yPos = s_sectionPositions[section][1] + 120;
                         }
                         if (sectionData.Right == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 20;
-                            Ypos = SectionPositions[section][1] + 160;
+                            xPos = s_sectionPositions[section][0] + 20;
+                            yPos = s_sectionPositions[section][1] + 160;
                         }
-                        ImageBroken = RotateImage(ImageBroken, 90);
+                        imageBroken = RotateImage(imageBroken, 90);
                         break;
                     case Directions.South:
                         if (sectionData.Left == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 200;
-                            Ypos = SectionPositions[section][1] + 200;
+                            xPos = s_sectionPositions[section][0] + 200;
+                            yPos = s_sectionPositions[section][1] + 200;
                         }
                         if (sectionData.Right == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 100;
-                            Ypos = SectionPositions[section][1] + 80;
+                            xPos = s_sectionPositions[section][0] + 100;
+                            yPos = s_sectionPositions[section][1] + 80;
                         }
-                        ImageBroken = RotateImage(ImageBroken, 180);
+                        imageBroken = RotateImage(imageBroken, 180);
                         break;
                     case Directions.West:
                         if (sectionData.Left == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 100;
-                            Ypos = SectionPositions[section][1] + 160;
+                            xPos = s_sectionPositions[section][0] + 100;
+                            yPos = s_sectionPositions[section][1] + 160;
                         }
                         if (sectionData.Right == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 200;
-                            Ypos = SectionPositions[section][1] + 120;
+                            xPos = s_sectionPositions[section][0] + 200;
+                            yPos = s_sectionPositions[section][1] + 120;
                         }
-                        ImageBroken = RotateImage(ImageBroken, 270);
+                        imageBroken = RotateImage(imageBroken, 270);
                         break;
                     default:
                         if (sectionData.Left == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 100;
-                            Ypos = SectionPositions[section][1] + 120;
+                            xPos = s_sectionPositions[section][0] + 100;
+                            yPos = s_sectionPositions[section][1] + 120;
                         }
                         if (sectionData.Right == participant)
                         {
-                            Xpos = SectionPositions[section][0] + 250;
-                            Ypos = SectionPositions[section][1] + 220;
+                            xPos = s_sectionPositions[section][0] + 250;
+                            yPos = s_sectionPositions[section][1] + 220;
                         }
                         break;
                 }
-                g.DrawImage(ImageSection, Xpos, Ypos, 150, 150);
+                g.DrawImage(imageSection, xPos, yPos, 150, 150);
                 if (participant.Equipment.IsBroken)
                 { 
-                    g.DrawImage(ImageBroken, Xpos, Ypos, 150, 150);
+                    g.DrawImage(imageBroken, xPos, yPos, 150, 150);
                 }
                 if (participant.TakingPitstop)
                 {
-                    g.DrawImage(ImagePitstop, Xpos, Ypos, 150, 150);
+                    g.DrawImage(imagePitstop, xPos, yPos, 150, 150);
                 }
             }
         }
 
         /// <summary>
         /// Draait bitmap om met een gekozen graad
-        /// https://stackoverflow.com/questions/36871291/how-do-you-rotate-a-bitmap-an-arbitrary-number-of-degrees
         /// </summary>
         /// <param name="b"></param>
         /// <param name="angle"></param>
