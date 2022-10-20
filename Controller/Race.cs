@@ -65,7 +65,15 @@ namespace Controller
             //Creator: PureDesign Girl - https://freesound.org/people/PureDesignGirl/
             //Source: https://freesound.org/people/PureDesignGirl/sounds/538828/
             //License: 'CC BY 4.0' - https://creativecommons.org/licenses/by/4.0/
-            _soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
+
+            try
+            {
+                _soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
+            } catch (Exception e)
+            {
+                _soundPlayer = null;
+            }
+            
 
             //timer en eventhandler klaar en we starten
             _timer = new Timer(timer);
@@ -401,7 +409,15 @@ namespace Controller
             RandomizeEquipment();
             _timer.AutoReset = false;
             _timer.Start();
-            _soundPlayer.PlayLooping();
+
+            try
+            {
+                _soundPlayer.PlayLooping();
+            }
+            catch (Exception e)
+            {
+                _soundPlayer = null;
+            }                    
         }
 
         /// <summary>
@@ -462,8 +478,11 @@ namespace Controller
             //Roep op driverfinished voor de volgend race
             if (!driverFound)
             {
-                _soundPlayer.Stop();
-                _soundPlayer = null;
+                if (_soundPlayer is not null)
+                {
+                    _soundPlayer.Stop();
+                    _soundPlayer = null;
+                }
                 _timer.Stop();
                 _timer.Enabled = false;
                 _timer.Dispose();

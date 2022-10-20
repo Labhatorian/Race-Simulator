@@ -71,7 +71,36 @@ namespace UnitTests
         public void GetSectionDataTest()
         {
             //Maak circuit aan, probeer sectiondata te krijgen en dan alweer om te kijken of hetzelfde is en probeern null
+            Data.Initialise();
+            Thread.Sleep(3000);
+            Data.Competition.Tracks.Dequeue();
+            Data.Competition.Tracks.Dequeue();
+
+            SectionTypes[] sectionTypesZandvoort = new SectionTypes[3];
+            //Naar boven
+            sectionTypesZandvoort[0] = SectionTypes.StartGrid;
+            sectionTypesZandvoort[1] = SectionTypes.Straight;
+            sectionTypesZandvoort[2] = SectionTypes.Finish;
+
+            Track TrackOne = new Track("Zandvoort", sectionTypesZandvoort);
+
+            Data.Competition.Tracks.Enqueue(TrackOne);
+            Data.NextRace();
+            SectionData sectionDataTest = Data.CurrentRace.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
+            SectionData sectionDataTest2 = Data.CurrentRace.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
+
+            Assert.That(sectionDataTest, Is.EqualTo(sectionDataTest2));
         }
 
+        [Test]
+        public void RaceStartTest()
+        {
+            Data.Initialise();
+            Data.NextRace();
+            Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
+            Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
+            Thread.Sleep(2000);
+            Assert.IsNotNull(Data.CurrentRace.Participants[0].Equipment.Quality);
+        }
     }
 }

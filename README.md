@@ -11,6 +11,10 @@ In opdracht van Windesheim. De eerste keer dat ik in C# heb gewerkt.<br />
 Simpel race simulator in de stijl van Formule 1. Heeft een console project en WPF project.<br />
 Dit is een vrij intensief project. Het is aangeraden om een vrij moden apparaat te gebruiken.<br />
 
+### Testen
+Testen gaat tijdens ontwikkeling via ReSharper . Soms heeft dit de neiging om niet te lukken om coverage te verkrijgen.<br />
+Het is aangeraden om testen paar keer te runnen om zeker te zijn.<br />
+
 ## Copyright
 De graphics van het Track en Car zijn opgehaald van Windesheim en aangepast waar nodig.<br />
 De code voor het converteren van Bitmap naar BitmapSource is opgehaald van Windesheim.<br />
