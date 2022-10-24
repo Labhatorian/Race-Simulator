@@ -7,9 +7,9 @@
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="GraphicVisualisation.MainWindow"
         xmlns:debug="clr-namespace:System.Diagnostics;assembly=System"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Race Simulator" Height="450" Width="800" Icon="/red.png">
     <Window.DataContext>
-        <local:DataContexter/>
+        <local:RaceSimDataContext/>
     </Window.DataContext>
     <Grid>
         <Grid x:Name="MainWindow1">
@@ -23,7 +23,7 @@
             <DockPanel LastChildFill="False">
                 <Menu Width="45" DockPanel.Dock="Top" Height="20" DataContext="{Binding Mode=OneWay}">
                     <MenuItem Header="Menu">
-                        <MenuItem Header="Competitieinfo" Click="MenuItem_Window1_Click"/>
+                        <MenuItem x:Name="ItemCompetitieInfo" Header="Competitieinfo" Click="MenuItem_Window1_Click"/>
                         <MenuItem Header="Raceinfo" Click="MenuItem_Window2_Click"/>
                         <MenuItem Header="Afsluiten" Click="MenuItem_Exit_Click"/>
                     </MenuItem>
@@ -31,6 +31,8 @@
             </DockPanel>
             <Label x:Name="TrackName" Content="{Binding trackname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White">
             </Label>
+            <Button x:Name="MoveDriver" Content="Help hem uit!" HorizontalAlignment="Left" Margin="612,22,0,0" VerticalAlignment="Top" Click="AddDistanceToDriver"/>
+            <Label x:Name="SelectDriverLabel" Content="Help een driver uit door hem te selecteren in Competitieinfo!" HorizontalAlignment="Left" Margin="525,42,0,0" VerticalAlignment="Top" Foreground="White" Width="249" Height="20" FontSize="9"/>
         </Grid>
     </Grid>
 </Window>

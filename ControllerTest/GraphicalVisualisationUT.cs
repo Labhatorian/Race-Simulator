@@ -10,7 +10,8 @@ namespace UnitTests
     [TestFixture]
     internal class GraphicalVisualisationUT
     {
-
+        //Niet aangeraden om calls van de windows te proberen in tests
+        //De compiler vindt het niet leuk als er threading calls wordt gedaan terwijl dat eigenlijk niet mag
         [SetUp]
         public void Setup()
         {
@@ -95,14 +96,28 @@ namespace UnitTests
         [Test]
         public void CircuitTest()
         {
+            //Moeilijk te testen want je moet het wel kunnen zien
+            //Testen op errors dus eigenlijk
             Data.Initialise();
             Data.NextRace();
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track);
         }
 
         [Test]
         public void DataContextTest()
         {
+            //Test alle datacontext mogelijk
+            //Maak race aan
+            //Haal data op
+            //Kijk of data klopt met gegevens die er zijn.
+
+            Data.Initialise();
+            Data.NextRace();
+            RaceSimDataContext raceSimDataContext = new();
+
+            Assert.That(Data.CurrentRace.Track.Name, Is.EqualTo(raceSimDataContext.trackname));
+            Assert.IsNotNull(raceSimDataContext.CompetitionStats[0]);
+            Assert.IsNotNull(raceSimDataContext.RaceDrivers[0]);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
+using GraphicVisualisation.Properties;
 
 namespace GraphicVisualisation
 {
@@ -15,67 +16,181 @@ namespace GraphicVisualisation
         /// <summary>
         /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
         /// </summary>
-        /// <param name="SectionString"></param>
+        /// <param name="bitmapString"></param>
         /// <returns>Bitmap</returns>
-        public static Bitmap GetBitmap(string SectionString)
+        public static Bitmap GetBitmap(string bitmapString)
         {
-                if (!Bitmaps.ContainsKey(SectionString))
+                if (!Bitmaps.ContainsKey(bitmapString))
                 {
-                    switch (SectionString)
+                    switch (bitmapString)
                     {
                         case "Straight":
-                            Bitmap StraightLineBM = new(Straight);
-                            Bitmaps.Add(SectionString, StraightLineBM);
+                            Bitmap StraightLineBM;
+                            try
+                            {
+                                StraightLineBM = new((Image)Resources.ResourceManager.GetObject("straight"));
+                            } catch (Exception e)
+                            {
+                                StraightLineBM = new(Straight);
+                            } 
+                            Bitmaps.Add(bitmapString, StraightLineBM);
                             break;
                         case "LeftCorner":
-                            Bitmap LeftCornerBM = new(LeftCorner);
-                        Bitmaps.Add(SectionString, LeftCornerBM);
+                        Bitmap LeftCornerBM;
+                        try
+                        {
+                            LeftCornerBM = new((Image)Resources.ResourceManager.GetObject("left"));
+                        }
+                        catch (Exception e)
+                        {
+                            LeftCornerBM = new(LeftCorner);
+                        }
+
+                        Bitmaps.Add(bitmapString, LeftCornerBM);
                             break;
                         case "RightCorner":
-                            Bitmap RightCornerBM = new(RightCorner);
-                        Bitmaps.Add(SectionString, RightCornerBM);
+                        Bitmap RightCornerBM;
+                        try
+                        {
+                            RightCornerBM = new((Image)Resources.ResourceManager.GetObject("right"));
+                        }
+                        catch (Exception e)
+                        {
+                            RightCornerBM = new(RightCorner);
+                        }
+
+                        Bitmaps.Add(bitmapString, RightCornerBM);
                             break;
                         case "StartGrid":
-                            Bitmap StartGridBM = new(StartGrid);
-                        Bitmaps.Add(SectionString, StartGridBM);
+                        Bitmap StartGridBM;
+                        try
+                        {
+                            StartGridBM = new((Image)Resources.ResourceManager.GetObject("start"));
+                        }
+                        catch (Exception e)
+                        {
+                            StartGridBM = new(StartGrid);
+                        }
+                        Bitmaps.Add(bitmapString, StartGridBM);
                             break;
                         case "Finish":
-                            Bitmap FinishBM = new(Finish);
-                        Bitmaps.Add(SectionString, FinishBM);
+                        Bitmap FinishBM;
+                        try
+                        {
+                            FinishBM = new((Image)Resources.ResourceManager.GetObject("finish"));
+                        }
+                        catch (Exception e)
+                        {
+                            FinishBM = new(Finish);
+                        }
+                        Bitmaps.Add(bitmapString, FinishBM);
                             break;
                         case "Blue":
-                        Bitmap BlueBM = new(Blue);
-                        Bitmaps.Add(SectionString, BlueBM);
+                        Bitmap BlueBM;
+                        try
+                        {
+                            BlueBM = new((Image)Resources.ResourceManager.GetObject("blue"));
+                        }
+                        catch (Exception e)
+                        {
+                            BlueBM = new(Blue);
+                        }
+                        Bitmaps.Add(bitmapString, BlueBM);
                         break;
                         case "Green":
-                        Bitmap GreenBM = new(Green);
-                        Bitmaps.Add(SectionString, GreenBM);
+                        Bitmap GreenBM;
+                        try
+                        {
+                            GreenBM = new((Image)Resources.ResourceManager.GetObject("green"));
+                        }
+                        catch (Exception e)
+                        {
+                            GreenBM = new(Green);
+                        }
+                        Bitmaps.Add(bitmapString, GreenBM);
                         break;
                         case "Grey":
-                        Bitmap GreyBM = new(Grey);
-                        Bitmaps.Add(SectionString, GreyBM);
+                        Bitmap GreyBM;
+                        try
+                        {
+                            GreyBM = new((Image)Resources.ResourceManager.GetObject("grey"));
+                        }
+                        catch (Exception e)
+                        {
+                            GreyBM = new(Grey);
+                        }
+                        Bitmaps.Add(bitmapString, GreyBM);
                         break;
                         case "Red":
-                        Bitmap RedBM = new(Red);
-                        Bitmaps.Add(SectionString, RedBM);
+                        Bitmap RedBM;
+                        try
+                        {
+                            RedBM = new((Image)Resources.ResourceManager.GetObject("red"));
+                        }
+                        catch (Exception e)
+                        {
+                            RedBM = new(Red);
+                        }
+                        Bitmaps.Add(bitmapString, RedBM);
                         break;
                         case "Yellow":
-                        Bitmap YellowBM = new(Yellow);
-                        Bitmaps.Add(SectionString, YellowBM);
+                        Bitmap YellowBM;
+                        try
+                        {
+                            YellowBM = new((Image)Resources.ResourceManager.GetObject("yellow"));
+                        }
+                        catch (Exception e)
+                        {
+                            YellowBM = new(Yellow);
+                        }
+                        Bitmaps.Add(bitmapString, YellowBM);
                         break;
                         case "Broken":
-                        Bitmap BrokenBM = new(Broken);
-                        Bitmaps.Add(SectionString, BrokenBM);
+                        Bitmap BrokenBM;
+                        try
+                        {
+                            BrokenBM = new((Image)Resources.ResourceManager.GetObject("broken"));
+                        }
+                        catch (Exception e)
+                        {
+                            BrokenBM = new(Broken);
+                        }
+                        Bitmaps.Add(bitmapString, BrokenBM);
+                        break;
+                        case "Pitstop":
+                        Bitmap PitstopBM;
+                        try
+                        {
+                            PitstopBM = new((Image)Resources.ResourceManager.GetObject("pitstop"));
+                        }
+                        catch (Exception e)
+                        {
+                            PitstopBM = new(Pitstop);
+                        }
+                        Bitmaps.Add(bitmapString, PitstopBM);
+                        break;
+                        case "Tree":
+                        Bitmap TreeBM;
+                        try
+                        {
+                            TreeBM = new((Image)Resources.ResourceManager.GetObject("tree"));
+                        }
+                        catch (Exception e)
+                        {
+                            TreeBM = new(Tree);
+                        }
+                        Bitmaps.Add(bitmapString, TreeBM);
                         break;
                     default:
-                            Bitmap EmptBitmap = EmptyBitmap(2000, 2500);
+                        Bitmap EmptBitmap;
+                            EmptBitmap = EmptyBitmap(2000, 2500);
                             Bitmaps.Add("Empty", EmptBitmap);
                             break;
                     }
-                }
+            }
 
-            Bitmaps[SectionString].Clone();
-            return Bitmaps[SectionString];
+            Bitmaps[bitmapString].Clone();
+            return Bitmaps[bitmapString];
         }
 
         /// <summary>
@@ -87,20 +202,27 @@ namespace GraphicVisualisation
         }
 
         /// <summary>
-        /// Maakt een Bitmap zonder het circuit zelf
+        /// Maakt een Bitmap zonder het circuit zelf. Voegt willekeurig 10 bomen toe
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns>Bitmap</returns>
         public static Bitmap EmptyBitmap(int x, int y)
         {
-            //TODO voeg bomen toe
             Bitmap BM = new Bitmap(x, y);
             SolidBrush SB = new SolidBrush(Color.Green);
+            Bitmap Tree = GetBitmap("Tree");
+            Random random = new Random();
+
             using (Graphics graph = Graphics.FromImage(BM))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
+
+                for(int i = 0; i <= 10; i++)
+                {
+                    graph.DrawImage(Tree, random.Next(0, x)-100, random.Next(0, y)-300, 500, 500);
+                }
             }
             return BM;
         }
@@ -146,21 +268,24 @@ namespace GraphicVisualisation
 
         #region GRAPHICS
         //Sections
-        const string Straight    = "..\\..\\..\\Graphics\\straight.png";
-        const string LeftCorner  = "..\\..\\..\\Graphics\\left.png";
-        const string RightCorner = "..\\..\\..\\Graphics\\right.png";
-        const string StartGrid   = "..\\..\\..\\Graphics\\start.png";
-        const string Finish      = "..\\..\\..\\Graphics\\finish.png";
+        const string Straight    = "..\\..\\..\\Content\\straight.png";
+        const string LeftCorner  = "..\\..\\..\\Content\\left.png";
+        const string RightCorner = "..\\..\\..\\Content\\right.png";
+        const string StartGrid   = "..\\..\\..\\Content\\start.png";
+        const string Finish      = "..\\..\\..\\Content\\finish.png";
+
+        const string Tree = "..\\..\\..\\Content\\tree.png";
 
         //Cars
-        const string Blue = "..\\..\\..\\Graphics\\blue.png";
-        const string Green = "..\\..\\..\\Graphics\\green.png";
-        const string Grey = "..\\..\\..\\Graphics\\grey.png";
-        const string Red = "..\\..\\..\\Graphics\\red.png";
-        const string Yellow = "..\\..\\..\\Graphics\\yellow.png";
+        const string Blue = "..\\..\\..\\Content\\blue.png";
+        const string Green = "..\\..\\..\\Content\\green.png";
+        const string Grey = "..\\..\\..\\Content\\grey.png";
+        const string Red = "..\\..\\..\\Content\\red.png";
+        const string Yellow = "..\\..\\..\\Content\\yellow.png";
 
         //Broken
-        const string Broken = "..\\..\\..\\Graphics\\broken.png";
+        const string Broken = "..\\..\\..\\Content\\broken.png";
+        const string Pitstop = "..\\..\\..\\Content\\pitstop.png";
         #endregion
     }
 }

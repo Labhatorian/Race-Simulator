@@ -1,27 +1,8 @@
 ﻿using Controller;
 using Model;
-using Race_Simulator;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Model;
 using System.Windows.Threading;
-using System.Drawing;
-using Image = System.Drawing.Image;
-using Rectangle = System.Drawing.Rectangle;
-using Brushes = System.Drawing.Brushes;
-using System.Xml;
 
 namespace GraphicVisualisation
 {
@@ -32,7 +13,7 @@ namespace GraphicVisualisation
     {
         private Window1 Window1;
         private Window2 Window2;
-        public DataContexter DataContexter { get; set; }
+        public RaceSimDataContext DataContexter { get; set; }
         /// <summary>
         /// De nieuwe Main(). Maak competitie en start volgende race.
         /// </summary>
@@ -40,11 +21,9 @@ namespace GraphicVisualisation
         { 
             Data.Initialise();
             Data.NextRace();
-
             InitializeComponent();
-            DataContexter = (DataContexter)this.DataContext;
+            DataContexter = (RaceSimDataContext)this.DataContext;
 
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
             Data.CurrentRace.DriversChanged += OnDriverChanged;
             Data.CurrentRace.DriversFinished += OnDriversFinished;  
         }
@@ -62,7 +41,7 @@ namespace GraphicVisualisation
                 new Action(() =>
                 {
                     this.MainImage.Source = null;
-                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(Data.CurrentRace, e.Track, e.Section.SectionType.ToString())); ;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(Data.CurrentRace, e.Track)); ;
                 }));
         }
 
@@ -71,11 +50,9 @@ namespace GraphicVisualisation
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        public void OnDriversFinished(Object source, EventArgs e)
+        public async void OnDriversFinished(Object source, EventArgs e)
         {
             Data.CurrentRace = null;
-            //Window1.Close();
-            //Window2.Close();
             Data.NextRace();
 
             LoadResources.Clear();
@@ -83,11 +60,20 @@ namespace GraphicVisualisation
             {
                 Data.CurrentRace.DriversChanged += OnDriverChanged;
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
-                GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track, null);
-                DataContexter.DataContexterRefresh();
+                GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track);
+                DataContexter.DataContextRefresh();
             } else
             {
-                //TODO Niks zien en laat competitie window zien
+                SectionTypes[] sectionTypesEmptyTrack = new SectionTypes[0];
+                Track emptyTrack = new Track("", sectionTypesEmptyTrack);
+                
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    this.MainImage.Source = null;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(null, emptyTrack));
+                    Window1 = new Window1(DataContexter);
+                    Window1.Owner = this;
+                    Window1.Show();
+                });
             }
         }
 
@@ -123,6 +109,22 @@ namespace GraphicVisualisation
             Window1 = new Window1(DataContexter);
             Window1.Owner = this;
             Window1.Show();
+        }
+
+        /// <summary>
+        /// Als er op de knop 'Help hem uit!' is gedrukt. Zeg tegen het spel dat er extra distance moet worden toegevoegd aan de geselecteerde driver
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddDistanceToDriver(object sender, RoutedEventArgs e)
+        {
+            if (Window1 is not null)
+            {
+                if (Window1.SelectedDriver is not null)
+                {
+                    Window1.SelectedDriver.Equipment.UserAddedDistance = true;
+                }
+            }
         }
     }
 }

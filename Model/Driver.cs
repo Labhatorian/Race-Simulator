@@ -12,5 +12,7 @@ namespace Model
         public int Points { get; set; }
         public IEquipment Equipment { get; set; }
         public TeamColors TeamColor { get; set; }
+        public Boolean ToTakePitstop { get; set; }
+        public Boolean TakingPitstop { get; set; }
     }
 }

@@ -6,8 +6,8 @@ namespace Race_Simulator
     public static class Visualisation
     {
         //Voor het correct plaatsen van de sections
-        static Directions CurrentDirection = Directions.North;
-        private static Dictionary<Section, int[]> SectionPositions = new();
+        private static Directions s_currentDirection = Directions.North;
+        private static Dictionary<Section, int[]> s_sectionPositions = new();
 
         /// <summary>
         /// Initialiseert de console
@@ -15,55 +15,53 @@ namespace Race_Simulator
         public static void Initialise()
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
-          
         }
 
         //Variabelen die bij DrawTrack() horen
-        static int CurrentXPos = 0;
-        static int CurrentXCounter = 0;
-        static int CurrentYCounter = 0;
-        static int CurrentYPos = 0;
-        static int PreviousDirection;
+        private static int s_currentXPos = 0;
+        private static int s_currentXCounter = 0;
+        private static int s_currentYCounter = 0;
+        private static int s_currentYPos = 0;
+        private static int s_previousDirection;
 
         /// <summary>
         /// Code dat uitzoekt welk graphic moet worden geprint. En waar hij moet worden geprint.
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
-        public static void DrawTrack(Track track, Race race, Section? sectiondriver, Section? previoussection)
+        public static void DrawTrack(Track track, Race race, Section? sectionDriver, Section? previousSection)
         {
             //Reset alles    
-            CurrentXPos = 0;
-            CurrentXCounter = 0;
-            CurrentYCounter = 0;
-            CurrentYPos = 0;
-            LinkedList<Section> Sections;
+            s_currentXPos = 0;
+            s_currentXCounter = 0;
+            s_currentYCounter = 0;
+            s_currentYPos = 0;
+            LinkedList<Section> sections;
             //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
             //Dus herinneren wij de console elke keer aan met een klap
             Console.CursorVisible = false;
 
-            
             //Als we alleen een deel moeten updaten, voeg alleen die sections toe
-            if (sectiondriver != null)
+            if (sectionDriver != null)
             {
-                Sections = new();
-                Sections.AddFirst(sectiondriver);
-                Sections.AddLast(previoussection);
+                sections = new();
+                sections.AddFirst(sectionDriver);
+                sections.AddLast(previousSection);
             } else
             {
                 Console.Clear();
-                Sections = new(track.Sections);
+                sections = new(track.Sections);
             }
 
             //Zoek uit voor elk sectie wat moet worden geprint
             //Bij left of right corner, verander richting
-            foreach (Section section in Sections)
+            foreach (Section section in sections)
             {
                 //Sla direction op voor als we deze moeten opslaan
-                PreviousDirection = (int)CurrentDirection;
-                if (sectiondriver != null)
+                s_previousDirection = (int)s_currentDirection;
+                if (sectionDriver != null)
                 {
-                    CurrentDirection = (Directions)SectionPositions[section][2];
+                    s_currentDirection = (Directions)s_sectionPositions[section][2];
                 }
 
                 //Hier gaat de code langs om te kijken wat er moet worden gevisualiseerd
@@ -71,7 +69,7 @@ namespace Race_Simulator
                 switch (section.SectionType)
                 {
                     case SectionTypes.Straight:
-                        switch (CurrentDirection)
+                        switch (s_currentDirection)
                         {
                             case Directions.East:
                                 PrintTrack(_straighteast, race.GetSectionData(section), section);
@@ -88,7 +86,7 @@ namespace Race_Simulator
                         }
                         break;
                     case SectionTypes.LeftCorner:
-                        switch (CurrentDirection)
+                        switch (s_currentDirection)
                         {
                             case Directions.East:
                                 PrintTrack(_leftcornereast, race.GetSectionData(section), section);
@@ -103,13 +101,13 @@ namespace Race_Simulator
                                 PrintTrack(_leftcorner, race.GetSectionData(section), section);
                                 break;
                         }
-                        if (sectiondriver == null)
+                        if (sectionDriver == null)
                         {
-                            CurrentDirection -= 1;
+                            s_currentDirection -= 1;
                         }
                         break;
                     case SectionTypes.RightCorner:
-                        switch (CurrentDirection)
+                        switch (s_currentDirection)
                         {
                             case Directions.East:
                                 PrintTrack(_rightcornereast, race.GetSectionData(section), section);
@@ -126,12 +124,12 @@ namespace Race_Simulator
                         }
 
                         //Zodat hij reset naar boven bij einde
-                        if (CurrentDirection != Directions.West & sectiondriver == null)
+                        if (s_currentDirection != Directions.West & sectionDriver == null)
                         {
-                            CurrentDirection += 1;
+                            s_currentDirection += 1;
                         } else
                         {
-                            CurrentDirection = 0;
+                            s_currentDirection = 0;
                         }
                      break;
                     case SectionTypes.StartGrid:
@@ -143,11 +141,11 @@ namespace Race_Simulator
                 }
 
                 //Slaat section x,y en direction op in dictionary voor later gebruik
-                if (!SectionPositions.ContainsKey(section))
+                if (!s_sectionPositions.ContainsKey(section))
                 {
-                    SectionPositions.Add(section, new int[] { CurrentXPos, CurrentYPos, PreviousDirection});
+                    s_sectionPositions.Add(section, new int[] { s_currentXPos, s_currentYPos, s_previousDirection});
                     //Update posities voor de rest van de track
-                    switch (CurrentDirection)
+                    switch (s_currentDirection)
                     {
                         case Directions.North:
                             //Verplaatst scherm naar onder zodat sections niet worden overwritten
@@ -157,11 +155,11 @@ namespace Race_Simulator
 
                                 //We moeten alles omlaag plaatsen in de dictionary als we Console.MoveBufferArea hebben gebruikt
                                 //Voorkomt dat hij verkeert print
-                                foreach(Section movedsection in Sections)
+                                foreach(Section movedsection in sections)
                                 {
-                                    if (SectionPositions.ContainsKey(movedsection))
+                                    if (s_sectionPositions.ContainsKey(movedsection))
                                     {
-                                        SectionPositions[movedsection][1] += 6;
+                                        s_sectionPositions[movedsection][1] += 6;
                                     }
                                 }
                             }
@@ -169,23 +167,23 @@ namespace Race_Simulator
                             //Noord is anders dus kan niet in functie
                             if (section.SectionType == SectionTypes.RightCorner)
                             {
-                                CurrentXPos = 0;
-                                CurrentYPos = 6 * (CurrentYCounter - 1);
+                                s_currentXPos = 0;
+                                s_currentYPos = 6 * (s_currentYCounter - 1);
                             }
                             break;
                         case Directions.East:
-                            CurrentXCounter += 1;
-                            CurrentXPos += 11;
+                            s_currentXCounter += 1;
+                            s_currentXPos += 11;
                             SetCurrentXYPos(section, 11, 6);
                             break;
                         case Directions.South:
-                            CurrentYPos += 6;
-                            CurrentYCounter += 1;
+                            s_currentYPos += 6;
+                            s_currentYCounter += 1;
                             SetCurrentXYPos(section, 11, 6);
                             break;
                         case Directions.West:
-                            CurrentXPos -= 11;
-                            CurrentXCounter -= 1;
+                            s_currentXPos -= 11;
+                            s_currentXCounter -= 1;
                             SetCurrentXYPos(section, 11, 6);
                             break;
                     }
@@ -197,17 +195,17 @@ namespace Race_Simulator
         }
 
         /// <summary>
-        /// Update Ypos en Xpos voor de volgende section die moet worden gevisualiseerd
+        /// Update yPos en xPos voor de volgende section die moet worden gevisualiseerd
         /// </summary>
         /// <param name="section"></param>
-        /// <param name="Xpos"></param>
-        /// <param name="Ypos"></param>
-        private static void SetCurrentXYPos(Section section, int Xpos, int Ypos)
+        /// <param name="xPos"></param>
+        /// <param name="yPos"></param>
+        private static void SetCurrentXYPos(Section section, int xPos, int yPos)
         {
             if (section.SectionType == SectionTypes.RightCorner)
             {
-                CurrentYPos = Ypos * (CurrentYCounter);
-                CurrentXPos = Xpos * CurrentXCounter;
+                s_currentYPos = yPos * (s_currentYCounter);
+                s_currentXPos = xPos * s_currentXCounter;
             }
         }
 
@@ -219,70 +217,70 @@ namespace Race_Simulator
         private static void PrintTrack(string[] array, SectionData data, Section section)
         { 
             string[] strings;
-            int CounterX;
-            int CounterY;
+            int countX;
+            int countY;
 
             //Haalt positie op als section al is opgeslagen met haar positie. Anders is het al berekent
-            if (!SectionPositions.ContainsKey(section))
+            if (!s_sectionPositions.ContainsKey(section))
             {
-                CounterX = CurrentXPos;
-                CounterY = CurrentYPos;
+                countX = s_currentXPos;
+                countY = s_currentYPos;
             } else
             {
-                CounterX = SectionPositions[section][0];
-                CounterY = SectionPositions[section][1];
+                countX = s_sectionPositions[section][0];
+                countY = s_sectionPositions[section][1];
 
             }
             
             //Print out
             foreach (string toWrite in array)
             {
-                    Console.SetCursorPosition(CounterX, CounterY);
+                    Console.SetCursorPosition(countX, countY);
                     Console.Write(SetParticipants(toWrite, data.Left, data.Right));
-                    CounterY++;
+                    countY++;
             }
         }
 
         /// <summary>
         /// Zet voorletter van driver neer op de goede plek. Zet niks neer als er niemand is in SectionData of % als driver kapot is
         /// </summary>
-        /// <param name="String"></param>
+        /// <param name="stringToReplace"></param>
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        private static string SetParticipants(string String, IParticipant left, IParticipant right)
+        private static string SetParticipants(string stringToReplace, IParticipant left, IParticipant right)
         {
 
             if (left != null)
             {
                 if (!left.Equipment.IsBroken)
                 {
-                    String = String.Replace("@", left.Naam.Substring(0, 1));
+                    stringToReplace = stringToReplace.Replace("@", left.Naam.Substring(0, 1));
                 }
                 else
                 {
-                    String = String.Replace("@", "%");
+                    stringToReplace = stringToReplace.Replace("@", "%");
                 }
             } else
             {
-                String = String.Replace("@", " ");
+                stringToReplace = stringToReplace.Replace("@", " ");
             }
 
             if (right != null)
             {
                 if (!right.Equipment.IsBroken)
                 {
-                    String = String.Replace("#", right.Naam.Substring(0, 1));
+                    stringToReplace = stringToReplace.Replace("#", right.Naam.Substring(0, 1));
                 } 
                 else
                 {
-                    String = String.Replace("#", "%");
+                    stringToReplace = stringToReplace.Replace("#", "%");
                 }
             } else
             {
-                String = String.Replace("#", " ");
+                stringToReplace = stringToReplace.Replace("#", " ");
             }
-            return String;
+            return stringToReplace;
         }
 
         /// <summary>

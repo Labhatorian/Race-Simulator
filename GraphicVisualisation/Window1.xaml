@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphicVisualisation"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="Race Simulator - Competitie Statistieken" Height="280" Width="420" Icon="/red.png" ShowInTaskbar="False">
     <Grid>
-        <ListView x:Name="CompetitionList" HorizontalAlignment="Center" Height="175" VerticalAlignment="Center" Width="384" ItemsSource="{Binding Path=table}">
+        <ListView Name="CompetitionList" HorizontalAlignment="Left" Height="175" VerticalAlignment="Top" Width="384" ItemsSource="{Binding Path=CompetitionStats}" SelectionChanged="ItemSelectionChanged" Margin="16,52,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Driver" DisplayMemberBinding="{Binding Path=Name}"/>
@@ -15,7 +15,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="Competitiepunten" HorizontalAlignment="Center" Margin="0,54,0,0" VerticalAlignment="Top"/>
+        <Label Content="Competitie Statistieken" HorizontalAlignment="Left" Margin="142,21,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

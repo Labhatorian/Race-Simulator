@@ -21,35 +21,11 @@ namespace ControllerTest
         [SetUp]
         public void Setup()
         {
-            //Visualisation.Initialise();
 
-
-            //List<IParticipant> participants = new List<IParticipant>();
-
-            //Driver DriverOne = new Driver();
-            //DriverOne.Naam = "Max Verstappen";
-            //DriverOne.Equipment = new Car();
-
-            //Driver DriverTwo = new Driver();
-            //DriverTwo.Naam = "Lewis Hamilton";
-            //DriverTwo.Equipment = new Car();
-
-            //participants.Add(DriverOne);
-            //participants.Add(DriverTwo);
-
-            //SectionTypes[] sectionTest = new SectionTypes[3];
-            //sectionTest[0] = SectionTypes.StartGrid;
-            //sectionTest[1] = SectionTypes.Straight;
-            //sectionTest[1] = SectionTypes.RightCorner;
-            //sectionTest[1] = SectionTypes.LeftCorner;
-            //sectionTest[2] = SectionTypes.Finish;
-
-            //TrackTest = new Track("Test", sectionTest);
-            //racetest = new Race(TrackTest, participants, 500);
         }
 
         [Test]
-        public void VisualisationTest()
+        public void VisualisationEventTest()
         {
             Data.Initialise();
             Visualisation.Initialise();
@@ -66,7 +42,15 @@ namespace ControllerTest
             {
                 Assert.Fail("Expected no exception, but got: " + ex.Message);
             }
-           // Assert.AreEqual(TrackTest.Name, Data.CurrentRace.Track.Name);
+        }
+
+        [Test]
+        //Ook hier zijn we afhanklijk van de race en haar timer functie waardoor dit vrij simpel test is
+        public void VisualisationTest()
+        {
+            //Maak circuit aan en probeer dat te laten zien
+            //Maak leeg circuit aan
+            
         }
     }
 }
