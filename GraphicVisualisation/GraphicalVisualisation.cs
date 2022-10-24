@@ -16,7 +16,7 @@ namespace GraphicVisualisation
         private static Directions s_currentDirection = Directions.North;
         private static int s_currentXCounter = 0;
         private static int s_currentYCounter = 0;
-        private static Dictionary<Section, int[]> s_sectionPositions = new();
+        private static readonly Dictionary<Section, int[]> s_sectionPositions = new();
 
         /// <summary>
         /// Maakt één afbeelding van het circuit met alles er op en er aan en geeft dat door aan MainImage in MainWindow
@@ -24,7 +24,7 @@ namespace GraphicVisualisation
         /// <param name="race"></param>
         /// <param name="track"></param>
         /// <returns>Bitmap</returns>
-        public static Bitmap DrawTrack(Race race, Track track)
+        public static Bitmap DrawTrack(Track track)
         {
             s_currentXCounter = 0;
             s_currentYCounter = 0;
@@ -43,7 +43,7 @@ namespace GraphicVisualisation
                             //Deze offset komt voort uit de console visualisatie. We beginnen met de StartGrid en die moet niet linksboven gedrawd worden.
                             int yOffset = 500 * offsetFirstTimeNorth;
                             g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset), 500, 500);
-                            PositionDrivers(race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!s_sectionPositions.ContainsKey(section))
                             {
                                 s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset) });
@@ -60,7 +60,7 @@ namespace GraphicVisualisation
                         case Directions.East:
                             imageSection = RotateImage(imageSection, 90);
                             g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!s_sectionPositions.ContainsKey(section))
                             {
                                 s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
@@ -71,7 +71,7 @@ namespace GraphicVisualisation
                         case Directions.South:
                             imageSection = RotateImage(imageSection, 180);
                             g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!s_sectionPositions.ContainsKey(section))
                             {
                                 s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
@@ -83,7 +83,7 @@ namespace GraphicVisualisation
                         case Directions.West:
                             imageSection = RotateImage(imageSection, 270);
                             g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(race.GetSectionData(section), g, section);
+                            PositionDrivers(Race.GetSectionData(section), g, section);
                             if (!s_sectionPositions.ContainsKey(section))
                             {
                                 s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
@@ -341,7 +341,7 @@ namespace GraphicVisualisation
         public static Bitmap RotateImage(Bitmap b, float angle)
         {
             //create a new empty bitmap to hold rotated image
-            Bitmap returnBitmap = new Bitmap(b.Width, b.Height);
+            Bitmap returnBitmap = new(b.Width, b.Height);
             //make a graphics object from the empty bitmap
             using (Graphics g = Graphics.FromImage(returnBitmap))
             {

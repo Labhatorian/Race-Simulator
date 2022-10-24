@@ -27,13 +27,15 @@ namespace Model
         /// </summary>
         /// <param name="sections"></param>
         /// <returns></returns>
-        private LinkedList<Section> ConvertSections(SectionTypes[] sections)
+        private static LinkedList<Section> ConvertSections(SectionTypes[] sections)
         {
-            LinkedList<Section> sectionList = new LinkedList<Section>();
+            LinkedList<Section> sectionList = new();
             foreach (SectionTypes sectionType in sections)
             {
-                Section section = new Section();
-                section.SectionType = sectionType;
+                Section section = new()
+                {
+                    SectionType = sectionType
+                };
                 sectionList.AddLast(section);
             }
             return sectionList;

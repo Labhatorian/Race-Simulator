@@ -26,17 +26,17 @@ namespace GraphicVisualisation
         /// Voor de label bovenaan de scherm. Laat circuitnaam zien
         /// _tracknames wordt niet geupdatet tijdens de competitie
         /// </summary>
-        public string trackname { get; set; }
-        private List<Track> _tracknames = Data.Competition.Tracks.ToList();
+        public string Trackname { get; set; }
+        private readonly List<Track> _tracknames = Data.Competition.Tracks.ToList();
 
         /// <summary>
         /// Begin met als eerst gegevens ophalen zodat er geen leeg label en tabellen zijn bij opstarten
         /// </summary>
         public RaceSimDataContext()
         {
-            trackname = GetTrackName();
+            Trackname = GetTrackName();
             DataContextRefresh();
-            OnPropertyChanged("trackname");
+            OnPropertyChanged(nameof(Trackname));
         }
 
         /// <summary>
@@ -67,15 +67,15 @@ namespace GraphicVisualisation
         /// <param name="e"></param>
         private void OnDriverChanged(object sender, EventArgs e)
         {
-            trackname = GetTrackName();
+            Trackname = GetTrackName();
             if (SelectedDriver != null)
             {
                 IParticipant driver = (IParticipant)Data.Competition.Participants.Where(s => s.Naam.Equals(SelectedDriver)).Single();
                 UpdateRaceDriverInfo(driver);
-                OnPropertyChanged("RaceDriversDriverInfo");
+                OnPropertyChanged(nameof(RaceDriversDriverInfo));
             }
             UpdateCompetitionInfo();
-            OnPropertyChanged(trackname);
+            OnPropertyChanged(nameof(Trackname));
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace GraphicVisualisation
         private void OnDriverFinished(object sender, EventArgs e)
         {
             UpdateCompetitionInfo();         
-            OnPropertyChanged(trackname);
+            OnPropertyChanged(nameof(Trackname));
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace GraphicVisualisation
             Data.Competition.Participants.Where(s => Data.Competition.Participants.Contains(s))
                 .ToList()
                 .ForEach(i => CompetitionStats.Add(new CompetitionRow(i.Naam, i.Points)));
-            OnPropertyChanged("CompetitionStats");
+            OnPropertyChanged(nameof(CompetitionStats));
         }
 
 
@@ -120,7 +120,7 @@ namespace GraphicVisualisation
         Data.Competition.Participants.Where(s => Data.CurrentRace.Participants.Contains(s))
             .ToList()
             .ForEach(i => RaceDrivers.Add(new DriverRow(i.Naam, i.TeamColor.ToString())));
-            OnPropertyChanged("RaceDrivers");
+            OnPropertyChanged(nameof(RaceDrivers));
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace GraphicVisualisation
             {
                 RaceDriversDriverInfo.Add(new DriverInfo(Lapcount, i.Equipment.Quality, i.Equipment.Performance, i.Equipment.Speed, i.Equipment.IsBroken));
             });
-            OnPropertyChanged("RaceDriversDriverInfo");
+            OnPropertyChanged(nameof(RaceDriversDriverInfo));
         }
     }
 

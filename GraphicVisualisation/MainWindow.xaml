@@ -29,7 +29,7 @@
                     </MenuItem>
                 </Menu>
             </DockPanel>
-            <Label x:Name="TrackName" Content="{Binding trackname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White">
+            <Label x:Name="TrackName" Content="{Binding Trackname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Center" Margin="0,17,0,0" VerticalAlignment="Top" Foreground="White">
             </Label>
             <Button x:Name="MoveDriver" Content="Help hem uit!" HorizontalAlignment="Left" Margin="612,22,0,0" VerticalAlignment="Top" Click="AddDistanceToDriver"/>
             <Label x:Name="SelectDriverLabel" Content="Help een driver uit door hem te selecteren in Competitieinfo!" HorizontalAlignment="Left" Margin="525,42,0,0" VerticalAlignment="Top" Foreground="White" Width="249" Height="20" FontSize="9"/>

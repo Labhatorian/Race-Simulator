@@ -64,15 +64,19 @@ namespace Controller
         {
             Competition.Participants = new List<IParticipant>();
 
-            Driver driverOne = new Driver();
-            driverOne.Naam = "Max Verstappen";
-            driverOne.Equipment = new Car();
-            driverOne.TeamColor = TeamColors.Blue;
+            Driver driverOne = new()
+            {
+                Naam = "Max Verstappen",
+                Equipment = new Car(),
+                TeamColor = TeamColors.Blue
+            };
 
-            Driver driverTwo = new Driver();
-            driverTwo.Naam = "Charles Leclerc";
-            driverTwo.Equipment = new Car();
-            driverTwo.TeamColor = TeamColors.Red;
+            Driver driverTwo = new()
+            {
+                Naam = "Charles Leclerc",
+                Equipment = new Car(),
+                TeamColor = TeamColors.Red
+            };
 
             Competition.Participants.Add(driverOne);
             Competition.Participants.Add(driverTwo);
@@ -148,8 +152,8 @@ namespace Controller
             //Naar boven weer
             sectionTypesSpa[17] = SectionTypes.Finish;
 
-            Track trackOne = new Track("Zandvoort", sectionTypesZandvoort);
-            Track trackTwo = new Track("Spa", sectionTypesSpa);
+            Track trackOne = new("Zandvoort", sectionTypesZandvoort);
+            Track trackTwo = new("Spa", sectionTypesSpa);
 
             Competition.Tracks.Enqueue(trackOne);
             Competition.Tracks.Enqueue(trackTwo);

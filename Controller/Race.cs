@@ -10,7 +10,7 @@ namespace Controller
         //Parameters voor de race
         public Track Track { get; set; }
         public List<IParticipant> Participants;
-        private Random _random;
+        private readonly Random _random;
         private Timer _timer;
         private int _finishCounter = 0;
         private SoundPlayer _soundPlayer;
@@ -29,7 +29,7 @@ namespace Controller
         /// </summary>
         /// <param name="section"></param>
         /// <returns></returns>
-        public SectionData GetSectionData(Section section)
+        public static SectionData GetSectionData(Section section)
         {
             positions.TryGetValue(section, out var value);
 
@@ -39,7 +39,7 @@ namespace Controller
             }
             else
             {
-                SectionData sectionData = new SectionData();
+                SectionData sectionData = new();
                 positions.Add(section, sectionData);
                 return sectionData;
             }
@@ -100,7 +100,7 @@ namespace Controller
         /// </summary>
         /// <param name="track"></param>
         /// <param name="participants"></param>
-        private void PlaceParticipants(Track track, List<IParticipant> participants)
+        private static void PlaceParticipants(Track track, List<IParticipant> participants)
         {
             //Telt bij welk deelnemer wij zijn
             int currentAt = 0;
@@ -414,7 +414,7 @@ namespace Controller
             {
                 _soundPlayer.PlayLooping();
             }
-            catch (Exception e)
+            catch
             {
                 _soundPlayer = null;
             }                    

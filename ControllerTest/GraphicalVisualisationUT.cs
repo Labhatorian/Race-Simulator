@@ -18,8 +18,21 @@ namespace UnitTests
 
         }
 
-        [Test]
-        public void CachingTest()
+        [TestCase("Empty")]
+        [TestCase("Straight")]
+        [TestCase("LeftCorner")]
+        [TestCase("RightCorner")]
+        [TestCase("StartGrid")]
+        [TestCase("Finish")]
+        [TestCase("Blue")]
+        [TestCase("Green")]
+        [TestCase("Grey")]
+        [TestCase("Red")]
+        [TestCase("Yellow")]
+        [TestCase("Broken")]
+        [TestCase("Pitstop")]
+        [TestCase("Tree")]
+        public void CachingTest(string bitmap)
         {
             Bitmap BM;
             Bitmap BM2;
@@ -28,51 +41,22 @@ namespace UnitTests
             BM2 = LoadResources.GetBitmap("Empty");
             Assert.That(BM2, Is.EqualTo(BM));
 
-            BM = LoadResources.GetBitmap("Straight");
-            BM2 = LoadResources.GetBitmap("Straight");
-            Assert.That(BM2, Is.EqualTo(BM));
+            LoadResources.Clear();
+        }
 
-            BM = LoadResources.GetBitmap("LeftCorner");
-            BM2 = LoadResources.GetBitmap("LeftCorner");
-            Assert.That(BM2, Is.EqualTo(BM));
+        [Test]
+        public void CacheClearTest()
+        {
+            Bitmap BM;
+            Bitmap BM2;
 
-            BM = LoadResources.GetBitmap("RightCorner");
-            BM2 = LoadResources.GetBitmap("RightCorner");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("StartGrid");
-            BM2 = LoadResources.GetBitmap("StartGrid");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Finish");
-            BM2 = LoadResources.GetBitmap("Finish");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Blue");
-            BM2 = LoadResources.GetBitmap("Blue");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Green");
-            BM2 = LoadResources.GetBitmap("Green");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Grey");
-            BM2 = LoadResources.GetBitmap("Grey");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Red");
-            BM2 = LoadResources.GetBitmap("Red");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Yellow");
-            BM2 = LoadResources.GetBitmap("Yellow");
-            Assert.That(BM2, Is.EqualTo(BM));
-
-            BM = LoadResources.GetBitmap("Broken");
-            BM2 = LoadResources.GetBitmap("Broken");
-            Assert.That(BM2, Is.EqualTo(BM));
+            BM = LoadResources.GetBitmap("Empty");
 
             LoadResources.Clear();
+
+            BM2 = LoadResources.GetBitmap("Empty");
+
+            Assert.AreNotEqual(BM, BM2);
         }
 
         [Test]
@@ -100,7 +84,7 @@ namespace UnitTests
             //Testen op errors dus eigenlijk
             Data.Initialise();
             Data.NextRace();
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track);
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace.Track);
         }
 
         [Test]
@@ -115,7 +99,7 @@ namespace UnitTests
             Data.NextRace();
             RaceSimDataContext raceSimDataContext = new();
 
-            Assert.That(Data.CurrentRace.Track.Name, Is.EqualTo(raceSimDataContext.trackname));
+            Assert.That(Data.CurrentRace.Track.Name, Is.EqualTo(raceSimDataContext.Trackname));
             Assert.IsNotNull(raceSimDataContext.CompetitionStats[0]);
             Assert.IsNotNull(raceSimDataContext.RaceDrivers[0]);
         }
