@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Microsoft Update Assistant to NET6.0
+upgrade-assistant.clef

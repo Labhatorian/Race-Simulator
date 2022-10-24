@@ -27,7 +27,7 @@ namespace UnitTests
             //Simuleer een volledig race om events te testen
             //Test trouwens rest van de race. Zolang dat niet erroren, is alles prima. Moeilijk te testen
             //Uiterst best gedaan om wat functionaliteit van race te testen
-            //Is niet helemaal mogelijk doordat timer functie en private
+            //Is niet helemaal mogelijk doordat timer functie en private methodes enzo.
             Data.Initialise();
             Data.Debug = true;
             Data.NextRace();
