@@ -4,7 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Labhatorian/Race-Simulator)
 ![GitHub Release Date](https://img.shields.io/github/release-date/Labhatorian/Race-Simulator)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Labhatorian/Race-Simulator)
-![Maintenance](https://img.shields.io/maintenance/no/2022)
+![Maintenance](https://img.shields.io/maintenance/yes/2022)
 
 ## Informatie
 In opdracht van Windesheim. De eerste keer dat ik in C# heb gewerkt.<br />
