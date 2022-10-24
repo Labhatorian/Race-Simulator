@@ -7,6 +7,12 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Graphics\**" />
+    <EmbeddedResource Remove="Graphics\**" />
+    <None Remove="Graphics\**" />
+    <Page Remove="Graphics\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Content\blue.png" />
     <None Remove="Content\broken.png" />
     <None Remove="Content\finish.png" />
@@ -38,19 +44,6 @@
     <Content Include="Content\straight.png" />
     <Content Include="Content\tree.png" />
     <Content Include="Content\yellow.png" />
-    <Content Include="Graphics\broken.png" />
-    <Content Include="Graphics\finish.png" />
-    <Content Include="Graphics\green.png" />
-    <Content Include="Graphics\grey.png" />
-    <Content Include="Graphics\left.png" />
-    <Content Include="Graphics\red.png" />
-    <Content Include="Graphics\right.png" />
-    <Content Include="Graphics\start.png" />
-    <Content Include="Graphics\straight.png" />
-    <Content Include="Graphics\yellow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Graphics\blue.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Controller\Controller.csproj" />
@@ -68,5 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>
