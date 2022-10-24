@@ -115,7 +115,7 @@ namespace UnitTests
             Data.NextRace();
             RaceSimDataContext raceSimDataContext = new();
 
-            Assert.That(Data.CurrentRace.Track.Name, Is.EqualTo(raceSimDataContext.trackname));
+            Assert.That(Data.CurrentRace.Track.Name, Is.EqualTo(raceSimDataContext.Trackname));
             Assert.IsNotNull(raceSimDataContext.CompetitionStats[0]);
             Assert.IsNotNull(raceSimDataContext.RaceDrivers[0]);
         }

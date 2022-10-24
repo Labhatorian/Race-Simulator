@@ -11,7 +11,7 @@ namespace GraphicVisualisation
 {
     public static class LoadResources
     {
-        private static Dictionary<string, Bitmap> Bitmaps = new Dictionary<string, Bitmap>();
+        private static Dictionary<string, Bitmap> Bitmaps = new();
         
         /// <summary>
         /// Haalt Bitmap op uit de cache. Als die niet bestaat, maak een nieuwe en voeg toe aan de cache
@@ -20,167 +20,180 @@ namespace GraphicVisualisation
         /// <returns>Bitmap</returns>
         public static Bitmap GetBitmap(string bitmapString)
         {
-                if (!Bitmaps.ContainsKey(bitmapString))
+#pragma warning disable CA1416 // Validate platform compatibility
+            if (!Bitmaps.ContainsKey(bitmapString))
                 {
                     switch (bitmapString)
                     {
-                        case "Straight":
-                            Bitmap StraightLineBM;
-                            try
-                            {
-                                StraightLineBM = new((Image)Resources.ResourceManager.GetObject("straight"));
-                            } catch (Exception e)
-                            {
-                                StraightLineBM = new(Straight);
-                            } 
-                            Bitmaps.Add(bitmapString, StraightLineBM);
-                            break;
+                    case "Straight":
+                        Bitmap StraightLineBM;
+                        try
+                        {
+                            StraightLineBM = new((Image)Resources.ResourceManager.GetObject("straight"));
+                        } 
+                        catch
+                        {
+                            StraightLineBM = new(Straight);
+                        } 
+                        Bitmaps.Add(bitmapString, StraightLineBM);
+                        break;
+
                         case "LeftCorner":
                         Bitmap LeftCornerBM;
                         try
                         {
                             LeftCornerBM = new((Image)Resources.ResourceManager.GetObject("left"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             LeftCornerBM = new(LeftCorner);
                         }
-
                         Bitmaps.Add(bitmapString, LeftCornerBM);
-                            break;
+                        break;
+
                         case "RightCorner":
                         Bitmap RightCornerBM;
                         try
                         {
                             RightCornerBM = new((Image)Resources.ResourceManager.GetObject("right"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             RightCornerBM = new(RightCorner);
                         }
-
                         Bitmaps.Add(bitmapString, RightCornerBM);
-                            break;
+                        break;
+
                         case "StartGrid":
                         Bitmap StartGridBM;
                         try
                         {
                             StartGridBM = new((Image)Resources.ResourceManager.GetObject("start"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             StartGridBM = new(StartGrid);
                         }
                         Bitmaps.Add(bitmapString, StartGridBM);
-                            break;
+                        break;
+
                         case "Finish":
                         Bitmap FinishBM;
                         try
                         {
                             FinishBM = new((Image)Resources.ResourceManager.GetObject("finish"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             FinishBM = new(Finish);
                         }
                         Bitmaps.Add(bitmapString, FinishBM);
-                            break;
+                        break;
+
                         case "Blue":
                         Bitmap BlueBM;
                         try
                         {
                             BlueBM = new((Image)Resources.ResourceManager.GetObject("blue"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             BlueBM = new(Blue);
                         }
                         Bitmaps.Add(bitmapString, BlueBM);
                         break;
+
                         case "Green":
                         Bitmap GreenBM;
                         try
                         {
                             GreenBM = new((Image)Resources.ResourceManager.GetObject("green"));
                         }
-                        catch (Exception e)
+                        catch
                         {
                             GreenBM = new(Green);
                         }
                         Bitmaps.Add(bitmapString, GreenBM);
                         break;
+
                         case "Grey":
                         Bitmap GreyBM;
                         try
                         {
                             GreyBM = new((Image)Resources.ResourceManager.GetObject("grey"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             GreyBM = new(Grey);
                         }
                         Bitmaps.Add(bitmapString, GreyBM);
                         break;
+
                         case "Red":
                         Bitmap RedBM;
                         try
                         {
                             RedBM = new((Image)Resources.ResourceManager.GetObject("red"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             RedBM = new(Red);
                         }
                         Bitmaps.Add(bitmapString, RedBM);
                         break;
+
                         case "Yellow":
                         Bitmap YellowBM;
                         try
                         {
                             YellowBM = new((Image)Resources.ResourceManager.GetObject("yellow"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             YellowBM = new(Yellow);
                         }
                         Bitmaps.Add(bitmapString, YellowBM);
                         break;
+
                         case "Broken":
                         Bitmap BrokenBM;
                         try
                         {
                             BrokenBM = new((Image)Resources.ResourceManager.GetObject("broken"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             BrokenBM = new(Broken);
                         }
                         Bitmaps.Add(bitmapString, BrokenBM);
                         break;
+
                         case "Pitstop":
                         Bitmap PitstopBM;
                         try
                         {
                             PitstopBM = new((Image)Resources.ResourceManager.GetObject("pitstop"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             PitstopBM = new(Pitstop);
                         }
                         Bitmaps.Add(bitmapString, PitstopBM);
                         break;
+
                         case "Tree":
                         Bitmap TreeBM;
                         try
                         {
                             TreeBM = new((Image)Resources.ResourceManager.GetObject("tree"));
                         }
-                        catch (Exception e)
+                        catch 
                         {
                             TreeBM = new(Tree);
                         }
                         Bitmaps.Add(bitmapString, TreeBM);
                         break;
+
                     default:
                         Bitmap EmptBitmap;
                             EmptBitmap = EmptyBitmap(2000, 2500);
@@ -191,6 +204,7 @@ namespace GraphicVisualisation
 
             Bitmaps[bitmapString].Clone();
             return Bitmaps[bitmapString];
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         /// <summary>
@@ -209,14 +223,14 @@ namespace GraphicVisualisation
         /// <returns>Bitmap</returns>
         public static Bitmap EmptyBitmap(int x, int y)
         {
-            Bitmap BM = new Bitmap(x, y);
-            SolidBrush SB = new SolidBrush(Color.Green);
+            Bitmap BM = new(x, y);
+            SolidBrush SB = new(Color.Green);
             Bitmap Tree = GetBitmap("Tree");
-            Random random = new Random();
+            Random random = new();
 
             using (Graphics graph = Graphics.FromImage(BM))
             {
-                Rectangle ImageSize = new Rectangle(0, 0, 2000, 2500);
+                Rectangle ImageSize = new(0, 0, 2000, 2500);
                 graph.FillRectangle(SB, ImageSize);
 
                 for(int i = 0; i <= 10; i++)
@@ -236,7 +250,7 @@ namespace GraphicVisualisation
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
+                throw new ArgumentNullException(nameof(bitmap));
 
             var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 

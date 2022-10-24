@@ -41,7 +41,7 @@ namespace GraphicVisualisation
                 new Action(() =>
                 {
                     this.MainImage.Source = null;
-                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(Data.CurrentRace, e.Track)); ;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(e.Track)); ;
                 }));
         }
 
@@ -60,18 +60,20 @@ namespace GraphicVisualisation
             {
                 Data.CurrentRace.DriversChanged += OnDriverChanged;
                 Data.CurrentRace.DriversFinished += OnDriversFinished;
-                GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track);
+                GraphicalVisualisation.DrawTrack(Data.CurrentRace.Track);
                 DataContexter.DataContextRefresh();
             } else
             {
-                SectionTypes[] sectionTypesEmptyTrack = new SectionTypes[0];
-                Track emptyTrack = new Track("", sectionTypesEmptyTrack);
+                SectionTypes[] sectionTypesEmptyTrack = Array.Empty<SectionTypes>();
+                Track emptyTrack = new("", sectionTypesEmptyTrack);
                 
                 Application.Current.Dispatcher.Invoke((Action)delegate {
                     this.MainImage.Source = null;
-                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(null, emptyTrack));
-                    Window1 = new Window1(DataContexter);
-                    Window1.Owner = this;
+                    this.MainImage.Source = LoadResources.CreateBitmapSourceFromGdiBitmap(GraphicalVisualisation.DrawTrack(emptyTrack));
+                    Window1 = new Window1(DataContexter)
+                    {
+                        Owner = this
+                    };
                     Window1.Show();
                 });
             }
@@ -94,8 +96,10 @@ namespace GraphicVisualisation
         /// <param name="e"></param>
         private void MenuItem_Window2_Click(object sender, RoutedEventArgs e)
         {
-            Window2 = new Window2(DataContexter);
-            Window2.Owner = this;
+            Window2 = new Window2(DataContexter)
+            {
+                Owner = this
+            };
             Window2.Show();
         }
 
@@ -106,8 +110,10 @@ namespace GraphicVisualisation
         /// <param name="e"></param>
         private void MenuItem_Window1_Click(object sender, RoutedEventArgs e)
         {
-            Window1 = new Window1(DataContexter);
-            Window1.Owner = this;
+            Window1 = new Window1(DataContexter)
+            {
+                Owner = this
+            };
             Window1.Show();
         }
 

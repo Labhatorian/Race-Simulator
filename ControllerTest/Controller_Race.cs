@@ -86,8 +86,8 @@ namespace UnitTests
 
             Data.Competition.Tracks.Enqueue(TrackOne);
             Data.NextRace();
-            SectionData sectionDataTest = Data.CurrentRace.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
-            SectionData sectionDataTest2 = Data.CurrentRace.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
+            SectionData sectionDataTest = Race.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
+            SectionData sectionDataTest2 = Race.GetSectionData(Data.CurrentRace.Track.Sections.First.Value);
 
             Assert.That(sectionDataTest, Is.EqualTo(sectionDataTest2));
         }
