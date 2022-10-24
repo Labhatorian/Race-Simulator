@@ -35,7 +35,7 @@ namespace ControllerTest
 
             try
             {
-                Visualisation.DrawTrack(Data.CurrentRace.Track, Data.CurrentRace, null, null);
+                Visualisation.DrawTrack(Data.CurrentRace.Track, null, null);
                 Thread.Sleep(5000);
             }
             catch (Exception ex)

@@ -100,7 +100,7 @@ namespace UnitTests
             //Testen op errors dus eigenlijk
             Data.Initialise();
             Data.NextRace();
-            GraphicalVisualisation.DrawTrack(Data.CurrentRace, Data.CurrentRace.Track);
+            GraphicalVisualisation.DrawTrack(Data.CurrentRace.Track);
         }
 
         [Test]
