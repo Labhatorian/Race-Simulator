@@ -4,7 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Labhatorian/Race-Simulator)
 ![GitHub Release Date](https://img.shields.io/github/release-date/Labhatorian/Race-Simulator)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Labhatorian/Race-Simulator)
-![Maintenance](https://img.shields.io/maintenance/yes/2022)
+![Maintenance](https://img.shields.io/maintenance/no/2022)
 
 ## Informatie
 In opdracht van Windesheim. De eerste keer dat ik in C# heb gewerkt.<br />
@@ -12,7 +12,7 @@ Simpel race simulator in de stijl van Formule 1. Heeft een console project en WP
 Dit is een vrij intensief project. Het is aangeraden om een vrij moden apparaat te gebruiken.<br />
 
 ### Testen
-Testen gaat tijdens ontwikkeling via ReSharper . Soms heeft dit de neiging om niet te lukken om coverage te verkrijgen.<br />
+Testen gaat tijdens ontwikkeling via ReSharper. Soms heeft dit de neiging om niet te lukken om coverage te verkrijgen.<br />
 Het is aangeraden om testen paar keer te runnen om zeker te zijn.<br />
 
 ## Copyright
