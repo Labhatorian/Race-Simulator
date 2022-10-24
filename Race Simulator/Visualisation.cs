@@ -29,169 +29,174 @@ namespace Race_Simulator
         /// </summary>
         /// <param name="track"></param>
         /// <param name="race"></param>
-        public static void DrawTrack(Track track, Section? sectionDriver, Section? previousSection)
+        public static void DrawTrack(Track? track, Section? sectionDriver, Section? previousSection)
         {
-            //Reset alles    
-            s_currentXPos = 0;
-            s_currentXCounter = 0;
-            s_currentYCounter = 0;
-            s_currentYPos = 0;
-            LinkedList<Section> sections;
-            //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
-            //Dus herinneren wij de console elke keer aan met een klap
-            Console.CursorVisible = false;
+            if (track is not null)
+            {
+                //Reset alles    
+                s_currentXPos = 0;
+                s_currentXCounter = 0;
+                s_currentYCounter = 0;
+                s_currentYPos = 0;
+                LinkedList<Section> sections;
+                //Deze zou bij Initialise() willen horen, maar soms luistert de console niet naar deze property.
+                //Dus herinneren wij de console elke keer aan met een klap
+                Console.CursorVisible = false;
 
-            //Als we alleen een deel moeten updaten, voeg alleen die sections toe
-            if (sectionDriver != null)
-            {
-                sections = new();
-                sections.AddFirst(sectionDriver);
-                sections.AddLast(previousSection);
-            } else
-            {
-                Console.Clear();
-                sections = new(track.Sections);
-            }
-
-            //Zoek uit voor elk sectie wat moet worden geprint
-            //Bij left of right corner, verander richting
-            foreach (Section section in sections)
-            {
-                //Sla direction op voor als we deze moeten opslaan
-                s_previousDirection = (int)s_currentDirection;
+                //Als we alleen een deel moeten updaten, voeg alleen die sections toe
                 if (sectionDriver != null)
                 {
-                    s_currentDirection = (Directions)s_sectionPositions[section][2];
+                    sections = new();
+                    sections.AddFirst(sectionDriver);
+                    sections.AddLast(previousSection);
+                }
+                else
+                {
+                    Console.Clear();
+                    sections = new(track.Sections);
                 }
 
-                //Hier gaat de code langs om te kijken wat er moet worden gevisualiseerd
-                //Verandert ook direction als het moet
-                switch (section.SectionType)
+                //Zoek uit voor elk sectie wat moet worden geprint
+                //Bij left of right corner, verander richting
+                foreach (Section section in sections)
                 {
-                    case SectionTypes.Straight:
-                        switch (s_currentDirection)
-                        {
-                            case Directions.East:
-                                PrintTrack(_straighteast, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.South:
-                                PrintTrack(_straightsouth, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.West:
-                                PrintTrack(_straightwest, Race.GetSectionData(section), section);
-                                break;
-                            default:
-                                PrintTrack(_straight, Race.GetSectionData(section), section);
-                                break;
-                        }
-                        break;
-                    case SectionTypes.LeftCorner:
-                        switch (s_currentDirection)
-                        {
-                            case Directions.East:
-                                PrintTrack(_leftcornereast, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.South:
-                                PrintTrack(_leftcornersouth, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.West:
-                                PrintTrack(_leftcornerwest, Race.GetSectionData(section), section);
-                                break;
-                            default:
-                                PrintTrack(_leftcorner, Race.GetSectionData(section), section);
-                                break;
-                        }
-                        if (sectionDriver == null)
-                        {
-                            s_currentDirection -= 1;
-                        }
-                        break;
-                    case SectionTypes.RightCorner:
-                        switch (s_currentDirection)
-                        {
-                            case Directions.East:
-                                PrintTrack(_rightcornereast, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.South:
-                                PrintTrack(_rightcornersouth, Race.GetSectionData(section), section);
-                                break;
-                            case Directions.West:
-                                PrintTrack(_rightcornerwest, Race.GetSectionData(section), section);
-                                break;
-                            default:
-                                PrintTrack(_rightcorner, Race.GetSectionData(section), section);
-                                break;
-                        }
-
-                        //Zodat hij reset naar boven bij einde
-                        if (s_currentDirection != Directions.West & sectionDriver == null)
-                        {
-                            s_currentDirection += 1;
-                        } else
-                        {
-                            s_currentDirection = 0;
-                        }
-                     break;
-                    case SectionTypes.StartGrid:
-                        PrintTrack(_startgrid, Race.GetSectionData(section), section);
-                        break;
-                    case SectionTypes.Finish:
-                        PrintTrack(_finish, Race.GetSectionData(section), section);
-                        break;
-                }
-
-                //Slaat section x,y en direction op in dictionary voor later gebruik
-                if (!s_sectionPositions.ContainsKey(section))
-                {
-                    s_sectionPositions.Add(section, new int[] { s_currentXPos, s_currentYPos, s_previousDirection});
-                    //Update posities voor de rest van de track
-                    switch (s_currentDirection)
+                    //Sla direction op voor als we deze moeten opslaan
+                    s_previousDirection = (int)s_currentDirection;
+                    if (sectionDriver != null)
                     {
-                        case Directions.North:
-                            //Verplaatst scherm naar onder zodat sections niet worden overwritten
-                            if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
-                            {
-                                Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
+                        s_currentDirection = (Directions)s_sectionPositions[section][2];
+                    }
 
-                                //We moeten alles omlaag plaatsen in de dictionary als we Console.MoveBufferArea hebben gebruikt
-                                //Voorkomt dat hij verkeert print
-                                foreach(Section movedsection in sections)
-                                {
-                                    if (s_sectionPositions.ContainsKey(movedsection))
-                                    {
-                                        s_sectionPositions[movedsection][1] += 6;
-                                    }
-                                }
+                    //Hier gaat de code langs om te kijken wat er moet worden gevisualiseerd
+                    //Verandert ook direction als het moet
+                    switch (section.SectionType)
+                    {
+                        case SectionTypes.Straight:
+                            switch (s_currentDirection)
+                            {
+                                case Directions.East:
+                                    PrintTrack(_straighteast, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.South:
+                                    PrintTrack(_straightsouth, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.West:
+                                    PrintTrack(_straightwest, Race.GetSectionData(section), section);
+                                    break;
+                                default:
+                                    PrintTrack(_straight, Race.GetSectionData(section), section);
+                                    break;
+                            }
+                            break;
+                        case SectionTypes.LeftCorner:
+                            switch (s_currentDirection)
+                            {
+                                case Directions.East:
+                                    PrintTrack(_leftcornereast, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.South:
+                                    PrintTrack(_leftcornersouth, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.West:
+                                    PrintTrack(_leftcornerwest, Race.GetSectionData(section), section);
+                                    break;
+                                default:
+                                    PrintTrack(_leftcorner, Race.GetSectionData(section), section);
+                                    break;
+                            }
+                            if (sectionDriver == null)
+                            {
+                                s_currentDirection -= 1;
+                            }
+                            break;
+                        case SectionTypes.RightCorner:
+                            switch (s_currentDirection)
+                            {
+                                case Directions.East:
+                                    PrintTrack(_rightcornereast, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.South:
+                                    PrintTrack(_rightcornersouth, Race.GetSectionData(section), section);
+                                    break;
+                                case Directions.West:
+                                    PrintTrack(_rightcornerwest, Race.GetSectionData(section), section);
+                                    break;
+                                default:
+                                    PrintTrack(_rightcorner, Race.GetSectionData(section), section);
+                                    break;
                             }
 
-                            //Noord is anders dus kan niet in functie
-                            if (section.SectionType == SectionTypes.RightCorner)
+                            //Zodat hij reset naar boven bij einde
+                            if (s_currentDirection != Directions.West & sectionDriver == null)
                             {
-                                s_currentXPos = 0;
-                                s_currentYPos = 6 * (s_currentYCounter - 1);
+                                s_currentDirection += 1;
+                            }
+                            else
+                            {
+                                s_currentDirection = 0;
                             }
                             break;
-                        case Directions.East:
-                            s_currentXCounter += 1;
-                            s_currentXPos += 11;
-                            SetCurrentXYPos(section, 11, 6);
+                        case SectionTypes.StartGrid:
+                            PrintTrack(_startgrid, Race.GetSectionData(section), section);
                             break;
-                        case Directions.South:
-                            s_currentYPos += 6;
-                            s_currentYCounter += 1;
-                            SetCurrentXYPos(section, 11, 6);
-                            break;
-                        case Directions.West:
-                            s_currentXPos -= 11;
-                            s_currentXCounter -= 1;
-                            SetCurrentXYPos(section, 11, 6);
+                        case SectionTypes.Finish:
+                            PrintTrack(_finish, Race.GetSectionData(section), section);
                             break;
                     }
+
+                    //Slaat section x,y en direction op in dictionary voor later gebruik
+                    if (!s_sectionPositions.ContainsKey(section))
+                    {
+                        s_sectionPositions.Add(section, new int[] { s_currentXPos, s_currentYPos, s_previousDirection });
+                        //Update posities voor de rest van de track
+                        switch (s_currentDirection)
+                        {
+                            case Directions.North:
+                                //Verplaatst scherm naar onder zodat sections niet worden overwritten
+                                if (section.SectionType != SectionTypes.Finish & section.SectionType != SectionTypes.RightCorner)
+                                {
+                                    Console.MoveBufferArea(0, 0, 11, 12, 0, 6);
+
+                                    //We moeten alles omlaag plaatsen in de dictionary als we Console.MoveBufferArea hebben gebruikt
+                                    //Voorkomt dat hij verkeert print
+                                    foreach (Section movedsection in sections)
+                                    {
+                                        if (s_sectionPositions.ContainsKey(movedsection))
+                                        {
+                                            s_sectionPositions[movedsection][1] += 6;
+                                        }
+                                    }
+                                }
+
+                                //Noord is anders dus kan niet in functie
+                                if (section.SectionType == SectionTypes.RightCorner)
+                                {
+                                    s_currentXPos = 0;
+                                    s_currentYPos = 6 * (s_currentYCounter - 1);
+                                }
+                                break;
+                            case Directions.East:
+                                s_currentXCounter += 1;
+                                s_currentXPos += 11;
+                                SetCurrentXYPos(section, 11, 6);
+                                break;
+                            case Directions.South:
+                                s_currentYPos += 6;
+                                s_currentYCounter += 1;
+                                SetCurrentXYPos(section, 11, 6);
+                                break;
+                            case Directions.West:
+                                s_currentXPos -= 11;
+                                s_currentXCounter -= 1;
+                                SetCurrentXYPos(section, 11, 6);
+                                break;
+                        }
+                    }
                 }
+                //Schrijf naam van circuit op
+                Console.SetCursorPosition(0, Console.WindowTop);
+                Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
             }
-            //Schrijf naam van circuit op
-            Console.SetCursorPosition(0, Console.WindowTop);
-            Console.WriteLine($"{Data.CurrentRace.Track.Name.ToUpper()}!");
         }
 
         /// <summary>
