@@ -449,18 +449,20 @@ namespace Controller
 
             //Geef ze punten gebaseerd op de Formule 1 manier
             _finishCounter += 1;
-            if (_finishCounter == 1)
+            switch (_finishCounter)
             {
-                driver.Points += 25;
-            } else if (_finishCounter == 2)
-            {
-                driver.Points += 18;
-            } else if (_finishCounter == 3)
-            {
-                driver.Points += 15;
-            } else if (_finishCounter > 3)
-            {
-                driver.Points += 12 - (2 * (_finishCounter - 3));
+                case 1:
+                    driver.Points += 25;
+                    break;
+                case 2:
+                    driver.Points += 18;
+                    break;
+                case 3:
+                    driver.Points += 15;
+                    break;
+                default:
+                    driver.Points += 12 - (2 * (_finishCounter - 3));
+                    break;
             }
 
             //Check of er ergens een driver is
