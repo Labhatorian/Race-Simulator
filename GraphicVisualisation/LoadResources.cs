@@ -20,7 +20,7 @@ namespace GraphicVisualisation
         /// <returns>Bitmap</returns>
         public static Bitmap GetBitmap(string bitmapString)
         {
-#pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility - Alles draait op Windows
             if (!Bitmaps.ContainsKey(bitmapString))
                 {
                     switch (bitmapString)

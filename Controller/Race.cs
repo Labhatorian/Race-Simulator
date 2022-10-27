@@ -65,7 +65,6 @@ namespace Controller
             //Creator: PureDesign Girl - https://freesound.org/people/PureDesignGirl/
             //Source: https://freesound.org/people/PureDesignGirl/sounds/538828/
             //License: 'CC BY 4.0' - https://creativecommons.org/licenses/by/4.0/
-
             try
             {
                 _soundPlayer = new SoundPlayer("..\\..\\..\\Content\\racemusic.wav");
@@ -73,7 +72,6 @@ namespace Controller
             {
                 _soundPlayer = null;
             }
-            
 
             //timer en eventhandler klaar en we starten
             _timer = new Timer(timer);
@@ -281,7 +279,7 @@ namespace Controller
                 //Voeg driver distance toe
                 //Als speler op MoveDriver button heeft gedrukt, voeg extra distance toe
                 //Dit gebeurt maar 1 keer per event zodat het nog wel een soort spel krijgt en het spel niet breekt.
-                //Maar de gebruiker heeft de illusie dat er wel meer gebeurd als er op de knop wordt gehammerd
+                //Maar de gebruiker heeft de illusie dat er wel meer gebeurd als er op de knop wordt gespamd
                 if (!driver.Equipment.IsBroken && !driver.TakingPitstop)
                 {
                     if (!leftOrRight)
@@ -354,7 +352,7 @@ namespace Controller
                 }
 
                 //Als hij verplaatst is, haal de driver bij de vorige section weg om dubbele drivers te verkomen.
-                //Ook DriversChanged aanroepen zodat hij niet elke interval update.
+                //Ook dan pas DriversChanged aanroepen zodat hij niet elke interval update.
                 if (moved)
                 {
                     if (!leftOrRight)
@@ -449,18 +447,20 @@ namespace Controller
 
             //Geef ze punten gebaseerd op de Formule 1 manier
             _finishCounter += 1;
-            if (_finishCounter == 1)
+            switch (_finishCounter)
             {
-                driver.Points += 25;
-            } else if (_finishCounter == 2)
-            {
-                driver.Points += 18;
-            } else if (_finishCounter == 3)
-            {
-                driver.Points += 15;
-            } else if (_finishCounter > 3)
-            {
-                driver.Points += 12 - (2 * (_finishCounter - 3));
+                case 1:
+                    driver.Points += 25;
+                    break;
+                case 2:
+                    driver.Points += 18;
+                    break;
+                case 3:
+                    driver.Points += 15;
+                    break;
+                default:
+                    driver.Points += 12 - (2 * (_finishCounter - 3));
+                    break;
             }
 
             //Check of er ergens een driver is

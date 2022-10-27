@@ -40,18 +40,14 @@ namespace GraphicVisualisation
                     switch (s_currentDirection)
                     {
                         case Directions.North:
-                            //Deze offset komt voort uit de console visualisatie. We beginnen met de StartGrid en die moet niet linksboven gedrawd worden.
+                            //Deze offset komt voort uit de manier hoe console visualisatie is gedaan. We beginnen met de StartGrid en die moet niet linksboven gedrawd worden.
                             int yOffset = 500 * offsetFirstTimeNorth;
-                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!s_sectionPositions.ContainsKey(section))
+                            DrawSectionAndPositionDriver(g, section, imageSection, yOffset);
+                            if (offsetFirstTimeNorth > 0)
                             {
-                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset) });
-                            }
-                            
-                            if (offsetFirstTimeNorth > 0){
                                 offsetFirstTimeNorth--;
-                            } else
+                            }
+                            else
                             {
                                 s_currentYCounter--;
                                 MoveDirection(section);
@@ -59,35 +55,19 @@ namespace GraphicVisualisation
                             break;
                         case Directions.East:
                             imageSection = RotateImage(imageSection, 90);
-                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!s_sectionPositions.ContainsKey(section))
-                            {
-                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
-                            }
+                            DrawSectionAndPositionDriver(g, section, imageSection, 0);
                             s_currentXCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.South:
                             imageSection = RotateImage(imageSection, 180);
-                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!s_sectionPositions.ContainsKey(section))
-                            {
-                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
-                            }
-
+                            DrawSectionAndPositionDriver(g, section, imageSection, 0);
                             s_currentYCounter++;
                             MoveDirection(section);
                             break;
                         case Directions.West:
                             imageSection = RotateImage(imageSection, 270);
-                            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter), 500, 500);
-                            PositionDrivers(Race.GetSectionData(section), g, section);
-                            if (!s_sectionPositions.ContainsKey(section))
-                            {
-                                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter) });
-                            }
+                            DrawSectionAndPositionDriver(g, section, imageSection, 0);
                             s_currentXCounter--;
                             MoveDirection(section);
                             break;
@@ -95,6 +75,16 @@ namespace GraphicVisualisation
                 }
             }     
             return bitMap;
+        }
+
+        private static void DrawSectionAndPositionDriver(Graphics g, Section section, Bitmap imageSection, int yOffset)
+        {
+            g.DrawImage(imageSection, (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset), 500, 500);
+            PositionDrivers(Race.GetSectionData(section), g, section);
+            if (!s_sectionPositions.ContainsKey(section))
+            {
+                s_sectionPositions.Add(section, new int[] { (500 * s_currentXCounter), (500 * s_currentYCounter + yOffset) });
+            }
         }
 
         /// <summary>
@@ -126,33 +116,34 @@ namespace GraphicVisualisation
         private static void MoveDirection(Section section)
         {
             Boolean changedDirection = false;
-            if (section.SectionType == SectionTypes.RightCorner)
+
+            switch (section.SectionType)
             {
-                if (s_currentDirection == Directions.West)
-                {
-                    s_currentDirection = 0;
-                }
-                else
-                {
-                    s_currentDirection += 1;
-                }
-                changedDirection = true;
-            }
+                case SectionTypes.RightCorner:
+                    if (s_currentDirection == Directions.West)
+                    {
+                        s_currentDirection = 0;
+                    }
+                    else
+                    {
+                        s_currentDirection += 1;
+                    }
+                    changedDirection = true;
+                    break;
+                case SectionTypes.LeftCorner:
+                    s_currentDirection -= 1;
+                    changedDirection = true;
 
-            if (section.SectionType == SectionTypes.LeftCorner)
-            {
-                s_currentDirection -= 1;
-                changedDirection = true;
+                    if (s_currentDirection == Directions.South)
+                    {
+                        s_currentXCounter += 2;
+                    }
+                    if (s_currentDirection == Directions.East)
+                    {
+                        s_currentYCounter -= 2;
 
-                if(s_currentDirection == Directions.South)
-                {
-                    s_currentXCounter += 2;
-                }
-                if (s_currentDirection == Directions.East)
-                {
-                    s_currentYCounter -= 2;
-
-                }
+                    }
+                    break;
             }
 
             if (changedDirection)
@@ -264,7 +255,7 @@ namespace GraphicVisualisation
             int yPos = 0;
             Bitmap imageBroken = LoadResources.GetBitmap("Broken");
             Bitmap imagePitstop = LoadResources.GetBitmap("Pitstop");
-            if (imageSection != null & (s_sectionPositions.ContainsKey(section)))
+            if (imageSection is not null && (s_sectionPositions.ContainsKey(section)))
             {
                 switch (s_currentDirection)
                 {
@@ -320,11 +311,14 @@ namespace GraphicVisualisation
                         }
                         break;
                 }
+
                 g.DrawImage(imageSection, xPos, yPos, 150, 150);
+
                 if (participant.Equipment.IsBroken)
                 { 
                     g.DrawImage(imageBroken, xPos, yPos, 150, 150);
                 }
+
                 if (participant.TakingPitstop)
                 {
                     g.DrawImage(imagePitstop, xPos, yPos, 150, 150);

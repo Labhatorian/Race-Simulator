@@ -7,7 +7,7 @@ namespace Controller
         //De belangrijkste paremeters. Competitie en huidige race
         public static Competition Competition { get; set; }
         public static Race CurrentRace { get; set; }
-        public static Boolean Debug { get; set; }
+        public static Boolean QuickRace { get; set; }
 
         /// <summary>
         /// Initialiseer data en dus de competitie
@@ -27,9 +27,9 @@ namespace Controller
         {
             CurrentRace = null;
             Track track = Competition.NextTrack();
-            if (track != null)
+            if (track is not null)
             {
-                if (!Debug)
+                if (!QuickRace)
                 {
                     CurrentRace = new Race(track, Competition.Participants, 700);
                 }

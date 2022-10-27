@@ -29,12 +29,12 @@ namespace UnitTests
             //Uiterst best gedaan om wat functionaliteit van race te testen
             //Is niet helemaal mogelijk doordat timer functie en private methodes enzo.
             Data.Initialise();
-            Data.Debug = true;
+            Data.QuickRace = true;
             Data.NextRace();
             Data.CurrentRace.DriversChanged += Visualisation.OnDriverChanged;
             Data.CurrentRace.DriversFinished += Visualisation.OnDriversFinished;
             Thread.Sleep(20000);
-            Data.Debug = false;
+            Data.QuickRace = false;
         }
 
         [Test]
