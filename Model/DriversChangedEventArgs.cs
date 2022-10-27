@@ -8,6 +8,9 @@ namespace Model
 {
     public class DriversChangedEventArgs : EventArgs
     {
+        public Track Track { get; set; }
+        public Section Section { get; set; }
+        public Section PreviousSection { get; set; }
 
         /// <summary>
         /// Arugmenten voor de custom events en eventhandlers
@@ -20,9 +23,5 @@ namespace Model
             Section = section;  
             PreviousSection = previousSection;
         }
-
-        public Track Track { get; set; }
-        public Section Section { get; set; }
-        public Section PreviousSection { get; set; }
     }
 }
