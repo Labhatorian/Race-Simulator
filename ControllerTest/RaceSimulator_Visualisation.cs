@@ -45,7 +45,6 @@ namespace ControllerTest
         }
 
         [Test]
-        //Ook hier zijn we afhanklijk van de race en haar timer functie waardoor dit vrij simpel test is
         public void VisualisationTest()
         {
             //Maak circuit aan en probeer dat te laten zien

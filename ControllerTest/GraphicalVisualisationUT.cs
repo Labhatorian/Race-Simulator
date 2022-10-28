@@ -80,7 +80,6 @@ namespace UnitTests
         [Test]
         public void CircuitTest()
         {
-            //Moeilijk te testen want je moet het wel kunnen zien
             //Testen op errors dus eigenlijk
             Data.Initialise();
             Data.NextRace();
@@ -90,11 +89,6 @@ namespace UnitTests
         [Test]
         public void DataContextTest()
         {
-            //Test alle datacontext mogelijk
-            //Maak race aan
-            //Haal data op
-            //Kijk of data klopt met gegevens die er zijn.
-
             Data.Initialise();
             Data.NextRace();
             RaceSimDataContext raceSimDataContext = new();

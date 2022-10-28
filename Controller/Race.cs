@@ -273,7 +273,7 @@ namespace Controller
                         driver.Equipment.IsBroken = false;
                         driver.Equipment.Quality -= 1;
                     }
-                    DriversChanged(this, new DriversChangedEventArgs(Track, nextSection, section));
+                    DriversChanged?.Invoke(this, new DriversChangedEventArgs(Track, nextSection, section));
                 }
 
                 //Voeg driver distance toe
@@ -365,7 +365,7 @@ namespace Controller
                     }
                     if (_timer != null)
                     {
-                        DriversChanged(this, new DriversChangedEventArgs(Track, nextSection, section));
+                        DriversChanged?.Invoke(this, new DriversChangedEventArgs(Track, nextSection, section));
                     }
                 }
             }
@@ -491,7 +491,7 @@ namespace Controller
                 {
                     DriversChanged -= (EventHandler<DriversChangedEventArgs>)d;
                 }
-                DriversFinished(this, new EventArgs());
+                DriversFinished?.Invoke(this, new EventArgs());
                 foreach (Delegate d in DriversFinished.GetInvocationList())
                 {
                     DriversFinished -= (EventHandler<EventArgs>)d;
